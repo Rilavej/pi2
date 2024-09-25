@@ -39,3 +39,5 @@ Adm.init(
         modelName: 'Adm', // We need to choose the model name
         tableName: 'adm', // Nome da tabela no banco de dados
     });
+
+    module.exports = Adm
