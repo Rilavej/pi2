@@ -1,0 +1,27 @@
+{
+  "name": "pi2",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js && exit 0",
+    "schema": "node ./config/schema.js && node server.js && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rilavej/pi2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rilavej/pi2/issues"
+  },
+  "homepage": "https://github.com/Rilavej/pi2#readme",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mysql2": "^3.11.3",
+    "path": "^0.12.7",
+    "sequelize": "^6.37.3"
+  }
+}

@@ -1,0 +1,8 @@
+// Variáveis de ambiente que devem ser declaradas no arquivo .env
+
+PORT = 3000
+DATABASE = pi2
+DB_USER = root
+DB_PASSWORD = 
+HOST = localhost
+DB_PORT = 3306
