@@ -1,5 +1,5 @@
+const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
-const sequelize = require('../config/dbconnection');
 
 const Cidade = sequelize.define(
     'Cidade',
@@ -14,7 +14,6 @@ const Cidade = sequelize.define(
             allowNull: false,
             references: {model: 'Uf', key: 'sigla_uf'},
             onDelete: 'CASCADE'
-
         }
     },
     {

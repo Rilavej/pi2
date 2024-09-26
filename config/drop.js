@@ -10,15 +10,15 @@ const connection = (async ()=>{
     })
 
     try {
-        const sql = `CREATE DATABASE IF NOT EXISTS \`${process.env.DATABASE}\`` 
+        const sql = `DROP SCHEMA IF EXISTS\`${process.env.DATABASE}\`` 
         const [results] = await connection.query({sql})
         console.log(results)
-        console.log(`Schema ${process.env.DATABASE} criado com sucesso.`)
+        console.log(`Schema ${process.env.DATABASE} excluído com sucesso.`)
         await connection.end()
-        console.log(`Conexão usada na criação do schema ${process.env.DATABASE} foi encerrada com sucesso.`)
+        console.log(`Conexão usada na exclusão do schema ${process.env.DATABASE} foi encerrada com sucesso.`)
         
     } catch (error) {
-        console.error(`dbcreate.js: Ocorreu um erro ao criar o schema.`, error)
+        console.error(`dbcreate.js: Ocorreu um erro ao excluir o schema.`, error)
     }
 
 })();

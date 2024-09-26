@@ -1,11 +1,11 @@
-const sequelize = require('../config/dbconnection');
-const DataTypes = require('sequelize');
 const Pessoa = require('./pessoa');
+const DataTypes = require('sequelize');
+const sequelize = require('../config/dbconnection');
 
-class Adm extends Pessoa {}
+class Admin extends Pessoa {}
 
 // Terá privilégios para editar todos os perfils
-Adm.init(
+Admin.init(
     {
         person_id: {
             type: DataTypes.INTEGER,
@@ -36,8 +36,8 @@ Adm.init(
     },    
     {
         sequelize, // We need to pass the connection instance
-        modelName: 'Adm', // We need to choose the model name
-        tableName: 'adm', // Nome da tabela no banco de dados
+        modelName: 'Admin', // We need to choose the model name
+        tableName: 'admin', // Nome da tabela no banco de dados
     });
 
-    module.exports = Adm
+    module.exports = Admin

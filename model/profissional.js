@@ -1,6 +1,6 @@
-const sequelize = require('../config/dbconnection');
-const DataTypes = require('sequelize');
 const Pessoa = require('./pessoa');
+const DataTypes = require('sequelize');
+const sequelize = require('../config/dbconnection');
 
 class Profissional extends Pessoa {}
 
@@ -33,15 +33,15 @@ Profissional.init(
             allowNull: false,
         },
         // Atributos apenas do prfissional
-        isAdm:{ 
+        isSelfAdmin:{ 
             type: DataTypes.BOOLEAN,
             allowNull: false, // Se 'true' a pessoa poderá editar e validar o proprio perfil
         },
-        profissao: {
+        profession: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        descricao_negocio: {
+        business_description: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -52,24 +52,4 @@ Profissional.init(
         tableName: 'profissional', // Nome da tabela no banco de dados
     });
 
-(async ()=>{
-    try {
-        await Profissional.sync({alter: true}) // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
-        console.log('Tabela profissional criada com sucesso.')
-
-    } catch (error) {
-        console.error(`profissional.js: Erro ao criar a tabela profissional.`, error)
-    }
-    
-    const minusculo = await sequelize.models.profissional
-    const MAIUSCULO = await sequelize.models.Profissional
-    //const outro = await Profissional
-    const subclasse = await sequelize.models.Pessoa.Profissional
-    console.log("\nsequelize.models.profissional: " + minusculo)
-    console.log("\nsequelize.models.Profissional: " + MAIUSCULO)
-    console.log("\nconst Profissional: " + Profissional)
-    console.log("\nsequelize.models.Pessoa.Profissional: " + subclasse)
-
-})();
-
-module.exports = Profissional;
+module.exports = Profissional

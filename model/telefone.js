@@ -1,5 +1,5 @@
+const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
-const sequelize = require('../config/dbconnection');
 
 const Telefone = sequelize.define(
     'Telefone',
@@ -9,12 +9,12 @@ const Telefone = sequelize.define(
             primaryKey:true,
             allowNull: false,
         },
-        id_pessoa: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {model: 'Pessoa', key: 'person_id'},
-            onDelete: 'CASCADE',
-        }
+        // id_pessoa: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     references: {model: 'Pessoa', key: 'person_id'},
+        //     onDelete: 'CASCADE',
+        // }
     },
     {
         tableName: 'telefone'

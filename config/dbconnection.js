@@ -1,4 +1,4 @@
-const  {Sequelize} = require('sequelize');
+const {Sequelize} = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, 
     {
@@ -12,7 +12,7 @@ const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, proce
     });
 
 sequelize.authenticate().then(() => {
-    console.log('Conexão estabelecida com o banco de dados.');
+    console.log('Conexão com o banco de dados estabelecida com sucesso.');
 }).catch((error) => {
     console.error(`dbconnection.js: Erro ao conectar com o banco de dados:`, error);
 });

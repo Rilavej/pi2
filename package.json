@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js && exit 0",
+    "test": "clear && node ./config/drop.js && node ./config/schema.js && node server.js && exit 0",
     "schema": "node ./config/schema.js && node server.js && exit 0"
   },
   "repository": {
