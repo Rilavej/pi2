@@ -1,14 +1,14 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
-const Pessoa = sequelize.define(
-    'Pessoa', // Nome do modelo e não da tabele. Na ausência do nome da tabela, está receberá o mesmo nome do modelo.
+const Person = sequelize.define(
+    'Person', // Nome do modelo e não da tabele. Na ausência do nome da tabela, está receberá o mesmo nome do modelo.
     {
-        person_id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
+        // personId: {
+        //     type: DataTypes.INTEGER,
+        //     primaryKey: true,
+        //     autoIncrement: true,
+        // },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -32,7 +32,8 @@ const Pessoa = sequelize.define(
         },
     },
     {
-        tableName: 'pessoa'
-    });
+        tableName: 'person'
+    }
+)
 
-module.exports = Pessoa
+module.exports = Person

@@ -12,7 +12,7 @@ const connection = (async ()=>{
     try {
         const sql = `DROP SCHEMA IF EXISTS\`${process.env.DATABASE}\`` 
         const [results] = await connection.query({sql})
-        console.log(results)
+        // console.log(results)
         console.log(`Schema ${process.env.DATABASE} excluído com sucesso.`)
         await connection.end()
         console.log(`Conexão usada na exclusão do schema ${process.env.DATABASE} foi encerrada com sucesso.`)

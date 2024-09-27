@@ -1,24 +1,27 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
-const Telefone = sequelize.define(
-    'Telefone',
+const Phone = sequelize.define(
+    'Phone',
     {
-        numero_telefone: {
+        contactNumber: {
             type: DataTypes.STRING,
             primaryKey:true,
             allowNull: false,
         },
-        // id_pessoa: {
+        // personId: {
         //     type: DataTypes.INTEGER,
         //     allowNull: false,
-        //     references: {model: 'Pessoa', key: 'person_id'},
+        //     references: {
+        //         model: 'Person',
+        //         key: 'personId',
+        //     },
         //     onDelete: 'CASCADE',
         // }
     },
     {
-        tableName: 'telefone'
+        tableName: 'phone'
     }
-);
+)
 
-module.exports = Telefone
+module.exports = Phone

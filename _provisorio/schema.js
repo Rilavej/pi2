@@ -12,7 +12,7 @@ const connection = (async ()=>{
     try {
         const sql = `CREATE DATABASE IF NOT EXISTS \`${process.env.DATABASE}\`` 
         const [results] = await connection.query({sql})
-        console.log(results)
+        // console.log(results)
         console.log(`Schema ${process.env.DATABASE} criado com sucesso.`)
         await connection.end()
         console.log(`Conexão usada na criação do schema ${process.env.DATABASE} foi encerrada com sucesso.`)

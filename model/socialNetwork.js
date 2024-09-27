@@ -1,16 +1,17 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
-const RedeSocial = sequelize.define(
-    'RedeSocial',
+const SocialNetwork = sequelize.define(
+    'SocialNetwork',
     {
-        nome_rede_social: {
+        name: {
             type: DataTypes.STRING,
             primaryKey: true,
-            //allowNull: false,
         }
     },
-    {tableName: 'redeSocial'}
+    {
+        tableName: 'socialNetwork'
+    }
 )
 
-module.exports = RedeSocial
+module.exports = SocialNetwork

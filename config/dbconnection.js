@@ -1,9 +1,10 @@
 const {Sequelize} = require('sequelize');
 
-const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, 
+// const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, 
+const sequelize = new Sequelize(`mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE}`, 
     {
-        host: process.env.HOST,
-        port: process.env.DB_PORT,
+        //host: process.env.HOST,
+        //port: process.env.DB_PORT,
         dialect: "mysql",
         define: {
             timestamps: false, // para não utilizar campos created_at e updated_at
