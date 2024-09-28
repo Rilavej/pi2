@@ -4,6 +4,7 @@ const Person = require('../model/person')
 const Professional = require('../model/professional')
 const Admin = require('../model/admin')
 const Phone = require('../model/phone')
+const Profession = require('../model/profession')
 const State = require('../model/state')
 const City = require('../model/city')
 const Address = require('../model/address')
@@ -20,6 +21,9 @@ Professional.belongsTo(Person)
 
 Person.hasMany(Phone, {onDelete: 'CASCADE'})
 Phone.belongsTo(Person)
+
+Person.hasMany(Profession, {onDelete: 'CASCADE'})
+Profession.belongsTo(Person)
 
 Person.hasOne(Address, {onDelete: 'CASCADE'})
 Address.belongsTo(Person)
@@ -39,4 +43,4 @@ Address.belongsTo(City)
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
 sequelize.sync({force: true}) /** Remover opção {force: true } quando em produção */
 
-module.exports = {Person, Professional, Admin, Phone, State, City, Address, SocialNetwork, SocialAccount}
+module.exports = {Person, Professional, Admin, Phone, Profession, State, City, Address, SocialNetwork, SocialAccount}
