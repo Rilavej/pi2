@@ -5,7 +5,7 @@
   "scripts": {
     "test": "clear && node ./_provisorio/drop.js && node ./_provisorio/schema.js && node server.js && exit 0",
     "schema": "node ./_provisorio/schema.js && node server.js && exit 0",
-    "zerver": "clear && node ./_provisorio/drop.js && node ./_provisorio/schema.js && node zerverExperimento.js && exit 0"
+    "zerverExperimento.js": "clear && node ./_provisorio/drop.js && node ./_provisorio/schema.js && node zerverExperimento.js && exit 0"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.21.0",
     "mysql2": "^3.11.3",
     "path": "^0.12.7",
