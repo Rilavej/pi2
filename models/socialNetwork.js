@@ -4,7 +4,7 @@ const DataTypes = require('sequelize')
 const SocialNetwork = sequelize.define(
     'SocialNetwork',
     {
-        name: {
+        socialNetworkName: {
             type: DataTypes.STRING,
             primaryKey: true,
         }

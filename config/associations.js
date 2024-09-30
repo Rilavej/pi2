@@ -37,6 +37,9 @@ SocialAccount.belongsTo(SocialNetwork)
 State.hasMany(City)
 City.belongsTo(State)
 
+State.hasMany(Address)
+Address.belongsTo(State)
+
 City.hasMany(Address)
 Address.belongsTo(City)
 

@@ -4,7 +4,7 @@ const DataTypes = require('sequelize')
 const City = sequelize.define(
     'City',
     {
-        name: {
+        cityName: {
             type: DataTypes.STRING,
             primaryKey: true,
             allowNull: false,

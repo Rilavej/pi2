@@ -1,4 +1,5 @@
-const {Sequelize} = require('sequelize');
+require('dotenv').config()
+const {Sequelize} = require('sequelize')
 
 // const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, 
 const sequelize = new Sequelize(`mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE}`, 

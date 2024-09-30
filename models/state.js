@@ -4,12 +4,12 @@ const DataTypes = require('sequelize')
 const State = sequelize.define(
     'State',
     {
-        abbreviation: {
+        stateAbbreviation: {
             type: DataTypes.STRING,
             primaryKey: true,
             allowNull: false
         },
-        name: {
+        stateName: {
             type: DataTypes.STRING,
             allowNull: false,
         },

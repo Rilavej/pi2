@@ -5,7 +5,7 @@ const DataTypes = require('sequelize')
 const Profession = sequelize.define(
     'Profession',
     {
-        name: {
+        professionName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
