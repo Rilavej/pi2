@@ -1,8 +1,8 @@
 const sequelize = require('../config/dbconnection')
 
 const Person = require('../models/person')
-const Professional = require('../models/professional')
-const Admin = require('../models/admin')
+// const Professional = require('../models/professional')
+// const Admin = require('../models/admin')
 const Phone = require('../models/phone')
 const Profession = require('../models/profession')
 const State = require('../models/state')
@@ -12,11 +12,11 @@ const SocialNetwork = require('../models/socialNetwork')
 const SocialAccount = require('../models/socialAccounts')
 
 // Isto é para ser herança. Verificar se esta correto
-Person.hasOne(Admin, {onDelete: 'CASCADE'})
-Admin.belongsTo(Person)
+// Person.hasOne(Admin, {onDelete: 'CASCADE'})
+// Admin.belongsTo(Person)
 
-Person.hasOne(Professional, {onDelete: 'CASCADE'})
-Professional.belongsTo(Person)
+// Person.hasOne(Professional, {onDelete: 'CASCADE'})
+// Professional.belongsTo(Person)
 // 
 
 Person.hasMany(Phone, {onDelete: 'CASCADE'})
@@ -37,8 +37,8 @@ SocialAccount.belongsTo(SocialNetwork)
 State.hasMany(City)
 City.belongsTo(State)
 
-State.hasMany(Address)
-Address.belongsTo(State)
+// State.hasMany(Address)
+// Address.belongsTo(State)
 
 City.hasMany(Address)
 Address.belongsTo(City)
@@ -46,4 +46,14 @@ Address.belongsTo(City)
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
 sequelize.sync({force: false})
 
-module.exports = {Person, Professional, Admin, Phone, Profession, State, City, Address, SocialNetwork, SocialAccount}
+module.exports = {
+    Person, 
+    /*Professional, Admin,*/ 
+    Phone, 
+    Profession, 
+    State, 
+    City, 
+    Address, 
+    SocialNetwork, 
+    SocialAccount
+}

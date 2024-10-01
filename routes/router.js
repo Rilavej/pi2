@@ -6,6 +6,9 @@ router.get('/',(req,res)=>{
     res.status(200).render('pages/index')
 })
 
-router.get('/person/new', personController.getRegisterPage)
+router.get('/signup', personController.getRegisterPage)
+router.post('/signup', personController.create)
+
+router.get('/login', personController.getLoginPage)
 
 module.exports = router

@@ -39,7 +39,7 @@ const Address = sequelize.define(
         
     },
     {
-        tableName: 'address'
+        // tableName: 'address'
     }
 )
 

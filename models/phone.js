@@ -8,6 +8,9 @@ const Phone = sequelize.define(
             type: DataTypes.STRING,
             primaryKey:true,
             allowNull: false,
+            validate: {
+                isNumeric: true
+            }
         },
         // personId: {
         //     type: DataTypes.INTEGER,
@@ -20,7 +23,7 @@ const Phone = sequelize.define(
         // }
     },
     {
-        tableName: 'phone'
+        // tableName: 'phone'
     }
 )
 

@@ -6,7 +6,6 @@ const City = sequelize.define(
     {
         cityName: {
             type: DataTypes.STRING,
-            primaryKey: true,
             allowNull: false,
         },
         // stateName: {
@@ -20,7 +19,7 @@ const City = sequelize.define(
         // }
     },
     {
-        tableName: 'city'
+        // tableName: 'city'
     }
 )
 

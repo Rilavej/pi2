@@ -14,7 +14,7 @@ const Profession = sequelize.define(
         },
     },
     {
-        tableName: "profession"
+        // tableName: "profession"
     }
    
 )

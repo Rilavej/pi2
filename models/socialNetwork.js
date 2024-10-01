@@ -6,11 +6,11 @@ const SocialNetwork = sequelize.define(
     {
         socialNetworkName: {
             type: DataTypes.STRING,
-            primaryKey: true,
+            unique: true
         }
     },
     {
-        tableName: 'socialNetwork'
+        // tableName: 'socialNetwork'
     }
 )
 

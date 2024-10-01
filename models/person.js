@@ -19,9 +19,9 @@ const Person = sequelize.define(
         surname: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                isAlpha: true,            
-            }
+            // validate: {
+            //     isAlpha: true,            
+            // }
         },
         email:{
             type: DataTypes.STRING,
@@ -46,7 +46,7 @@ const Person = sequelize.define(
         }
     },
     {
-        tableName: 'person'
+        // tableName: 'person'
     }
 )
 

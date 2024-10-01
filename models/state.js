@@ -9,13 +9,13 @@ const State = sequelize.define(
             primaryKey: true,
             allowNull: false
         },
-        stateName: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+        // stateName: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+        // },
     },
     {
-        tableName: 'state'
+        // tableName: 'state'
     }
 )
 

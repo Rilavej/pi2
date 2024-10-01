@@ -22,7 +22,7 @@ const SocialAccount = sequelize.define(
         // }
     },
     {
-        tableName: 'socialAccount'
+        // tableName: 'socialAccount'
     }
 )
 

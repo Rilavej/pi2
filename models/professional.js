@@ -23,7 +23,7 @@ Professional.init(
     {
         sequelize, // We need to pass the connection instance
         modelName: 'Professional', // We need to choose the model name
-        tableName: 'professional', // Nome da tabela no banco de dados
+        // tableName: 'professional', // Nome da tabela no banco de dados
     }
 )
 
