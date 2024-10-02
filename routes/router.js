@@ -10,5 +10,6 @@ router.get('/signup', personController.getRegisterPage)
 router.post('/signup', personController.create)
 
 router.get('/login', personController.getLoginPage)
+router.post('/login/password',)
 
 module.exports = router
