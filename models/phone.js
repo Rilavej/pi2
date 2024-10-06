@@ -12,15 +12,6 @@ const Phone = sequelize.define(
                 isNumeric: true
             }
         },
-        // personId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {
-        //         model: 'Person',
-        //         key: 'personId',
-        //     },
-        //     onDelete: 'CASCADE',
-        // }
     },
     {
         // tableName: 'phone'

@@ -7,9 +7,11 @@ router.get('/',(req,res)=>{
 })
 
 router.get('/signup', personController.getRegisterPage)
-router.post('/signup', personController.create)
+router.post('/signup', personController.createPerson)
 
 router.get('/login', personController.getLoginPage)
-router.post('/login/password',)
+router.post('/login',personController.login)
+
+router.get('/:username', personController.getUser)
 
 module.exports = router

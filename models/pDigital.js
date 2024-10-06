@@ -1,17 +1,17 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
-const SocialNetwork = sequelize.define(
-    'SocialNetwork',
+const PDigital = sequelize.define(
+    'PDigital',
     {
-        socialNetworkName: {
+        platform: {
             type: DataTypes.STRING,
             unique: true
         }
     },
     {
-        // tableName: 'socialNetwork'
+        // tableName: 'pDigital'
     }
 )
 
-module.exports = SocialNetwork
+module.exports = PDigital

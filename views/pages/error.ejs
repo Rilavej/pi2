@@ -4,9 +4,19 @@
             <h1 class="title">
                 Erro
             </h1>
-            <p class="subtitle">
-                <strong><%= error ></strong>!
-            </p>
+            <div class="container">
+                <p class="subtitle">
+                    <strong>
+                        <%= message %>
+                    </strong>
+                </p>
+                <p class="subtitle">
+                    <strong>
+                        <%= error %>
+                    </strong>
+                </p>
+            </div>
+
         </div>
     </section>
     <%- include('../layouts/footer'); -%>

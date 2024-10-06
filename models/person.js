@@ -12,23 +12,24 @@ const Person = sequelize.define(
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                isAlpha: true,            
-            }
-        },
-        surname: {
-            type: DataTypes.STRING,
-            allowNull: false,
             // validate: {
             //     isAlpha: true,            
             // }
         },
+        // surname: {
+        //     type: DataTypes.STRING,
+        //     allowNull: false,
+            // validate: {
+            //     isAlpha: true,            
+            // }
+        // },
         email:{
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                isEmail: true,
-            }
+            unique: true,
+            // validate: {
+            //     isEmail: true,
+            // }
         },
         username:{
             type: DataTypes.STRING,
