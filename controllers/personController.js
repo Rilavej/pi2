@@ -66,15 +66,13 @@ controller.createPerson = async (req, res)=> {
 
 controller.login = (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: `/${req.user.username}`,
+        successRedirect: `/user`,
         failureRedirect: '/login', 
     })(req, res, next)
 }
 
-controller.getUser = (req, res) => {
-    const person = Person.findOne({
-        where: {username: req.params.username}
-    })
-    res.status(200).render('person/index', {person})
+controller.getUser = async (req, res) => {
+    res.status(200).render('person/index')
 }
+
 module.exports = controller

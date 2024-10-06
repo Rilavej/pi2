@@ -7,16 +7,16 @@ module.exports = function(passport) {
 
     passport.use(new LocalStrategy(
         {
-            usernameField:'username',
+            usernameField:'email',
             passwordField:'password'
         },
-        async (username , password, done)=> {
+        async (email , password, done)=> {
             try {
                 const user = await Person.findOne({
                     //https://sequelize.org/docs/v6/core-concepts/model-querying-finders/
                     raw: true,
                     where: {
-                        username: username
+                        email: email
                     }
                 })
 
@@ -43,7 +43,9 @@ module.exports = function(passport) {
 
     passport.deserializeUser(async (id, done)=>{
         try {
-            const user = await Person.findByPk(id)
+            const user = await Person.findByPk(id, {
+                attributes: {exclude: ['hashedPassword' ,'isAdmin', 'email', 'LocationId']}
+            })
             done(null, user)
         } catch (err) {
             done(err, user)

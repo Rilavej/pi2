@@ -12,6 +12,6 @@ router.post('/signup', personController.createPerson)
 router.get('/login', personController.getLoginPage)
 router.post('/login',personController.login)
 
-router.get('/:username', personController.getUser)
+router.get('/user', personController.getUser)
 
 module.exports = router
