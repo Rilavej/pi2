@@ -14,4 +14,6 @@ router.post('/login',personController.login)
 
 router.get('/user', personController.getUser)
 
+router.post('/search',personController.search)
+
 module.exports = router

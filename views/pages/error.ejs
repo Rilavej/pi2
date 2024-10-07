@@ -5,16 +5,20 @@
                 Erro
             </h1>
             <div class="container">
+                <% if (message) { %>
                 <p class="subtitle">
                     <strong>
                         <%= message %>
                     </strong>
                 </p>
+                <% } %>
+                <% if (error) { %>
                 <p class="subtitle">
                     <strong>
                         <%= error %>
                     </strong>
                 </p>
+                <% } %>
             </div>
 
         </div>

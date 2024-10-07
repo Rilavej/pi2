@@ -1,0 +1,21 @@
+<%- include('../layouts/header'); -%>
+    <section class="section">
+        <div class="container">
+            <% if (card) { %>
+                <h1 class="title">
+                    <%= card %>
+                </h1>
+                <p class="subtitle">
+                    <%= JSON.stringify(card, null, 8) %>
+                </p>
+            <% } else { %>
+                <h1 class="title">
+                    Sua busca não encontrou resultados
+                </h1>
+                <p class="subtitle">
+                    
+                </p>
+            <% } %>
+        </div>
+    </section>
+    <%- include('../layouts/footer'); -%>

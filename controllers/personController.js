@@ -75,4 +75,25 @@ controller.getUser = async (req, res) => {
     res.status(200).render('person/index')
 }
 
+controller.search = async (req, res)=> {
+    const {city, state, category} = req.body
+
+    try {
+        const card = await Person.findAll({
+            attributes: ['name',],
+            include: [{all: true}],
+            where:{
+                '$Location.city$': city,
+                '$Location.state$': state,
+                '$Professions.category$': category
+            }
+        })
+
+        res.render('pages/searchResult', {card: card}
+
+    )} catch (error) {
+        res.render('pages/error', {error: error, message: "Sua busca não encontrou resultados"} )
+    }
+}
+
 module.exports = controller
