@@ -56,7 +56,7 @@ controller.createPerson = async (req, res)=> {
         }
         const person = await Person.create({name, email, username, hashedPassword, LocationId: location.id})
         
-        res.status(200).redirect('/login')
+        res.status(200).redirect('/user')
 
     } catch (error) {
         console.error(error)
@@ -89,11 +89,37 @@ controller.search = async (req, res)=> {
             }
         })
 
-        res.render('pages/searchResult', {card: card}
+        res.render('pages/searchResults', {card: card}
 
     )} catch (error) {
         res.render('pages/error', {error: error, message: "Sua busca não encontrou resultados"} )
     }
+}
+
+// Este pode ser mesclado com 'controller.search'
+controller.getAll = async (req, res)=> {
+    const {city, state, category} = req.body
+
+    try {
+        const card = await Person.findAll({
+            attributes: ['name',],
+            include: [{all: true}],
+            // where:{
+            //     '$Location.city$': city,
+            //     '$Location.state$': state,
+            //     '$Professions.category$': category
+            // }
+        })
+
+        res.render('pages/index', {card: card}
+
+    )} catch (error) {
+        res.render('pages/error', {error: error, message: "Erro interno"} )
+    }
+}
+
+controller.setCard = async (req, res)=>{
+    res.send('card')
 }
 
 module.exports = controller

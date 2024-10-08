@@ -1,6 +1,12 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
         <div class="container">
+            <h1 class="title">
+                Aqui voce deve estar autenticado
+            </h1>
+            <p class="subtitle">
+                por enquanto não está
+            </p>
             <% if (user) { %>
                 <h1 class="title">
                     <%= user.name %>
@@ -8,14 +14,7 @@
                 <p class="subtitle">
                     <%= JSON.stringify(user, null, 8) %>
                 </p>
-            <% } else { %>
-                <h1 class="title">
-                    Faça login
-                </h1>
-                <p class="subtitle">
-                    ou crie uma conta
-                </p>
-            <% } %>
+            <% }  %>
         </div>
     </section>
     <%- include('../layouts/footer'); -%>

@@ -7,10 +7,12 @@ const Location = sequelize.define(
         city: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: 'cityState'
         },
         state: {
             type: DataTypes.STRING,
-            allowNull: false,            
+            allowNull: false,    
+            unique: 'cityState'        
         }
     },
     {

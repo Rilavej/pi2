@@ -1,0 +1,19 @@
+<section class="section">
+    <div class="container">
+        <% if (card) { %>
+            <h1 class="title">
+                <%= card %>
+            </h1>
+            <p class="subtitle">
+                <%= JSON.stringify(card, null, null) %>
+            </p>
+            <% } else { %>
+                <h1 class="title">
+                    Erro interno
+                </h1>
+                <p class="subtitle">
+
+                </p>
+                <% } %>
+    </div>
+</section>
