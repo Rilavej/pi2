@@ -32,13 +32,19 @@ const table = (async ()=> {
             sql,
             values
         })
-        // console.log(results)
         console.log(`Tabela Location preenchida com sucesso.`)
+
+        await connection.query(
+            'INSERT INTO PDigital (platform) VALUES (?),(?),(?),(?)',
+            ["WhatsApp","Instagran","Facebook","LinkedIn",]
+        )
+        console.log("Tabela PDigital preenchida com sucesso.")
+
         await connection.end()
         console.log(`Conexão usada no preenchimento foi encerrada com sucesso.`)
         
     } catch (error) {
-        console.error(`Ocorreu um erro ao preencher a tabela.`, error)
+        console.error(`Ocorreu um erro ao preencher as tabelas.`, error)
     }
 
 })();

@@ -14,7 +14,7 @@ const saltRounds = 10
 
 const controller = {}
 
-controller.getRegisterPage = async (req, res)=> {
+controller.getRegisterPage = async (req, res) => {
     try {
         // Talvez const person = Person.bild() ou nenhum dos dois
         //https://sequelize.org/docs/v6/core-concepts/model-instances/#creating-an-instance
@@ -32,7 +32,7 @@ controller.getRegisterPage = async (req, res)=> {
     }
 }
 
-controller.getLoginPage = async (req, res)=> {
+controller.getLoginPage = async (req, res) => {
     try {
         res.status(200).render('person/login')
     } catch (error) {
@@ -41,7 +41,7 @@ controller.getLoginPage = async (req, res)=> {
     }
 }
 
-controller.createPerson = async (req, res)=> {
+controller.createPerson = async (req, res, next) => {
     const {
         city, state, // Location
         name, email, username, password, // Pessoa
@@ -50,60 +50,70 @@ controller.createPerson = async (req, res)=> {
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
 
-        let location = await Location.findOne({where: {city: city, state: state}})
+        let location = await Location.findOne({ where: { city: city, state: state } })
         if (!location) {
-            location = await Location.create({city, state})
+            location = await Location.create({ city, state })
         }
-        const person = await Person.create({name, email, username, hashedPassword, LocationId: location.id})
-        
-        res.status(200).redirect('/user')
+        const person = await Person.create({ name, email, username, hashedPassword, LocationId: location.id })
+
+        next() //vai para o login. conferir se nao vai informaçoes nao devidas
 
     } catch (error) {
         console.error(error)
-        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`, error: error})
+        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`, error: error })
     }
 }
 
+// aqui não ha nenhuma informacao do usuario?
 controller.login = (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: `/user`,
-        failureRedirect: '/login', 
+        failureRedirect: '/login',
     })(req, res, next)
 }
 
 controller.getUser = async (req, res) => {
-    res.status(200).render('person/index')
+    try {
+        if (req.isAuthenticated()) {
+            res.status(200).render('person/index', {user: req.user})
+            return
+        }
+        res.render('pages/error', { message: 'Você precisa fazer login', error: null })
+    } catch (err) {
+        res.render('pages/error', {error: err, message: 'Erro interno'})
+    }
 }
 
-controller.search = async (req, res)=> {
-    const {city, state, category} = req.body
+controller.search = async (req, res) => {
+    const { city, state, category } = req.body
 
     try {
         const card = await Person.findAll({
             attributes: ['name',],
-            include: [{all: true}],
-            where:{
+            include: [{ all: true }],
+            where: {
                 '$Location.city$': city,
                 '$Location.state$': state,
                 '$Professions.category$': category
             }
         })
 
-        res.render('pages/searchResults', {card: card}
+        res.render('pages/searchResults', { card: card }
 
-    )} catch (error) {
-        res.render('pages/error', {error: error, message: "Sua busca não encontrou resultados"} )
+        )
+    } catch (error) {
+        res.render('pages/error', { error: error, message: "Sua busca não encontrou resultados" })
     }
 }
 
 // Este pode ser mesclado com 'controller.search'
-controller.getAll = async (req, res)=> {
-    const {city, state, category} = req.body
+controller.getAll = async (req, res) => {
+    const { city, state, category } = req.body
 
     try {
         const card = await Person.findAll({
             attributes: ['name',],
-            include: [{all: true}],
+            include: [{ all: true }],
             // where:{
             //     '$Location.city$': city,
             //     '$Location.state$': state,
@@ -111,15 +121,17 @@ controller.getAll = async (req, res)=> {
             // }
         })
 
-        res.render('pages/index', {card: card}
+        res.render('pages/index', { card: card }
 
-    )} catch (error) {
-        res.render('pages/error', {error: error, message: "Erro interno"} )
+        )
+    } catch (error) {
+        res.render('pages/error', { error: error, message: "Erro interno" })
     }
 }
 
-controller.setCard = async (req, res)=>{
-    res.send('card')
+controller.createCard = async (req, res) => {
+    const { phone, isWhatsApp, category, jobDescription, link, platform } = req.body
+    res.send('ok')
 }
 
 module.exports = controller

@@ -44,7 +44,7 @@ module.exports = function(passport) {
     passport.deserializeUser(async (id, done)=>{
         try {
             const user = await Person.findByPk(id, {
-                attributes: {exclude: ['hashedPassword' ,'isAdmin', 'email', 'LocationId']}
+                attributes: {exclude: ['hashedPassword' ,'isAdmin', 'email',]}
             })
             done(null, user)
         } catch (err) {
