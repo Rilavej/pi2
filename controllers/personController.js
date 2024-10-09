@@ -28,7 +28,9 @@ controller.getRegisterPage = async (req, res) => {
         })
     } catch (error) {
         console.error(error)
-        res.status(500).render("pages/error", { error: "Erro ao carregar o formulário!" })
+        res.status(500).render(
+            "pages/error", { error: "Erro ao carregar o formulário!", message: 'Erro interno' }
+        )
     }
 }
 
@@ -37,7 +39,9 @@ controller.getLoginPage = async (req, res) => {
         res.status(200).render('person/login')
     } catch (error) {
         console.error(error)
-        res.status(500).render("pages/error", { error: "Erro ao carregar o formulário!" })
+        res.status(500).render(
+            "pages/error", { error: "Erro ao carregar o formulário!", message: 'Erro interno' }
+        )
     }
 }
 
@@ -68,19 +72,24 @@ controller.createPerson = async (req, res, next) => {
 controller.login = (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: `/user`,
-        failureRedirect: '/login',
+        failureRedirect: '/user',
     })(req, res, next)
 }
 
 controller.getUser = async (req, res) => {
     try {
-        if (req.isAuthenticated()) {
-            res.status(200).render('person/index', {user: req.user})
-            return
-        }
-        res.render('pages/error', { message: 'Você precisa fazer login', error: null })
+        const person = await Person.findByPk(req.user.id, {
+            attributes: ['id','name',],
+            include: { 
+                all: true, 
+                nested: true,
+                attributes: {exclude: 'id'},
+            },
+        });
+        res.status(200).render('person/index', { person })
     } catch (err) {
-        res.render('pages/error', {error: err, message: 'Erro interno'})
+        console.error(err);
+        res.render('pages/error', {message: 'Erro interno', error: err})
     }
 }
 
@@ -89,7 +98,7 @@ controller.search = async (req, res) => {
 
     try {
         const card = await Person.findAll({
-            attributes: ['name',],
+            attributes: ['id','name',],
             include: [{ all: true }],
             where: {
                 '$Location.city$': city,
@@ -97,9 +106,7 @@ controller.search = async (req, res) => {
                 '$Professions.category$': category
             }
         })
-
         res.render('pages/searchResults', { card: card }
-
         )
     } catch (error) {
         res.render('pages/error', { error: error, message: "Sua busca não encontrou resultados" })
@@ -120,10 +127,7 @@ controller.getAll = async (req, res) => {
             //     '$Professions.category$': category
             // }
         })
-
-        res.render('pages/index', { card: card }
-
-        )
+        res.render('pages/index', { card: card })
     } catch (error) {
         res.render('pages/error', { error: error, message: "Erro interno" })
     }
@@ -131,7 +135,15 @@ controller.getAll = async (req, res) => {
 
 controller.createCard = async (req, res) => {
     const { phone, isWhatsApp, category, jobDescription, link, platform } = req.body
-    res.send('ok')
+    // const person = await Person.findByPk(req.user.id)
+    try {
+        await Phone.create({ phone: phone, PDIgitalId: isWhatsApp })
+        await Profession.create({ category: category, jobDescription: jobDescription })
+        await PDigital.create({ link: link, PDigitalId: platform })
+        res.redirect('/user')
+    } catch (error) {
+        res.render('pages/error', { message: 'Erro interno', error: error })
+    }
 }
 
 module.exports = controller

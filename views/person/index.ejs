@@ -4,16 +4,16 @@
             <h1 class="title">
                 Aqui voce deve estar autenticado
             </h1>
-            <p class="subtitle">
-                por enquanto não está
-            </p>
             <% if (user) { %>
                 <h1 class="title">
                     <%= user.name %>
                 </h1>
                 <p class="subtitle">
-                    <%= JSON.stringify(user, null, 8) %>
+                    <%= JSON.stringify(user, null, null) %>
                 </p>
+                <h1 class="title">
+                    <%= JSON.stringify(person, null, null) %>
+                </h1>
             <% }  %>
         </div>
     </section>

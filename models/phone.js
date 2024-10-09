@@ -4,7 +4,7 @@ const DataTypes = require('sequelize')
 const Phone = sequelize.define(
     'Phone',
     {
-        contactNumber: {
+        phone: {
             type: DataTypes.STRING,
             primaryKey:true,
             allowNull: false,

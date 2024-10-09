@@ -13,7 +13,7 @@ const table = (async ()=> {
 
         await connection.query(`USE ${process.env.DATABASE}`)
 
-        const sql = `INSERT INTO Location (city, state) \
+        const sql = `INSERT INTO Locations (city, state) \
         VALUES (?, ?), (?, ?), (?, ?), (?, ?), (?, ?), (?, ?), (?, ?), (?, ?);`
 
         // values?: any | any[] | { [param: string]: any };
@@ -35,10 +35,10 @@ const table = (async ()=> {
         console.log(`Tabela Location preenchida com sucesso.`)
 
         await connection.query(
-            'INSERT INTO PDigital (platform) VALUES (?),(?),(?),(?)',
+            'INSERT INTO PDigitals (platform) VALUES (?),(?),(?),(?)',
             ["WhatsApp","Instagran","Facebook","LinkedIn",]
         )
-        console.log("Tabela PDigital preenchida com sucesso.")
+        console.log("Tabela PDigitals preenchida com sucesso.")
 
         await connection.end()
         console.log(`Conexão usada no preenchimento foi encerrada com sucesso.`)
