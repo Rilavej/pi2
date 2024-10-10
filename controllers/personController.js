@@ -36,11 +36,15 @@ controller.getRegisterPage = async (req, res) => {
 
 controller.getLoginPage = async (req, res) => {
     try {
-        res.status(200).render('person/login')
-    } catch (error) {
-        console.error(error)
+        const message = req.session.messages.at(-1) || null
+        console.log(typeof(req.session.messages))
+        console.log(req.session.messages)
+        console.log(JSON.stringify(req.session.messages))
+        res.status(200).render('person/login', {message: message})
+    } catch (err) {
+        console.error(err)
         res.status(500).render(
-            "pages/error", { error: "Erro ao carregar o formulário!", message: 'Erro interno' }
+            "pages/error", { err: "Erro ao carregar o formulário!", message: 'Erro interno' }
         )
     }
 }
@@ -72,8 +76,9 @@ controller.createPerson = async (req, res, next) => {
 controller.login = (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: `/user`,
-        failureRedirect: '/user',
-    })(req, res, next)
+        failureRedirect: '/login',
+        failureMessage: true, // subtitua o true por "Usuário ou senha incorretos!"
+    })(req,res,next)
 }
 
 controller.getUser = async (req, res) => {

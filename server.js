@@ -22,14 +22,15 @@ server.use(passport.session())
 
 server.use((req, res, next) => {
     res.locals.user = req.user || null
+    res.locals.message = null
     next()
 })
 // ############################################################################################################
 
 server.use(express.json())
 server.use(express.urlencoded({extended:true}))
-server.use(router)
 server.use(express.static(path.join(__dirname, 'public')))
+server.use(router)
 
 // Define configurações do servidor relacionadas a view engine
 // https://expressjs.com/en/4x/api.html#app.set

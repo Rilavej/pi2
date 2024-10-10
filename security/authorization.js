@@ -3,12 +3,12 @@ module.exports = {
         if (req.isAuthenticated()){
             return next()
         }
-        res.render('person/authError', {message: "Usuário ou senha incorretos"} )
+        res.render('person/login', {message: "Antes é preciso fazer login!"} )
     },
     admin: function(req,res,next) {
         if (req.isAuthenticated() && req.user.isAdmin){
             return next()
         }
-        res.render('person/authError', {message: "Voçê não é administrador"} )
+        res.render('person/login', {message: "Acesso negado!"} )
     }
 }

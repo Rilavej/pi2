@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const personController = require('../controllers/personController')
-const {auth} = require('../security/authorization')
+const {auth, admin} = require('../security/authorization')
 
 
 router.get('/', personController.getAll) // usar cookie para filtar pela localizaçao do usuario 
