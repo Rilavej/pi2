@@ -26,20 +26,28 @@ controller.getRegisterPage = async (req, res) => {
             // state: state,
             // city: city
         })
-    } catch (error) {
-        console.error(error)
+    } catch (err) {
+        console.error(err)
         res.status(500).render(
-            "pages/error", { error: "Erro ao carregar o formulário!", message: 'Erro interno' }
+            "pages/error", { err: "Erro ao carregar o formulário!", message: 'Erro interno' }
         )
     }
 }
 
 controller.getLoginPage = async (req, res) => {
     try {
-        const message = req.session.messages.at(-1) || null
-        console.log(typeof(req.session.messages))
-        console.log(req.session.messages)
-        console.log(JSON.stringify(req.session.messages))
+        res.status(200).render('person/login', {message: null})
+    } catch (err) {
+        console.error(err)
+        res.status(500).render(
+            "pages/error", { err: "Erro ao carregar o formulário!", message: 'Erro interno' }
+        )
+    }
+}
+
+controller.getLoginPageFail = async (req, res) => {
+    try {
+        const message = req.session.messages? req.session.messages.at(-1) : null
         res.status(200).render('person/login', {message: message})
     } catch (err) {
         console.error(err)
@@ -66,9 +74,9 @@ controller.createPerson = async (req, res, next) => {
 
         next() //vai para o login. conferir se nao vai informaçoes nao devidas
 
-    } catch (error) {
-        console.error(error)
-        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`, error: error })
+    } catch (err) {
+        console.error(err)
+        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`, err: err })
     }
 }
 
@@ -76,8 +84,8 @@ controller.createPerson = async (req, res, next) => {
 controller.login = (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: `/user`,
-        failureRedirect: '/login',
-        failureMessage: true, // subtitua o true por "Usuário ou senha incorretos!"
+        failureRedirect: '/loginFail',
+        failureMessage: 'Usuário ou senha incorreto(s)!'
     })(req,res,next)
 }
 
@@ -94,7 +102,7 @@ controller.getUser = async (req, res) => {
         res.status(200).render('person/index', { person })
     } catch (err) {
         console.error(err);
-        res.render('pages/error', {message: 'Erro interno', error: err})
+        res.render('pages/error', {message: 'Erro interno', err: err})
     }
 }
 
@@ -113,8 +121,8 @@ controller.search = async (req, res) => {
         })
         res.render('pages/searchResults', { card: card }
         )
-    } catch (error) {
-        res.render('pages/error', { error: error, message: "Sua busca não encontrou resultados" })
+    } catch (err) {
+        res.render('pages/error', { err: err, message: "Sua busca não encontrou resultados" })
     }
 }
 
@@ -133,8 +141,8 @@ controller.getAll = async (req, res) => {
             // }
         })
         res.render('pages/index', { card: card })
-    } catch (error) {
-        res.render('pages/error', { error: error, message: "Erro interno" })
+    } catch (err) {
+        res.render('pages/error', { err: err, message: "Erro interno" })
     }
 }
 
@@ -146,8 +154,8 @@ controller.createCard = async (req, res) => {
         await Profession.create({ category: category, jobDescription: jobDescription })
         await PDigital.create({ link: link, PDigitalId: platform })
         res.redirect('/user')
-    } catch (error) {
-        res.render('pages/error', { message: 'Erro interno', error: error })
+    } catch (err) {
+        res.render('pages/error', { message: 'Erro interno', err: err })
     }
 }
 

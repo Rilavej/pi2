@@ -10,7 +10,8 @@ const sequelize = new Sequelize(`mysql://${process.env.DB_USER}:${process.env.DB
         define: {
             timestamps: false, // para não utilizar campos created_at e updated_at
             // freezeTableName: true // para não adicionar o "s" no nome das tabelas
-        }
+        },
+        logging: false
     });
 
 sequelize.authenticate().then(() => {

@@ -19,14 +19,13 @@ server.use(session({
 }))
 server.use(passport.initialize())
 server.use(passport.session())
+// ############################################################################################################
 
 server.use((req, res, next) => {
     res.locals.user = req.user || null
-    res.locals.message = null
+    res.locals.message = {}
     next()
 })
-// ############################################################################################################
-
 server.use(express.json())
 server.use(express.urlencoded({extended:true}))
 server.use(express.static(path.join(__dirname, 'public')))
