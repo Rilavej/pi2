@@ -5,7 +5,7 @@ const {
     Profession,
     Location,
     Address,
-    PDigital,
+    Media,
     SocialAccount,
 } = require('../config/associations')
 
@@ -93,10 +93,10 @@ controller.getUser = async (req, res) => {
     try {
         const person = await Person.findByPk(req.user.id, {
             attributes: ['id','name',],
-            include: { 
+            include: {
                 all: true, 
                 nested: true,
-                attributes: {exclude: 'id'},
+                attributes: {exclude: ['id', 'PersonId', 'MediumId']},
             },
         });
         res.status(200).render('person/index', { person })
@@ -147,12 +147,46 @@ controller.getAll = async (req, res) => {
 }
 
 controller.createCard = async (req, res) => {
-    const { phone, isWhatsApp, category, jobDescription, link, platform } = req.body
-    // const person = await Person.findByPk(req.user.id)
+    const {category, jobDescription, phone, link, platform} = req.body
     try {
-        await Phone.create({ phone: phone, PDIgitalId: isWhatsApp })
-        await Profession.create({ category: category, jobDescription: jobDescription })
-        await PDigital.create({ link: link, PDigitalId: platform })
+        let professionsBulk = []
+        for (let i = 0; i < category.length; i++) {
+            let row = {}
+            row['category'] = category[i]
+            row['jobDescription'] = jobDescription[i]
+            row['PersonId'] = req.user.id
+            professionsBulk.push(row)
+        }
+
+        // Assumindo que todo telefone é whatsapp
+        let phonesBulk = []
+        for (let i = 0; i < phone.length; i++) {
+            let row = {}
+            row['phone'] = phone[i]
+            row['PersonId'] = req.user.id
+            phonesBulk.push(row)
+        }
+
+        let socialAccountsBulk = []
+        for (let i = 0; i < link.length; i++) {
+            let row = {}
+            row['link'] = link[i]
+            row['PersonId'] = req.user.id
+            // melhorar mandando um script com lista
+            let media = await Media.findOne({ 
+                where: 
+                    { platform: platform[i] }
+                })
+            if (!media) {
+                media = await Media.create({platform: platform[i]})
+            }
+            row['MediumId'] = media.id
+            socialAccountsBulk.push(row)
+        }
+
+        await Profession.bulkCreate(professionsBulk)
+        await Phone.bulkCreate(phonesBulk)
+        await SocialAccount.bulkCreate(socialAccountsBulk)
         res.redirect('/user')
     } catch (err) {
         res.render('pages/error', { message: 'Erro interno', err: err })

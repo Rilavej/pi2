@@ -1,5 +1,6 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
+const Media = require('./media')
 
 const Phone = sequelize.define(
     'Phone',
@@ -12,6 +13,13 @@ const Phone = sequelize.define(
                 isNumeric: true
             }
         },
+        // MediaId: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: "Media",
+        //         key: 'id'
+        //     }
+        // }
     },
     {
         // tableName: 'phone'

@@ -32,13 +32,13 @@ const table = (async ()=> {
             sql,
             values
         })
-        console.log(`Tabela Location preenchida com sucesso.`)
+        console.log(`Tabela Locations preenchida com sucesso.`)
 
         await connection.query(
-            'INSERT INTO PDigitals (platform) VALUES (?),(?),(?),(?)',
+            'INSERT INTO Media (platform) VALUES (?),(?),(?),(?)',
             ["WhatsApp","Instagran","Facebook","LinkedIn",]
         )
-        console.log("Tabela PDigitals preenchida com sucesso.")
+        console.log("Tabela Media preenchida com sucesso.")
 
         await connection.end()
         console.log(`Conexão usada no preenchimento foi encerrada com sucesso.`)

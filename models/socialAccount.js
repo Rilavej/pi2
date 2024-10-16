@@ -8,18 +8,6 @@ const SocialAccount = sequelize.define(
             type: DataTypes.STRING,
             primaryKey: true,
         },
-        // SocialNetworkName: {
-        //     type: DataTypes.STRING,
-        //     allowNull: false,
-        //     references: {model: 'SocialNetwork', key: 'SocialNetworkName'},
-        //     onDelete: 'CASCADE',
-        // },
-        // personId: {
-        //     type: DataTypes.INTEGER,
-        //     allowNull: false,
-        //     references: {model: 'Person', key: 'personId'},
-        //     onDelete: 'CASCADE',
-        // }
     },
     {
         // tableName: 'socialAccount'

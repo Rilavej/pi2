@@ -16,5 +16,58 @@
                 </h1>
             <% }  %>
         </div>
+        <div class="container is-max-tablet">
+            <div class="box">
+                <form action="/user" method="post">
+
+                    <div class="field">
+                        <label class="label">Profissão</label>
+                        <div class="control">
+                            <input class="input" name="[category]" type="text" placeholder="Nome da categoria">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Descrição</label>
+                        <div class="control">
+                            <input class="input" name="[jobDescription]" type="text" placeholder="Descrição dos serviços">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Profissão</label>
+                        <div class="control">
+                            <input class="input" name="[category]" type="text" placeholder="Nome da categoria">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Descrição</label>
+                        <div class="control">
+                            <input class="input" name="[jobDescription]" type="text" placeholder="Descrição dos serviços">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Telefone</label>
+                        <div class="control">
+                            <input class="input" name="phone[]" type="text" placeholder="Somente números">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Conta Social</label>
+                        <div class="control">
+                            <input class="input" name="link[]" type="text" placeholder="Link do perfil">
+                            <input class="input" name="platform[]" type="text" placeholder="Nome da rede Social">
+                        </div>
+                    </div>
+
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-link">Salvar</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </section>
     <%- include('../layouts/footer'); -%>

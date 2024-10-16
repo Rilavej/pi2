@@ -5,7 +5,7 @@ const Phone = require('../models/phone')
 const Profession = require('../models/profession')
 const Location = require('../models/location')
 const Address = require('../models/address')
-const PDigital = require('../models/pDigital')
+const Media = require('../models/media')
 const SocialAccount = require('../models/socialAccount')
 
 Location.hasMany(Person)
@@ -23,11 +23,11 @@ SocialAccount.belongsTo(Person)
 Person.hasOne(Address, {onDelete: 'CASCADE'})
 Address.belongsTo(Person)
 
-PDigital.hasMany(SocialAccount)
-SocialAccount.belongsTo(PDigital)
+Media.hasMany(SocialAccount)
+SocialAccount.belongsTo(Media)
 
-PDigital.hasMany(Phone)
-Phone.belongsTo(PDigital)
+Media.hasMany(Phone)
+Phone.belongsTo(Media)
 
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
 sequelize.sync({force: false})
@@ -38,6 +38,6 @@ module.exports = {
     Profession,
     Location,
     Address,
-    PDigital,
+    Media,
     SocialAccount,
 }
