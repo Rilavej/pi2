@@ -96,7 +96,7 @@ controller.getUser = async (req, res) => {
             include: {
                 all: true, 
                 nested: true,
-                attributes: {exclude: ['id', 'PersonId', 'MediumId']},
+                attributes: {exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds']},
             },
         });
         res.status(200).render('person/index', { person })
@@ -152,9 +152,11 @@ controller.createCard = async (req, res) => {
         let professionsBulk = []
         for (let i = 0; i < category.length; i++) {
             let row = {}
+            if (category[i] == '') {continue}
             row['category'] = category[i]
-            row['jobDescription'] = jobDescription[i]
             row['PersonId'] = req.user.id
+            if (jobDescription[i] != '') {
+                row['jobDescription'] = jobDescription[i]}
             professionsBulk.push(row)
         }
 

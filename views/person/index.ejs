@@ -6,14 +6,13 @@
             </h1>
             <% if (user) { %>
                 <h1 class="title">
-                    <%= user.name %>
+                    <%= user.name %> 
+                    <br>
+                    <%= JSON.stringify(user, null, null) %>
                 </h1>
                 <p class="subtitle">
-                    <%= JSON.stringify(user, null, null) %>
-                </p>
-                <h1 class="title">
                     <%= JSON.stringify(person, null, null) %>
-                </h1>
+                </p>
             <% }  %>
         </div>
         <div class="container is-max-tablet">
@@ -23,25 +22,25 @@
                     <div class="field">
                         <label class="label">Profissão</label>
                         <div class="control">
-                            <input class="input" name="[category]" type="text" placeholder="Nome da categoria">
+                            <input class="input" name="category[]" type="text" placeholder="Nome da categoria">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Descrição</label>
                         <div class="control">
-                            <input class="input" name="[jobDescription]" type="text" placeholder="Descrição dos serviços">
+                            <input class="input" name="jobDescription[]" type="text" placeholder="Descrição dos serviços">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Profissão</label>
                         <div class="control">
-                            <input class="input" name="[category]" type="text" placeholder="Nome da categoria">
+                            <input class="input" name="category[]" type="text" placeholder="Nome da categoria">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Descrição</label>
                         <div class="control">
-                            <input class="input" name="[jobDescription]" type="text" placeholder="Descrição dos serviços">
+                            <input class="input" name="jobDescription[]" type="text" placeholder="Descrição dos serviços">
                         </div>
                     </div>
 
