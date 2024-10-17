@@ -4,11 +4,6 @@ const DataTypes = require('sequelize')
 const Media = sequelize.define(
     'Media',
     {
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true,
-        },
         platform: {
             type: DataTypes.STRING,
             unique: true

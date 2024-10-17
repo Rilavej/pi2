@@ -180,7 +180,7 @@ controller.createCard = async (req, res) => {
             if (!media) {
                 media = await Media.create({platform: platform[i]})
             }
-            row['MediumId'] = media.id
+            row['MediaId'] = media.id
             socialAccountsBulk.push(row)
         }
 

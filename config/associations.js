@@ -23,11 +23,8 @@ SocialAccount.belongsTo(Person)
 Person.hasOne(Address, {onDelete: 'CASCADE'})
 Address.belongsTo(Person)
 
-Media.hasMany(SocialAccount)
-SocialAccount.belongsTo(Media)
-
-Media.hasMany(Phone)
-Phone.belongsTo(Media)
+Media.hasMany(SocialAccount, {foreignKey: 'MediaId', onDelete: 'CASCADE'})
+SocialAccount.belongsTo(Media, {foreignKey: 'MediaId'})
 
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
 sequelize.sync({force: false})

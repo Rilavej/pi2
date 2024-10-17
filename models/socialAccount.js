@@ -1,5 +1,6 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
+const Media = require('./media')
 
 const SocialAccount = sequelize.define(
     'SocialAccount',

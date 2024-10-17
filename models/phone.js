@@ -13,13 +13,12 @@ const Phone = sequelize.define(
                 isNumeric: true
             }
         },
-        // MediaId: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: "Media",
-        //         key: 'id'
-        //     }
-        // }
+        // Padrao para códigos de midia "-x-y-z-",onde x,y,z são ids da tabela media
+        // Implemetar get e set presonalizados
+        phoneMediaIds: {
+            type: DataTypes.STRING,
+            comment: 'Padrão para códigos de mídia: "-x-y-z-". Onde "x", "y" e "z" são ids da tabela media'
+        }
     },
     {
         // tableName: 'phone'
