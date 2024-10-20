@@ -1,22 +1,18 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
-// "Profession" pode subtituir "Professional" permitindo que uma pessoa tenha varias profissoes em unico cadastro
 const Profession = sequelize.define(
     'Profession',
     {
-        category: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         jobDescription: {
             type: DataTypes.STRING,
         },
-    },
-    {
-        // tableName: "profession"
+        // Campo reservado para possíveis ocupações inexistentes no CBO
+        newCategory: {
+            type: DataTypes.STRING,
+            defaultValue: null,
+        },
     }
-   
 )
 
 module.exports = Profession
