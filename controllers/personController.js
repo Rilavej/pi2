@@ -7,12 +7,17 @@ const {
     Address,
     Media,
     SocialAccount,
+    Uf,
+    Municipio,
+    Cbo
 } = require('../config/associations')
+const { Op } = require('sequelize');
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
 const controller = {}
+
 
 controller.getRegisterPage = async (req, res) => {
     try {
@@ -59,18 +64,25 @@ controller.getLoginPageFail = async (req, res) => {
 
 controller.createPerson = async (req, res, next) => {
     const {
-        city, state, // Location
+        city, state, // Municipio e Uf
         name, email, username, password, // Pessoa
     } = req.body
 
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
-
-        let location = await Location.findOne({ where: { city: city, state: state } })
-        if (!location) {
-            location = await Location.create({ city, state })
-        }
-        const person = await Person.create({ name, email, username, hashedPassword, LocationId: location.id })
+        
+        const uf = await Uf.findOne({
+            where: {
+                [Op.or]: [{name: state},{ abbreviation: state}]
+            }
+        })
+        const municipio = await Municipio.findOne({
+            where: {
+                [Op.and]: [ {name: city}, {Ufid: uf.id} ]
+            }
+        })
+        
+        const person = await Person.create({ name, email, username, hashedPassword, MunicipioId: municipio.id })
 
         next() //vai para o login. conferir se nao vai informaçoes nao devidas
 
@@ -114,9 +126,9 @@ controller.search = async (req, res) => {
             attributes: ['id','name',],
             include: [{ all: true }],
             where: {
-                '$Location.city$': city,
-                '$Location.state$': state,
-                '$Professions.category$': category
+                '$Municipio.city$': city,
+                '$Uf.state$': state,
+                '$Cbo.category$': category
             }
         })
         res.render('pages/searchResults', { card: card }

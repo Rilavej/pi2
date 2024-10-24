@@ -49,5 +49,7 @@ module.exports = {
     Address,
     Media,
     SocialAccount,
-    Cbo
+    Uf,
+    Municipio,
+    Cbo,
 }
