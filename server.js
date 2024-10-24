@@ -7,7 +7,6 @@ const path = require('path')
 const passport = require('passport');
 require('./security/authentication')(passport);
 var session = require('express-session')
-const bodyParser = require('body-parser')
 
 const PORT = process.env.PORT || 3000
 
@@ -28,7 +27,7 @@ server.use((req, res, next) => {
     next()
 })
 server.use(express.json())
-server.use(bodyParser.urlencoded({extended:true}))
+server.use(express.urlencoded({extended:true}))
 server.use(express.static(path.join(__dirname, 'public')))
 server.use(router)
 

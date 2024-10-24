@@ -140,9 +140,14 @@ controller.search = async (req, res) => {
 
 // Este pode ser mesclado com 'controller.search'
 controller.getAll = async (req, res) => {
-    const { city, state, category } = req.body
 
     try {
+        const ufs = await Uf.findAll({ 
+            raw: true,
+            order: ['name']
+        })
+        console.log(ufs)
+        
         const card = await Person.findAll({
             attributes: ['name',],
             include: [{ all: true }],
@@ -152,7 +157,7 @@ controller.getAll = async (req, res) => {
             //     '$Professions.category$': category
             // }
         })
-        res.render('pages/index', { card: card })
+        res.render('pages/index', { ufs: ufs, card: card })
     } catch (err) {
         res.render('pages/error', { err: err, message: "Erro interno" })
     }
