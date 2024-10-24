@@ -126,9 +126,9 @@ controller.search = async (req, res) => {
             attributes: ['id','name',],
             include: [{ all: true }],
             where: {
-                '$Municipio.city$': city,
-                '$Uf.state$': state,
-                '$Cbo.category$': category
+                '$Cbo.title$': category,
+                '$Municipio.name$': city,
+                [Op.or]: [{'$Uf.name$': state}, {'$Uf.abbreviation$': state,}],
             }
         })
         res.render('pages/searchResults', { card: card }
