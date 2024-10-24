@@ -39,4 +39,5 @@ server.set('view engine', 'ejs')
 
 server.listen(PORT, ()=>{
     console.log(`Servidor escutando a porta ${PORT}.`)
+    console.log(`PID: ${require('process').pid}`)
 })

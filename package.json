@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "node ./_provisorio/schema.js && node server.js && exit 0",
-    "drop": "node ./_provisorio/drop.js && node ./_provisorio/schema.js && node server.js && exit 0",
-    "zerverExperimento.js": "node ./_provisorio/schema.js && nodemon zerverExperimento.js && exit 0",
+    "test": "node ./_provisorio/schema.js && nodemon server.js & PID=$! && sleep 3 && kill -STOP $PID && echo \"Processo $PID nodemon pausado.\" && node ./_provisorio/table.js && kill -CONT $PID && wait $PID && exit 0",
+    "drop": "node ./_provisorio/drop.js && node ./_provisorio/schema.js && nodemon server.js & PID=$! && sleep 3 && kill -STOP $PID && echo \"Processo $PID nodemon pausado.\" && node ./_provisorio/table.js && kill -CONT $PID && wait $PID",
+    "zerverExperimento.js": "node ./_provisorio/schema.js && nodemon zerverExperimento.js & PID=$! && sleep 3 && kill -STOP $PID && echo \"Processo $PID nodemon pausado.\" && node ./_provisorio/table.js && kill -CONT $PID && wait $PID",
     "table": "node ./_provisorio/table.js"
   },
   "repository": {
