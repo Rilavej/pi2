@@ -21,21 +21,14 @@ const controller = {}
 
 controller.getRegisterPage = async (req, res) => {
     try {
-        // Talvez const person = Person.bild() ou nenhum dos dois
-        //https://sequelize.org/docs/v6/core-concepts/model-instances/#creating-an-instance
-        // const state = State.findAll({
-        //     order: ['stateAbbreviation' ,'DESC']
-        // })
-        // const city = City.findAll()
-        res.status(200).render('person/signup', {
-            // state: state,
-            // city: city
+        const ufs = await Uf.findAll({ 
+            raw: true,
+            order: ['name']
         })
+        res.status(200).render('person/signup', { ufs: ufs })
     } catch (err) {
         console.error(err)
-        res.status(500).render(
-            "pages/error", { err: "Erro ao carregar o formulário!", message: 'Erro interno' }
-        )
+        res.status(500).render("pages/error", {message: 'Erro interno'})
     }
 }
 
@@ -45,7 +38,7 @@ controller.getLoginPage = async (req, res) => {
     } catch (err) {
         console.error(err)
         res.status(500).render(
-            "pages/error", { err: "Erro ao carregar o formulário!", message: 'Erro interno' }
+            "pages/error", { message: 'Erro interno' }
         )
     }
 }
@@ -57,7 +50,7 @@ controller.getLoginPageFail = async (req, res) => {
     } catch (err) {
         console.error(err)
         res.status(500).render(
-            "pages/error", { err: "Erro ao carregar o formulário!", message: 'Erro interno' }
+            "pages/error", { message: 'Erro interno' }
         )
     }
 }
@@ -88,7 +81,7 @@ controller.createPerson = async (req, res, next) => {
 
     } catch (err) {
         console.error(err)
-        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`, err: err })
+        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`})
     }
 }
 
@@ -111,15 +104,19 @@ controller.getUser = async (req, res) => {
                 attributes: {exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds']},
             },
         });
-        res.status(200).render('person/index', { person })
+        
+        const cbo = await Cbo.findAll()
+        let str = JSON.stringify(cbo)
+        
+        res.status(200).render('person/index', { person, cbo: str})
     } catch (err) {
         console.error(err);
-        res.render('pages/error', {message: 'Erro interno', err: err})
+        res.render('pages/error', {message: 'Erro interno'})
     }
 }
 
 controller.search = async (req, res) => {
-    const { city, state, category } = req.body
+    const { city, state, professional } = req.body
 
     try {
         const card = await Person.findAll({
@@ -134,7 +131,8 @@ controller.search = async (req, res) => {
         res.render('pages/searchResults', { card: card }
         )
     } catch (err) {
-        res.render('pages/error', { err: err, message: "Sua busca não encontrou resultados" })
+        console.error(err);
+        res.render('pages/error', { message: "Sua busca não encontrou resultados" })
     }
 }
 
@@ -147,6 +145,10 @@ controller.getAll = async (req, res) => {
             order: ['name']
         })
         console.log(ufs)
+
+        const cbo = await Cbo.findAll({
+            raw: true,
+        })
         
         const card = await Person.findAll({
             attributes: ['name',],
@@ -159,7 +161,7 @@ controller.getAll = async (req, res) => {
         })
         res.render('pages/index', { ufs: ufs, card: card })
     } catch (err) {
-        res.render('pages/error', { err: err, message: "Erro interno" })
+        res.render('pages/error', { message: "Erro interno" })
     }
 }
 
@@ -208,7 +210,7 @@ controller.createCard = async (req, res) => {
         await SocialAccount.bulkCreate(socialAccountsBulk)
         res.redirect('/user')
     } catch (err) {
-        res.render('pages/error', { message: 'Erro interno', err: err })
+        res.render('pages/error', { message: 'Erro interno' })
     }
 }
 

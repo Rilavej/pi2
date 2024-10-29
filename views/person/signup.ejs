@@ -34,18 +34,27 @@
                     </div>
 
                     <div class="field">
-                        <label class="label">City</label>
+                        <label class="label">State</label>
                         <div class="control">
-                            <input class="input" name="city" type="text" placeholder="Text input">
+                            <select id="state" class="input" name="state" required onclick="fetchCities()">
+                                <option value="" disabled selected> Estado </option>
+                                <% ufs.forEach(uf=> { %>
+                                    <option value=<%=uf.abbreviation %>><%= uf.name %>
+                                    </option>
+                                    <% }); %>
+                            </select>
                         </div>
                     </div>
 
                     <div class="field">
-                        <label class="label">State</label>
+                        <label class="label">City</label>
                         <div class="control">
-                            <input class="input" name="state" type="text" placeholder="Text input">
+                            <select id="city" class="input" name="city" required>
+                                <option value="" disabled selected>Cidade </option>
+                            </select>
                         </div>
                     </div>
+
 
                     <div class="field is-grouped">
                         <div class="control">

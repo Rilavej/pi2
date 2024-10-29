@@ -5,7 +5,7 @@ const Cbo = sequelize.define(
     'Cbo',
     {
         id: {
-            type: DataTypes.STRING(6),
+            type: DataTypes.INTEGER(6).ZEROFILL,
             primaryKey: true,
             allowNull: false,
         },

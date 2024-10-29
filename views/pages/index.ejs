@@ -1,14 +1,5 @@
 <%- include('../layouts/header'); -%>
-    <section class="section">
-        <div class="container">
-            <h1 class="title">
-                Hello World
-            </h1>
-            <p class="subtitle">
-                My first website with <strong>Bulma</strong>! </p>
-            <p class="help">
-                Já tem conta? <a href="/login"> Faça login</a> </p>
-        </div>
+<%- include('../layouts/title') %>
         <section class="section">
             <div class="container is-max-tablet is-centered">
                 <h1 class="subtitle has-text-centered">Encontre um profissional</h1>
@@ -17,10 +8,10 @@
                         <div class="field column is-one-third">
                             <label class="label"></label>
                             <div class="control">
-                                <select id="state" class="input" name="state" required onchange="fetchCities()">
-                                    <option value="" disabled selected>--Estado--</option>
+                                <select id="state" class="input" name="state" required onclick="fetchCities()">
+                                    <option value="" disabled selected> Estado </option>
                                     <% ufs.forEach(uf=> { %>
-                                        <option value=<%= uf.abbreviation %>><%= uf.name %>
+                                        <option value=<%=uf.abbreviation %>><%= uf.name %>
                                         </option>
                                         <% }); %>
                                 </select>
@@ -29,13 +20,14 @@
                         <div class="field column is-one-third"> <label class="label"></label>
                             <div class="control">
                                 <select id="city" class="input" name="city" required>
-                                    <option value="" disabled selected >--Cidade--</option>
+                                    <option value="" disabled selected> Cidade </option>
                                 </select>
                             </div>
                         </div>
                         <div class="field column is-one-third"> <label class="label"></label>
-                            <div class="control"> <input class="input" name="category" type="text"
-                                    placeholder="profissional"> </div>
+                            <div class="control"> 
+                                <input class="input" name="professional" type="text" placeholder="profissional"> 
+                            </div>
                         </div>
                         <div class="field column is-one-third">
                             <div class="field is-one-third"> <label class="label"></label>
@@ -52,40 +44,4 @@
         </section>
         <%- include('../layouts/featuredCards')%>
     </section>
-    <script>
-        async function fetchCities() {
-            const state = document.getElementById("state").value;
-            // location.href = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`
-            response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`)
-            let data = await response.json()
-            let json = await JSON.stringify(data)
-            console.log(data)
-            console.log(json)
-
-            const cities = data
-            let select = document.getElementById('city')
-            cities.forEach(city=> { 
-                let option = document.createElement('option')
-                option.innerHTML = city.nome
-                select.appendChild(option)
-            })
-
-            // const term = document.getElementById("city").value;
-            // if (term.length < 2) return; // Evitar consultas com menos de 2 caracteres
-        }
-    </script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.min.js"></script>
-    <script>
-        // Supondo que `dados` seja um array de objetos com os dados do banco
-        const fuse = new Fuse(dados, {
-            keys: ['nome'], // Campos onde buscar
-            threshold: 0.3 // Ajuste de sensibilidade de similaridade
-        });
-
-        function buscarLocalmente() {
-            const termo = document.getElementById("autocomplete").value;
-            const resultados = fuse.search(termo);
-            // Exibir os resultados como no exemplo anterior
-        }
-    </script> -->
     <%- include('../layouts/footer'); -%>

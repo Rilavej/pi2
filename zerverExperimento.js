@@ -1,29 +1,42 @@
 const express = require('express')
 const server = express()
-const router = require('./routes/router')
-require('dotenv').config()
-// require("./config/associations")
+const router = require('./routes/router');
+require('dotenv').config();
+require('./config/associations');
+const path = require('path')
+const passport = require('passport');
+require('./security/authentication')(passport);
+var session = require('express-session')
 
 const PORT = process.env.PORT || 3000
 
-// server.use(router)
+// ############################################# Estudar ######################################################
+server.use(session({
+    secret: process.env.SECRET,  //Chave secreta utilizada para assinar as sessões, garantindo a integridade e segurança das mesmas   
+    resave: false, //Determina se a sessão deve ser regravada no armazenamento, mesmo que não tenha sido modificada
+    saveUninitialized: true, //Define se a sessão deve ser salva no armazenamento, mesmo que não tenha sido modificada
+    cookie: { maxAge: 10 * 60 * 1000 } //Define as configurações do cookie de sessão. maxAge está definido como 2 minutos (2 * 60 * 1000 milissegundos), especificando o tempo máximo de vida do cookie antes de expirar
+}))
+server.use(passport.initialize())
+server.use(passport.session())
+// ############################################################################################################
+
+server.use((req, res, next) => {
+    res.locals.user = req.user || null
+    res.locals.message = {}
+    next()
+})
+server.use(express.json())
+server.use(express.urlencoded({extended:true}))
+server.use(express.static(path.join(__dirname, 'public')))
+server.use(router)
+
+// Define configurações do servidor relacionadas a view engine
+// https://expressjs.com/en/4x/api.html#app.set
+server.set('views', path.join(__dirname, './views'))
+server.set('view engine', 'ejs')
 
 server.listen(PORT, ()=>{
     console.log(`Servidor escutando a porta ${PORT}.`)
-})
-
-console.log(`mariadb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE}`)
-
-console.log(process.cwd())
-
-let ejs = require('ejs');
-let people = ['geddy', 'neil', 'alex'];
-let html = ejs.render('<h1\'red\'><%= people.join(", "); %></h1>', {people: people});
-
-server.get('/ejs', (req,res)=>{
-    res.send(html)
-})
-
-server.get('/', (req,res)=>{
-    res.send(server.get('views'))
+    console.log(`PID: ${require('process').pid}`)
 })

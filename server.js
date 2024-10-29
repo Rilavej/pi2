@@ -24,6 +24,7 @@ server.use(passport.session())
 server.use((req, res, next) => {
     res.locals.user = req.user || null
     res.locals.message = {}
+    res.locals.err = {err: 'Erro interno do servidor'}
     next()
 })
 server.use(express.json())
@@ -38,5 +39,5 @@ server.set('view engine', 'ejs')
 
 server.listen(PORT, ()=>{
     console.log(`Servidor escutando a porta ${PORT}.`)
-    console.log(`PID: ${require('process').pid}`)
+    console.log(`PID: ${require('process').pid}: node`)
 })

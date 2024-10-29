@@ -4,7 +4,7 @@ const DataTypes = require('sequelize')
 const Municipio = sequelize.define(
     'Municipio', {
         id: {
-            type: DataTypes.STRING(7),
+            type: DataTypes.INTEGER(7).ZEROFILL,
             primaryKey: true,
             allowNull: false,
         },

@@ -4,7 +4,7 @@ const DataTypes = require('sequelize')
 const Uf = sequelize.define(
     'Uf',{
         id: {
-            type: DataTypes.STRING(2), 
+            type: DataTypes.INTEGER(2).ZEROFILL, 
             primaryKey: true,
             allowNull: false,
         },
