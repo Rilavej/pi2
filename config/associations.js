@@ -17,8 +17,11 @@ const Uf = require('../models/uf')
 Uf.hasMany(Municipio)
 Municipio.belongsTo(Uf)
 
-Municipio.hasMany(Person)
-Person.belongsTo(Municipio)
+// Municipio.hasMany(Person)
+// Person.belongsTo(Municipio)
+
+Person.belongsToMany(Municipio, {through: Address})
+Municipio.belongsToMany(Person, {through: Address})
 
 Person.belongsToMany(Cbo, {through: Profession})
 Cbo.belongsToMany(Person, {through: Profession})
@@ -32,8 +35,8 @@ Phone.belongsTo(Person)
 Person.hasMany(SocialAccount, {onDelete: 'CASCADE'})
 SocialAccount.belongsTo(Person)
 
-Person.hasOne(Address, {onDelete: 'CASCADE'})
-Address.belongsTo(Person)
+// Person.hasOne(Address, {onDelete: 'CASCADE'})
+// Address.belongsTo(Person)
 
 Media.hasMany(SocialAccount, {foreignKey: 'MediaId', onDelete: 'CASCADE'})
 SocialAccount.belongsTo(Media, {foreignKey: 'MediaId'})

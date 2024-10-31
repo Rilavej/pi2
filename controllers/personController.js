@@ -3,7 +3,6 @@ const {
     Person,
     Phone,
     Profession,
-    Location,
     Address,
     Media,
     SocialAccount,
@@ -153,11 +152,6 @@ controller.getAll = async (req, res) => {
         const card = await Person.findAll({
             attributes: ['name',],
             include: [{ all: true }],
-            // where:{
-            //     '$Location.city$': city,
-            //     '$Location.state$': state,
-            //     '$Professions.category$': category
-            // }
         })
         res.render('pages/index', { ufs: ufs, card: card })
     } catch (err) {

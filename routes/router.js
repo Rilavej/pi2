@@ -18,6 +18,5 @@ router.get('/user', auth, personController.getUser) //ferzer middleware auth
 router.post('/user', auth, personController.createCard) //ferzer middleware auth
 
 router.get('/api/:professions', api.getProfessions)
-router.get('/api/cbo', api.getCbo)
 
 module.exports = router

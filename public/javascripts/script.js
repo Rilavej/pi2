@@ -17,33 +17,7 @@ async function fetchCities() {
 }
 
 const parentEl = document.querySelector("#autocompleteWrapper")
-const inputEl = document.querySelector("#autocompleteInput")
-
-// inputEl.addEventListener('input', () => onInputChange(window.cbo, inputEl.value, parentEl))
-
-// let ul = document.createElement("ul")
-
-// async function onInputChange(strList, inputValue, parentEl) {
-//     // let div = document.createElement('div')
-//     ul.remove()
-//     if (inputValue.length < 3)  return 
-//     const objects = JSON.parse(strList)
-//     let value = inputValue.toLowerCase()
-//     // let filteredList = []
-//     // let ul = document.createElement("ul")
-//     objects.forEach(element => {
-//         if (element.title.substring(0, value.length).toLowerCase() === value) {
-//             // filteredList.push(element)
-
-//             let li = document.createElement('li')
-//             let button = document.createElement('button')
-//             button.innerHTML = element.title
-//             li.appendChild(button)
-//             ul.appendChild(li)
-//         }
-//     })
-//     parentEl.appendChild(ul)
-// }
+const inputEl = document.querySelector("#autocompleteInput") 
 
 window.cbo = JSON.parse(window.cbo)
 inputEl.addEventListener('input', (e) => onInputChange(window.cbo, "title", e.target.value))
@@ -54,7 +28,7 @@ function onInputChange(objList, key, inputValue) {
     if (value.length  < 2 ) return;
     const filteredNames = [];
     objList.forEach(element => {
-        if(element[key].substring(0,value.length).toLowerCase() === value) {
+        if(removeAccents(element[key].substring(0,value.length).toLowerCase()) === removeAccents(value)) {
             filteredNames.push(element)
         }
     });
@@ -86,4 +60,8 @@ function onDropdownClick(e) {
     const button = e.target;
     inputEl.value = button.innerHTML
     removeAutocompletDropdown()
+}
+
+function removeAccents(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
