@@ -1,4 +1,6 @@
 <%- include('../layouts/header'); -%>
+    <script>window.cbo = '<%- cbo %>'</script>
+
     <section class="section">
         <div class="container">
             <h1 class="title">
@@ -21,9 +23,9 @@
 
                     <div class="field">
                         <label class="label">Profissão</label>
-                        <div class="control">
-                            <% if (cbo) { console.log(typeof(cbo))}; %>
-                            <input class="input" name="category[]" type="text" placeholder="Nome da categoria" oninput="autocompleteCbo('<%= cbo %>')">
+                        <div id="autocompleteWrapper" class="control">
+                            <input id="autocompleteInput" class="input" name="category[]" type="text"
+                                placeholder="Nome da categoria" autocomplete="off">
                         </div>
                     </div>
                     <div class="field">

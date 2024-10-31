@@ -210,6 +210,7 @@ controller.createCard = async (req, res) => {
         await SocialAccount.bulkCreate(socialAccountsBulk)
         res.redirect('/user')
     } catch (err) {
+        console.error(err)
         res.render('pages/error', { message: 'Erro interno' })
     }
 }

@@ -14,35 +14,76 @@ async function fetchCities() {
         option.innerHTML = city.nome
         select.appendChild(option)
     })
-
-    // const term = document.getElementById("city").value;
-    // if (term.length < 2) return; // Evitar consultas com menos de 2 caracteres
 }
 
-async function autocompleteCbo(data) {
-    try {
-        let obj = JSON.parse(data)
-        obj.forEach(element => {
-            console.log(JSON.stringify(element))
-        });
+const parentEl = document.querySelector("#autocompleteWrapper")
+const inputEl = document.querySelector("#autocompleteInput")
 
-        // console.log(obj)
+// inputEl.addEventListener('input', () => onInputChange(window.cbo, inputEl.value, parentEl))
 
-        // obj.forEach(element => {
-        //     console.log(element)
-        // });
-    } catch (error) {
-        console.error(error)
-    }
-}
-// Supondo que `dados` seja um array de objetos com os dados do banco
-// const fuse = new Fuse(dados, {
-//     keys: ['nome'], // Campos onde buscar
-//     threshold: 0.3 // Ajuste de sensibilidade de similaridade
-// });
+// let ul = document.createElement("ul")
 
-// function buscarLocalmente() {
-//     const termo = document.getElementById("autocomplete").value;
-//     const resultados = fuse.search(termo);
-// Exibir os resultados como no exemplo anterior
+// async function onInputChange(strList, inputValue, parentEl) {
+//     // let div = document.createElement('div')
+//     ul.remove()
+//     if (inputValue.length < 3)  return 
+//     const objects = JSON.parse(strList)
+//     let value = inputValue.toLowerCase()
+//     // let filteredList = []
+//     // let ul = document.createElement("ul")
+//     objects.forEach(element => {
+//         if (element.title.substring(0, value.length).toLowerCase() === value) {
+//             // filteredList.push(element)
+
+//             let li = document.createElement('li')
+//             let button = document.createElement('button')
+//             button.innerHTML = element.title
+//             li.appendChild(button)
+//             ul.appendChild(li)
+//         }
+//     })
+//     parentEl.appendChild(ul)
 // }
+
+window.cbo = JSON.parse(window.cbo)
+inputEl.addEventListener('input', (e) => onInputChange(window.cbo, "title", e.target.value))
+
+function onInputChange(objList, key, inputValue) {
+    removeAutocompletDropdown()
+    const value = inputValue.toLowerCase();
+    if (value.length  < 2 ) return;
+    const filteredNames = [];
+    objList.forEach(element => {
+        if(element[key].substring(0,value.length).toLowerCase() === value) {
+            filteredNames.push(element)
+        }
+    });
+    createAutocompletDropdown(filteredNames,'title' ,parentEl)
+}
+
+function createAutocompletDropdown(list, key, parentEl) {
+    const listEl = document.createElement('ul')
+    // listEl.className = ''
+    listEl.id = 'autocompleteList'
+    list.forEach(element => {
+        const listItem = document.createElement('li');
+        const button = document.createElement('button');
+        button.addEventListener('click', onDropdownClick)
+        button.innerHTML = element[key]
+        listItem.appendChild(button)
+        listEl.appendChild(listItem)
+    });
+    parentEl.appendChild(listEl)
+}
+
+function removeAutocompletDropdown() {
+    const listEl = document.querySelector('#autocompleteList')
+    if(listEl) listEl.remove()
+}
+
+function onDropdownClick(e) {
+    e.preventDefault();
+    const button = e.target;
+    inputEl.value = button.innerHTML
+    removeAutocompletDropdown()
+}
