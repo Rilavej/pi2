@@ -8,7 +8,8 @@ const {
     SocialAccount,
     Uf,
     Municipio,
-    Cbo
+    Cbo,
+    noCboProfession
 } = require('../config/associations')
 const { Op } = require('sequelize');
 

@@ -6,7 +6,8 @@ const Media = sequelize.define(
     {
         platform: {
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            allowNull: false
         }
     },
     {

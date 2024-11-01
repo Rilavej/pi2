@@ -15,6 +15,7 @@ const Uf = sequelize.define(
         },
         abbreviation: {
             type: DataTypes.ENUM,
+            allowNull: false,
             unique: true,
             values: [
                 "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 

@@ -4,13 +4,13 @@ const DataTypes = require('sequelize')
 const Profession = sequelize.define(
     'Profession',
     {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
         jobDescription: {
             type: DataTypes.STRING,
-        },
-        // Campo reservado para possíveis ocupações inexistentes no CBO
-        newCategory: {
-            type: DataTypes.STRING,
-            defaultValue: null,
         },
     }
 )

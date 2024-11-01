@@ -4,11 +4,6 @@ const DataTypes = require('sequelize')
 const Person = sequelize.define(
     'Person', // Nome do modelo e não da tabele. Na ausência do nome da tabela, está receberá o mesmo nome do modelo.
     {
-        // personId: {
-        //     type: DataTypes.INTEGER,
-        //     primaryKey: true,
-        //     autoIncrement: true,
-        // },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -43,7 +38,8 @@ const Person = sequelize.define(
         // Se o modelo Admin não der certo
         isAdmin: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: false,
+            allowNull: false,
         }
     },
     {

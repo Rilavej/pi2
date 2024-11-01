@@ -3,43 +3,43 @@ const sequelize = require('../config/dbconnection')
 const Person = require('../models/person')
 const Phone = require('../models/phone')
 const Profession = require('../models/profession')
-// const Location = require('../models/location')
 const Address = require('../models/address')
 const Media = require('../models/media')
 const SocialAccount = require('../models/socialAccount')
 const Cbo = require('../models/cbo')
+const noCboProfession = require('../models/noCboProfession')
 const Municipio = require('../models/municipio')
 const Uf = require('../models/uf')
 
-// Location.hasMany(Person)
-// Person.belongsTo(Location)
+Uf.hasMany(Municipio, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
+Municipio.belongsTo(Uf, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
 
-Uf.hasMany(Municipio)
-Municipio.belongsTo(Uf)
+Municipio.hasMany(Person, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
+Person.belongsTo(Municipio, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
 
-// Municipio.hasMany(Person)
-// Person.belongsTo(Municipio)
+// The Super Many-to-Many relationship
+Person.belongsToMany(Cbo, {through: {model: Profession}, onDelete: 'CASCADE'})
+Cbo.belongsToMany(Person, {through: {model: Profession}, onDelete: 'RESTRICT'})
+Person.hasMany(Profession, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Profession.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Cbo.hasMany(Profession, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
+Profession.belongsTo(Cbo, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
 
-Person.belongsToMany(Municipio, {through: Address})
-Municipio.belongsToMany(Person, {through: Address})
+Person.hasMany(noCboProfession, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+noCboProfession.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
 
-Person.belongsToMany(Cbo, {through: Profession})
-Cbo.belongsToMany(Person, {through: Profession})
+Person.hasMany(Phone, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Phone.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
 
-Person.hasMany(Phone, {onDelete: 'CASCADE'})
-Phone.belongsTo(Person)
+Person.hasMany(SocialAccount, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+SocialAccount.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Media.hasMany(SocialAccount, {foreignKey: {name: 'MediaId', allowNull: true}, onDelete: 'SET NULL'})
+SocialAccount.belongsTo(Media, {foreignKey: {name: 'MediaId', allowNull: true}, onDelete: 'SET NULL'})
+Person.belongsToMany(Media, {through: {model: SocialAccount, unique: false}, otherKey: 'MediaId'})
+Media.belongsToMany(Person, {through: {model: SocialAccount, unique: false}, foreignKey: 'MediaId'})
 
-// Person.hasMany(Profession, {onDelete: 'CASCADE'})
-// Profession.belongsTo(Person)
-
-Person.hasMany(SocialAccount, {onDelete: 'CASCADE'})
-SocialAccount.belongsTo(Person)
-
-// Person.hasOne(Address, {onDelete: 'CASCADE'})
-// Address.belongsTo(Person)
-
-Media.hasMany(SocialAccount, {foreignKey: 'MediaId', onDelete: 'CASCADE'})
-SocialAccount.belongsTo(Media, {foreignKey: 'MediaId'})
+Person.hasOne(Address, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Address.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
 
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
 sequelize.sync({force: false})
@@ -48,11 +48,11 @@ module.exports = {
     Person,
     Phone,
     Profession,
-    // Location,
     Address,
     Media,
     SocialAccount,
     Uf,
     Municipio,
     Cbo,
+    noCboProfession
 }
