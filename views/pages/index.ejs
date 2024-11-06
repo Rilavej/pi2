@@ -8,10 +8,11 @@
                         <div class="field column is-one-third">
                             <label class="label"></label>
                             <div class="control">
-                                <select id="state" class="input" name="state" required onclick="fetchCities()">
+                                <script>window.ufs = '<%- ufs %>'</script>
+                                <select id="state" class="input" name="state" required>
                                     <option value="" disabled selected> Estado </option>
                                     <% ufs.forEach(uf=> { %>
-                                        <option value=<%=uf.abbreviation %>><%= uf.name %>
+                                        <option value=<%= uf.abbreviation %>><%= uf.name %>
                                         </option>
                                         <% }); %>
                                 </select>

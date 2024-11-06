@@ -144,17 +144,14 @@ controller.getAll = async (req, res) => {
             raw: true,
             order: ['name']
         })
-        console.log(ufs)
-
         const cbo = await Cbo.findAll({
             raw: true,
         })
-        
-        const card = await Person.findAll({
+        const people = await Person.findAll({
             attributes: ['name',],
             include: [{ all: true }],
         })
-        res.render('pages/index', { ufs: ufs, card: card })
+        res.render('pages/index', { ufs: ufs, people: people })
     } catch (err) {
         res.render('pages/error', { message: "Erro interno" })
     }

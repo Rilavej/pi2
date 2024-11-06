@@ -23,8 +23,8 @@ server.use(passport.session())
 
 server.use((req, res, next) => {
     res.locals.user = req.user || null
-    res.locals.message = {}
-    res.locals.err = {err: 'Erro interno do servidor'}
+    // res.locals.message = {}
+    // res.locals.err = {err: 'Erro interno do servidor'}
     next()
 })
 server.use(express.json())

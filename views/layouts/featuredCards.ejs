@@ -1,13 +1,13 @@
 <section class="section">
     <div class="container">
-        <% if (card) { %>
-            <h1 class="title">
-                <%= card %>
-            </h1>
-            <p class="subtitle">
-                <%= JSON.stringify(card, null, null) %>
-            </p>
-            <% card.forEach(card => { %>
+      <% if (people) { %>
+          <h1 class="title">
+          <%= people %>
+          </h1>
+          <p class="subtitle">
+          <%= JSON.stringify(people, null, null) %>
+          </p>
+        <% people.forEach(person=> { %>
             <div class="card">
                 <div class="card-image">
                   <figure class="image is-4by3">

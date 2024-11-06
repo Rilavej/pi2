@@ -1,3 +1,9 @@
+const ufSelect = document.querySelector("#state")
+
+ufSelect.addEventListener('click', (e) => {
+    fetchCities()
+});
+
 async function fetchCities() {
     const state = document.getElementById("state").value;
     // location.href = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`
