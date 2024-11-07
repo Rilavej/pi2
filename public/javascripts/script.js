@@ -52,7 +52,7 @@ function createAutocompletDropdown(list, key, parentEl, inputEl) {
     list.forEach(element => {
         const listItem = document.createElement('li');
         const button = document.createElement('button');
-        button.addEventListener('click', (e) => onDropdownClick(e, inputEl))
+        button.addEventListener('click', () => onDropdownClick(inputEl))
         button.innerHTML = element[key]
         listItem.appendChild(button)
         listEl.appendChild(listItem)
@@ -61,6 +61,7 @@ function createAutocompletDropdown(list, key, parentEl, inputEl) {
 }
 
 function removeAutocompletDropdown(listEl) {
+    listEl = document.querySelector('#autocompleteList')
     if (listEl) listEl.remove()
 }
 
@@ -68,7 +69,7 @@ function onDropdownClick(e, inputEl) {
     e.preventDefault();
     const button = e.target;
     inputEl.value = button.innerHTML
-    removeAutocompletDropdown(inputEl)
+    removeAutocompletDropdown()
 }
 
 function removeAccents(str) {
