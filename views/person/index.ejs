@@ -1,75 +1,43 @@
 <%- include('../layouts/header'); -%>
-    <script>window.cbo = '<%- cbo %>'</script>
-
     <section class="section">
-        <div class="container">
-            <h1 class="title">
-                Aqui voce deve estar autenticado
-            </h1>
-            <% if (user) { %>
-                <h1 class="title">
-                    <%= user.name %>
-                        <br>
-                        <%= JSON.stringify(user, null, null) %>
-                </h1>
-                <p class="subtitle">
-                    <%= JSON.stringify(person, null, null) %>
-                </p>
-                <% } %>
-        </div>
         <div class="container is-max-tablet">
             <div class="box">
                 <form action="/user" method="post">
-
                     <div class="field">
                         <label class="label">Profissão</label>
                         <div id="autocompleteWrapper" class="control">
-                            <input id="autocompleteInput" class="input" name="category[]" type="text"
+                            <input id="autocompleteInput" class="input" name="profession[]" type="text"
                                 placeholder="Nome da categoria" autocomplete="off">
                         </div>
                     </div>
                     <div class="field">
-                        <label class="label">Descrição</label>
                         <div class="control">
                             <input class="input" name="jobDescription[]" type="text"
                                 placeholder="Descrição dos serviços">
                         </div>
                     </div>
-                    <div class="field">
-                        <label class="label">Profissão</label>
-                        <div class="control">
-                            <input class="input" name="category[]" type="text" placeholder="Nome da categoria">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Descrição</label>
-                        <div class="control">
-                            <input class="input" name="jobDescription[]" type="text"
-                                placeholder="Descrição dos serviços">
-                        </div>
-                    </div>
-
                     <div class="field">
                         <label class="label">Telefone</label>
                         <div class="control">
                             <input class="input" name="phone[]" type="text" placeholder="Somente números">
                         </div>
                     </div>
-
                     <div class="field">
                         <label class="label">Conta Social</label>
                         <div class="control">
                             <input class="input" name="link[]" type="text" placeholder="Link do perfil">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
                             <input class="input" name="platform[]" type="text" placeholder="Nome da rede Social">
                         </div>
                     </div>
-
                     <div class="field is-grouped">
                         <div class="control">
                             <button class="button is-link">Salvar</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>

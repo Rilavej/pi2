@@ -34,7 +34,7 @@ controller.getRegisterPage = async (req, res) => {
 
 controller.getLoginPage = async (req, res) => {
     try {
-        res.status(200).render('person/login', {message: null})
+        res.status(200).render('person/login')
     } catch (err) {
         console.error(err)
         res.status(500).render(
@@ -105,10 +105,7 @@ controller.getUser = async (req, res) => {
             },
         });
         
-        const cbo = await Cbo.findAll()
-        let str = JSON.stringify(cbo)
-        
-        res.status(200).render('person/index', { person, cbo: str})
+        res.status(200).render('person/index', { person, cbo: res.locals.cbo})
     } catch (err) {
         console.error(err);
         res.render('pages/error', {message: 'Erro interno'})
@@ -144,14 +141,14 @@ controller.getAll = async (req, res) => {
             raw: true,
             order: ['name']
         })
-        const cbo = await Cbo.findAll({
-            raw: true,
-        })
+        
+        const cbo = JSON.stringify(await Cbo.findAll())
+
         const people = await Person.findAll({
             attributes: ['name',],
             include: [{ all: true }],
         })
-        res.render('pages/index', { ufs: ufs, people: people })
+        res.render('pages/index', { ufs: ufs, people: people, cbo: cbo})
     } catch (err) {
         res.render('pages/error', { message: "Erro interno" })
     }
