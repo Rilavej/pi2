@@ -1,9 +1,6 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
         <div class="container">
-            <h1 class="title">
-                Erro
-            </h1>
             <div class="container">
                 <% if (message) { %>
                     <p class="subtitle">
@@ -11,10 +8,8 @@
                             <%= message %>
                         </strong>
                     </p>
-                <% } %>
-
+                    <% } %>
             </div>
-
         </div>
     </section>
     <%- include('../layouts/footer'); -%>

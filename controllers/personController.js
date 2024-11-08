@@ -96,6 +96,8 @@ controller.login = (req, res, next) => {
 
 controller.getUser = async (req, res) => {
     try {
+        // const cbo = JSON.stringify(await Cbo.findAll())
+
         const person = await Person.findByPk(req.user.id, {
             attributes: ['id','name',],
             include: {
@@ -105,7 +107,7 @@ controller.getUser = async (req, res) => {
             },
         });
         
-        res.status(200).render('person/index', { person, cbo: res.locals.cbo})
+        res.status(200).render('person/index', { person })
     } catch (err) {
         console.error(err);
         res.render('pages/error', {message: 'Erro interno'})
@@ -113,19 +115,19 @@ controller.getUser = async (req, res) => {
 }
 
 controller.search = async (req, res) => {
-    const { city, state, professional } = req.body
+    const { city, state, profession } = req.body
 
     try {
-        const card = await Person.findAll({
+        const people = await Person.findAll({
             attributes: ['id','name',],
             include: [{ all: true }],
             where: {
-                '$Cbo.title$': category,
+                '$Cbo.title$': profession,
                 '$Municipio.name$': city,
                 [Op.or]: [{'$Uf.name$': state}, {'$Uf.abbreviation$': state,}],
             }
         })
-        res.render('pages/searchResults', { card: card }
+        res.render('pages/searchResults', { people: people }
         )
     } catch (err) {
         console.error(err);
@@ -137,31 +139,33 @@ controller.search = async (req, res) => {
 controller.getAll = async (req, res) => {
 
     try {
+        /*
         const ufs = await Uf.findAll({ 
             raw: true,
             order: ['name']
         })
         
         const cbo = JSON.stringify(await Cbo.findAll())
-
+        */
         const people = await Person.findAll({
             attributes: ['name',],
             include: [{ all: true }],
         })
-        res.render('pages/index', { ufs: ufs, people: people, cbo: cbo})
+        res.render('pages/index', {people: people,/* ufs: ufs,  cbo: cbo */})
     } catch (err) {
+        console.error(err)
         res.render('pages/error', { message: "Erro interno" })
     }
 }
 
 controller.createCard = async (req, res) => {
-    const {category, jobDescription, phone, link, platform} = req.body
+    const {profession, jobDescription, phone, link, platform} = req.body
     try {
         let professionsBulk = []
-        for (let i = 0; i < category.length; i++) {
+        for (let i = 0; i < profession.length; i++) {
             let row = {}
-            if (category[i] == '') {continue}
-            row['category'] = category[i]
+            if (profession[i] == '') {continue}
+            row['profession'] = profession[i]
             row['PersonId'] = req.user.id
             if (jobDescription[i] != '') {
                 row['jobDescription'] = jobDescription[i]}

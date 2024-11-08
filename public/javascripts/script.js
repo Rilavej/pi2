@@ -1,5 +1,8 @@
+// if (document.querySelector(".finder")) document.querySelector(".finder")
+//     .addEventListener('focusout',()=> removeAutocompletDropdown())
+
 if (document.querySelector("#state")) {
-    document.querySelector("#state").addEventListener('click', () => {
+    document.querySelector("#state").addEventListener('input', () => {
         fetchCities()
         document.querySelector("#city").disabled = false
     });

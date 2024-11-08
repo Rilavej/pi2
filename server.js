@@ -6,7 +6,14 @@ require('./config/associations');
 const path = require('path')
 const passport = require('passport');
 require('./security/authentication')(passport);
-var session = require('express-session')
+var session = require('express-session');
+
+(async () => {
+    const { ufs, cbo } = await require('./cache/ufs&cbo')
+    server.locals.ufs = ufs // define a variavel no objeto locals, tornando-a acessivel globalmente na view-engine
+    server.locals.cbo = cbo
+    // console.log(ufs) funciona
+})();
 
 const PORT = process.env.PORT || 3000
 
@@ -25,12 +32,10 @@ server.use((req, res, next) => {
     res.locals.user = req.user || null
     res.locals.message = null
     // res.locals.err = {err: 'Erro interno do servidor'}
-    res.locals.ufs = null
-    res.locals.cbo = null
     next()
 })
 server.use(express.json())
-server.use(express.urlencoded({extended:true}))
+server.use(express.urlencoded({ extended: true }))
 server.use(express.static(path.join(__dirname, 'public')))
 server.use(router)
 
@@ -39,7 +44,7 @@ server.use(router)
 server.set('views', path.join(__dirname, './views'))
 server.set('view engine', 'ejs')
 
-server.listen(PORT, ()=>{
+server.listen(PORT, () => {
     console.log(`Servidor escutando a porta ${PORT}.`)
     console.log(`PID: ${require('process').pid}: node`)
 })
