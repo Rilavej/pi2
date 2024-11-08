@@ -7,7 +7,7 @@ module.exports = (async function () {
         order: ['name']
     })
 
-    const cbo = JSON.stringify(await Cbo.findAll())
+    const cbo = await Cbo.findAll({ raw: true })
 
     return {ufs: ufs, cbo: cbo}
 })();
