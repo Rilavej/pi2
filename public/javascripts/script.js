@@ -1,6 +1,3 @@
-// if (document.querySelector(".finder")) document.querySelector(".finder")
-//     .addEventListener('focusout',()=> removeAutocompletDropdown())
-
 if (document.querySelector("#state")) {
     document.querySelector("#state").addEventListener('input', () => {
         fetchCities()
@@ -54,6 +51,7 @@ function createAutocompletDropdown(filteredNames, key, inputEl, parentEl) {
     filteredNames.forEach(element => {
         const listItem = document.createElement('li');
         const button = document.createElement('button');
+        button.className = 'button is-ghost'
         button.addEventListener('click', (e) => onDropdownClick(e, inputEl))
         button.innerHTML = element[key]
         listItem.appendChild(button)
@@ -79,3 +77,6 @@ function onDropdownClick(e, inputEl) {
 function removeAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
+
+// if (document.querySelector(".finder")) document.querySelector(".finder")
+//     .addEventListener('focusout',()=> removeAutocompletDropdown())

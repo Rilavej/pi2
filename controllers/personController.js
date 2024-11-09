@@ -161,11 +161,16 @@ controller.getAll = async (req, res) => {
 controller.createCard = async (req, res) => {
     const {profession, jobDescription, phone, link, platform} = req.body
     try {
+        const cbo = await Cbo.findOne({
+            where: {title: profession} // deveria vir do front-end
+        })
+        const CboId = cbo.id
+
         let professionsBulk = []
-        for (let i = 0; i < profession.length; i++) {
+        for (let i = 0; i < CboId.length; i++) {
             let row = {}
-            if (profession[i] == '') {continue}
-            row['profession'] = profession[i]
+            if (CboId[i] == '') {continue}
+            row['CboId'] = CboId[i]
             row['PersonId'] = req.user.id
             if (jobDescription[i] != '') {
                 row['jobDescription'] = jobDescription[i]}

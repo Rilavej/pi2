@@ -1,14 +1,14 @@
-const express = require('express')
-const server = express()
+const express = require('express');
+const server = express();
 const router = require('./routes/router');
 require('dotenv').config();
 require('./config/associations');
-const path = require('path')
+const path = require('path');
 const passport = require('passport');
 require('./security/authentication')(passport);
 var session = require('express-session');
 
-(async () => {
+(async function () {
     const { ufs, cbo } = await require('./cache/ufs&cbo')
     server.locals.ufs = ufs // define a variavel no objeto locals, tornando-a acessivel globalmente na view-engine
     server.locals.cbo = cbo

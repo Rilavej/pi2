@@ -1,7 +1,7 @@
-const {Uf, Cbo} = require('../config/associations');
+const {Uf, Cbo, sync} = require('../config/associations');
 
 module.exports = (async function () {
-
+    await sync
     const ufs = await Uf.findAll({ 
         raw: true,
         order: ['name']
