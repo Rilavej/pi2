@@ -161,22 +161,26 @@ controller.getAll = async (req, res) => {
 controller.createCard = async (req, res) => {
     const {profession, jobDescription, phone, link, platform} = req.body
     try {
-        const cbo = await Cbo.findOne({
-            where: {title: profession} // deveria vir do front-end
+        // deveria vir do front-end
+        const cbo = await Cbo.findAll({
+            attributes: ['id'],
+            where: {title: {[Op.or]: profession}},
+            raw: true 
         })
-        const CboId = cbo.id
-
+        
         let professionsBulk = []
-        for (let i = 0; i < CboId.length; i++) {
+        for (let i = 0; i < cbo.length; i++) {
             let row = {}
-            if (CboId[i] == '') {continue}
-            row['CboId'] = CboId[i]
+            // if (!profession[i]) {continue}
+            // if (profession[i] == '') {continue}
+            row['CboId'] = cbo[i]['id']
+            console.log(cbo[i]['id'])
             row['PersonId'] = req.user.id
             if (jobDescription[i] != '') {
                 row['jobDescription'] = jobDescription[i]}
             professionsBulk.push(row)
         }
-
+        
         // Assumindo que todo telefone é whatsapp
         let phonesBulk = []
         for (let i = 0; i < phone.length; i++) {
@@ -206,6 +210,7 @@ controller.createCard = async (req, res) => {
         await Profession.bulkCreate(professionsBulk)
         await Phone.bulkCreate(phonesBulk)
         await SocialAccount.bulkCreate(socialAccountsBulk)
+
         res.redirect('/user')
     } catch (err) {
         console.error(err)

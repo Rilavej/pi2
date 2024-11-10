@@ -12,7 +12,7 @@ var session = require('express-session');
     const { ufs, cbo } = await require('./cache/ufs&cbo')
     server.locals.ufs = ufs // define a variavel no objeto locals, tornando-a acessivel globalmente na view-engine
     server.locals.cbo = cbo
-    // console.log(ufs) funciona
+    // console.log(ufs) // funciona
 })();
 
 const PORT = process.env.PORT || 3000
