@@ -26,7 +26,7 @@ if (window.cbo) try {
 
 if (document.querySelector("#autocompleteInput")) {
     document.querySelector("#autocompleteInput").addEventListener('input', (e) =>onInputChange(
-        window.cbo, "title", e, document.querySelector("#autocompleteWrapper")
+        window.cbo, "title", e, document.querySelector(".autocompleteWrapper")
     ));
 }
 
@@ -80,3 +80,10 @@ function removeAccents(str) {
 
 // if (document.querySelector(".finder")) document.querySelector(".finder")
 //     .addEventListener('focusout',()=> removeAutocompletDropdown())
+
+document.querySelector("#addProfession").addEventListener('click', ()=>{
+    document.querySelector('.finder').appendChild(
+    '<input id="autocompleteInput" class="input" name="profession[]" type="text" \
+    placeholder="Nome da categoria" autocomplete="off">'
+    )
+})

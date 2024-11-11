@@ -21,14 +21,14 @@ const controller = {}
 
 controller.getRegisterPage = async (req, res) => {
     try {
-        const ufs = await Uf.findAll({ 
+        const ufs = await Uf.findAll({
             raw: true,
             order: ['name']
         })
         res.status(200).render('person/signup', { ufs: ufs })
     } catch (err) {
         console.error(err)
-        res.status(500).render("pages/error", {message: 'Erro interno'})
+        res.status(500).render("pages/error", { message: 'Erro interno' })
     }
 }
 
@@ -45,8 +45,8 @@ controller.getLoginPage = async (req, res) => {
 
 controller.getLoginPageFail = async (req, res) => {
     try {
-        const message = req.session.messages? req.session.messages.at(-1) : null
-        res.status(200).render('person/login', {message: message})
+        const message = req.session.messages ? req.session.messages.at(-1) : null
+        res.status(200).render('person/login', { message: message })
     } catch (err) {
         console.error(err)
         res.status(500).render(
@@ -63,25 +63,25 @@ controller.createPerson = async (req, res, next) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
-        
+
         const uf = await Uf.findOne({
             where: {
-                [Op.or]: [{name: state},{ abbreviation: state}]
+                [Op.or]: [{ name: state }, { abbreviation: state }]
             }
         })
         const municipio = await Municipio.findOne({
             where: {
-                [Op.and]: [ {name: city}, {Ufid: uf.id} ]
+                [Op.and]: [{ name: city }, { Ufid: uf.id }]
             }
         })
-        
+
         const person = await Person.create({ name, email, username, hashedPassword, MunicipioId: municipio.id })
 
         next() //vai para o login. conferir se nao vai informaçoes nao devidas
 
     } catch (err) {
         console.error(err)
-        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!`})
+        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!` })
     }
 }
 
@@ -91,7 +91,7 @@ controller.login = (req, res, next) => {
         successRedirect: `/user`,
         failureRedirect: '/loginFail',
         failureMessage: 'Usuário ou senha incorreto(s)!'
-    })(req,res,next)
+    })(req, res, next)
 }
 
 controller.getUser = async (req, res) => {
@@ -99,18 +99,24 @@ controller.getUser = async (req, res) => {
         // const cbo = JSON.stringify(await Cbo.findAll())
 
         const person = await Person.findByPk(req.user.id, {
-            attributes: ['id','name',],
+            attributes: ['id', 'name',],
             include: {
-                all: true, 
+                all: true,
                 nested: true,
-                attributes: {exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds']},
+                attributes: { exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds'] },
             },
         });
-        
-        res.status(200).render('person/index', { person })
+
+        let profession = false
+        if (person) {
+            profession = true
+            console.log(person.Professions[0].Cbo.title)
+            console.log(person.dataValues.Professions[0].dataValues.CboId)
+        }
+        res.status(200).render('person/index', { person, profession })
     } catch (err) {
         console.error(err);
-        res.render('pages/error', {message: 'Erro interno'})
+        res.render('pages/error', { message: 'Erro interno' })
     }
 }
 
@@ -119,12 +125,12 @@ controller.search = async (req, res) => {
 
     try {
         const people = await Person.findAll({
-            attributes: ['id','name',],
+            attributes: ['id', 'name',],
             include: [{ all: true }],
             where: {
                 '$Cbo.title$': profession,
                 '$Municipio.name$': city,
-                [Op.or]: [{'$Uf.name$': state}, {'$Uf.abbreviation$': state,}],
+                [Op.or]: [{ '$Uf.name$': state }, { '$Uf.abbreviation$': state, }],
             }
         })
         res.render('pages/searchResults', { people: people }
@@ -151,7 +157,7 @@ controller.getAll = async (req, res) => {
             attributes: ['name',],
             include: [{ all: true }],
         })
-        res.render('pages/index', {people: people,/* ufs: ufs,  cbo: cbo */})
+        res.render('pages/index', { people: people,/* ufs: ufs,  cbo: cbo */ })
     } catch (err) {
         console.error(err)
         res.render('pages/error', { message: "Erro interno" })
@@ -159,28 +165,28 @@ controller.getAll = async (req, res) => {
 }
 
 controller.createCard = async (req, res) => {
-    const {profession, jobDescription, phone, link, platform} = req.body
+    const { profession, jobDescription, phone, link, platform } = req.body
     try {
         // deveria vir do front-end
         const cbo = await Cbo.findAll({
             attributes: ['id'],
-            where: {title: {[Op.or]: profession}},
-            raw: true 
+            where: { title: { [Op.or]: profession } },
+            raw: true
         })
-        
+
         let professionsBulk = []
         for (let i = 0; i < cbo.length; i++) {
             let row = {}
             // if (!profession[i]) {continue}
             // if (profession[i] == '') {continue}
             row['CboId'] = cbo[i]['id']
-            console.log(cbo[i]['id'])
             row['PersonId'] = req.user.id
             if (jobDescription[i] != '') {
-                row['jobDescription'] = jobDescription[i]}
+                row['jobDescription'] = jobDescription[i]
+            }
             professionsBulk.push(row)
         }
-        
+
         // Assumindo que todo telefone é whatsapp
         let phonesBulk = []
         for (let i = 0; i < phone.length; i++) {
@@ -196,20 +202,22 @@ controller.createCard = async (req, res) => {
             row['link'] = link[i]
             row['PersonId'] = req.user.id
             // melhorar mandando um script com lista
-            let media = await Media.findOne({ 
-                where: 
+            let media = await Media.findOne({
+                where:
                     { platform: platform[i] }
-                })
+            })
             if (!media) {
-                media = await Media.create({platform: platform[i]})
+                media = await Media.create({ platform: platform[i] })
             }
             row['MediaId'] = media.id
             socialAccountsBulk.push(row)
         }
 
-        await Profession.bulkCreate(professionsBulk)
-        await Phone.bulkCreate(phonesBulk)
-        await SocialAccount.bulkCreate(socialAccountsBulk)
+        const result = await Profession.bulkCreate(professionsBulk)
+        if (result) {
+            await Phone.bulkCreate(phonesBulk)
+            await SocialAccount.bulkCreate(socialAccountsBulk)
+        }
 
         res.redirect('/user')
     } catch (err) {
