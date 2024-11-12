@@ -22,7 +22,7 @@ server.use(session({
     secret: process.env.SECRET,  //Chave secreta utilizada para assinar as sessões, garantindo a integridade e segurança das mesmas   
     resave: false, //Determina se a sessão deve ser regravada no armazenamento, mesmo que não tenha sido modificada
     saveUninitialized: true, //Define se a sessão deve ser salva no armazenamento, mesmo que não tenha sido modificada
-    cookie: { maxAge: 10 * 60 * 1000 } //Define as configurações do cookie de sessão. maxAge está definido como 2 minutos (2 * 60 * 1000 milissegundos), especificando o tempo máximo de vida do cookie antes de expirar
+    cookie: { maxAge: 60 * 60 * 1000 } //Define as configurações do cookie de sessão. maxAge está definido como 2 minutos (2 * 60 * 1000 milissegundos), especificando o tempo máximo de vida do cookie antes de expirar
 }))
 server.use(passport.initialize())
 server.use(passport.session())

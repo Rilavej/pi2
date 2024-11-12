@@ -105,13 +105,14 @@ controller.getUser = async (req, res) => {
                 nested: true,
                 attributes: { exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds'] },
             },
+            // raw: true
         });
-
+        console.log(JSON.stringify(person,null,4))
         let profession = false
         if (person) {
             profession = true
             console.log(person.Professions[0].Cbo.title)
-            console.log(person.dataValues.Professions[0].dataValues.CboId)
+            console.log(person.dataValues.Professions[0].CboId)
         }
         res.status(200).render('person/index', { person, profession })
     } catch (err) {
