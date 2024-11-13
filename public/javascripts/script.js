@@ -1,33 +1,14 @@
-if (document.querySelector("#state")) {
-    document.querySelector("#state").addEventListener('input', () => {
-        fetchCities()
-        document.querySelector("#city").disabled = false
-    });
-}
-
-if (document.querySelector("#city")) {
-    document.querySelector("#city").addEventListener('input', (e) => onInputChange(
-        window.cities, "nome", e, document.querySelector("#autocompleteWrapperCities")
-    ));
-}
-
-async function fetchCities() {
-    const state = document.getElementById("state").value;
-    // location.href = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`
-    response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`)
-    window.cities = await response.json()
-}
-
 if (window.cbo) try {
     window.cbo = JSON.parse(window.cbo);
 } catch (error) {
     console.log(typeof (window.cbo), 'objeto inválido')
 }
 
-if (document.querySelector("#autocompleteInput")) {
-    document.querySelector("#autocompleteInput").addEventListener('input', (e) =>onInputChange(
-        window.cbo, "title", e, document.querySelector(".autocompleteWrapper")
-    ));
+async function fetchCities() {
+    const state = document.getElementById("stateInput").value;
+    // location.href = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`
+    response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${state}/municipios`)
+    window.cities = await response.json()
 }
 
 function onInputChange(objList, key, e, parentEl) {
@@ -46,12 +27,12 @@ function onInputChange(objList, key, e, parentEl) {
 
 function createAutocompletDropdown(filteredNames, key, inputEl, parentEl) {
     const listEl = document.createElement('ul')
-    listEl.className = 'autocompleteList'
-    // listEl.id = 'autocompleteList'
+    listEl.id = 'autocompleteList'
     filteredNames.forEach(element => {
         const listItem = document.createElement('li');
-        const button = document.createElement('button');
-        button.className = 'button is-ghost'
+        listItem.className = 'panel'
+        const button = document.createElement('a');
+        button.className = 'panel-block'
         button.addEventListener('click', (e) => onDropdownClick(e, inputEl))
         button.innerHTML = element[key]
         listItem.appendChild(button)
@@ -61,10 +42,9 @@ function createAutocompletDropdown(filteredNames, key, inputEl, parentEl) {
 }
 
 function removeAutocompletDropdown() {
-    listEl = document.querySelectorAll('.autocompleteList')
-    if (listEl) listEl.forEach(element => {
-        element.remove()
-    }); 
+    if (document.querySelector('#autocompleteList')) {
+        document.querySelector('#autocompleteList').remove()
+    }
 }
 
 function onDropdownClick(e, inputEl) {
@@ -78,12 +58,36 @@ function removeAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-// if (document.querySelector(".finder")) document.querySelector(".finder")
-//     .addEventListener('focusout',()=> removeAutocompletDropdown())
+// document.querySelector("#addProfession").addEventListener('click', ()=>{
+//     document.querySelector('#finderForm').appendChild(
+//     '<input id="cboInput" class="input" name="profession[]" type="text" \
+//     placeholder="Nome da categoria" autocomplete="off">'
+//     )
+// })
 
-document.querySelector("#addProfession").addEventListener('click', ()=>{
-    document.querySelector('.finder').appendChild(
-    '<input id="autocompleteInput" class="input" name="profession[]" type="text" \
-    placeholder="Nome da categoria" autocomplete="off">'
-    )
-})
+if (document.querySelector("#stateInput")) {
+    document.querySelector("#stateInput").addEventListener('input', () => {
+        fetchCities()
+        document.querySelector("#cityInput").disabled = false
+    });
+}
+
+if (document.querySelector("#cityInput")) {
+    document.querySelector("#cityInput").addEventListener('input', (e) => onInputChange(
+        window.cities, "nome", e, document.querySelector("#autocompleteWrapperCities")
+    ));
+    document.querySelector("#cityInput").addEventListener('click', (e) => onInputChange(
+        window.cities, "nome", e, document.querySelector("#autocompleteWrapperCities")
+    ));
+}
+
+if (document.querySelector("#cboInput")) {
+    document.querySelector("#cboInput").addEventListener('input', (e) => onInputChange(
+        window.cbo, "title", e, document.querySelector("#autocompleteWrapperCbo")
+    ));
+    document.querySelector("#cboInput").addEventListener('click', (e) => onInputChange(
+        window.cbo, "title", e, document.querySelector("#autocompleteWrapperCbo")
+    ));
+    // nao funciona
+    // document.querySelector("#cboInput").addEventListener('blur', removeAutocompletDropdown);
+}

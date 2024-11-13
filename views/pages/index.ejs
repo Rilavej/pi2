@@ -1,42 +1,41 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
-        <div class="container is-max-tablet is-centered">
-            <h1 class="subtitle has-text-centered">Encontre um profissional</h1>
-            <form class="finder" action="/" method="post" autocomplete="off">
-                <div class="field is-horizontal">
-                    <div class="field column is-one-third">
-                        <label class="label"></label>
-                        <div class="control select">
-                            <select id="state" class="input" name="state" required>
-                                <option value="" disabled selected> Estado </option>
-                                <% ufs.forEach(uf=> { %>
-                                    <option value=<%=uf.abbreviation %>><%= uf.name %>
-                                    </option>
-                                    <% }); %>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field column is-one-third">
-                        <div id="autocompleteWrapperCities" class="control">
-                            <input id="city" class="input" name="city" type="text" required disabled
-                                placeholder="Cidade" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="field column is-one-third">
-                        <div id="autocompleteWrapper" class="control">
-                            <input id="autocompleteInput" class="input" name="profession" type="text" required
-                                placeholder="profissional" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="field column is-one-third">
-                        <div class="field is-one-third">
-                            <div class="control"> <button class="button is-link">Pesquisar</button> </div>
-                        </div>
+        <h1 class="subtitle has-text-centered">Encontre um profissional</h1>
+        <form id="finderForm" action="/" method="post" autocomplete="off">
+            <div class="columns">
+                <div class="column field">
+                    <div class="control">
+                        <select id="stateInput" class="input is-white" name="state" required>
+                            <option value="" disabled selected> Estado </option>
+                            <% ufs.forEach(uf=> { %>
+                                <option value=<%=uf.abbreviation %>><%= uf.name %>
+                                </option>
+                                <% }); %>
+                        </select>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="container is-max-tablet">
+                <div class="column field">
+                    <div id="autocompleteWrapperCities" class="control">
+                        <input id="cityInput" class="input is-white" name="city" type="text" required disabled
+                            placeholder="Cidade" autocomplete="off">
+                    </div>
+                </div>
+                <div class="column field">
+                    <div id="autocompleteWrapperCbo" class="control">
+                        <input id="cboInput" class="input is-white" name="profession" type="text" required
+                            placeholder="profissional" autocomplete="off">
+                    </div>
+                </div>
+                <div class="column field">
+                    <div class="control">
+                        <button id="searchButton" class="button is-fullwidth is-link ">Pesquisar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <section class="section">
+        <div class="container">
             <p class="subtitle has-text-centered">É um profissional?</p>
             <p class="subtitle has-text-centered"> <a href="/signup">Crie uma conta</a> e apareça aqui! </p>
             <p class="help has-text-centered"> Já tem conta? <a href="/login"> Faça login</a> </p>
