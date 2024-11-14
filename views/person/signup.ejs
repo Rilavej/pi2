@@ -1,37 +1,40 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
-        <h1>Criar Conta</h1>
-        <div class="container is-max-tablet">
-            <div class="box">
-                <form action="/signup" method="post">
+        <div class="block has-text-centered">
+            <h1 class="subtitle">Criar Conta</h1>
+            <p class="help">Já tem uma conta? <br><a href="/login">Sign in</a></p>
+        </div>
+        <div class="box">
+            <form action="/signup" method="post">
+                <div class="container">
                     <div class="field">
                         <label class="label">Nome</label>
                         <div class="control">
-                            <input class="input" name="name" type="text" placeholder="Text input">
+                            <input class="input" name="name" type="text" required placeholder="name">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Nome de usuário</label>
                         <div class="control">
-                            <input class="input" name="username" type="text" placeholder="Text input">
+                            <input class="input" name="username" type="text" placeholder="username">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control">
-                            <input class="input" name="email" type="email" placeholder="Email input">
+                            <input class="input" name="email" type="email" required placeholder="email">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Senha</label>
                         <div class="control">
-                            <input class="input" name="password" type="password" placeholder="password">
+                            <input class="input" name="password" type="password" required placeholder="password">
                         </div>
                     </div>
                     <div class="field">
                         <label class="label">Estado</label>
                         <div class="control">
-                            <select id="state" class="input" name="state" required onclick="fetchCities()">
+                            <select id="stateInput" class="input" name="state" required onclick="fetchCities()">
                                 <option value="" disabled selected> Estado </option>
                                 <% ufs.forEach(uf=> { %>
                                     <option value=<%=uf.abbreviation %>><%= uf.name %>
@@ -40,23 +43,20 @@
                             </select>
                         </div>
                     </div>
-                    <div class="field column is-one-third">
+                    <div class="field">
                         <label class="label">Cidade</label>
                         <div id="autocompleteWrapperCities" class="control">
-                            <input id="city" class="input" name="city" type="text" required disabled
-                                placeholder="Cidade" autocomplete="off">
+                            <input id="cityInput" class="input" name="city" type="text" required disabled
+                                placeholder="city" autocomplete="off">
                         </div>
                     </div>
-                    <div class="field is-grouped">
+                    <div class="field pt-5 mt-4">
                         <div class="control">
-                            <button class="button is-link">Criar conta</button>
+                            <button class="button is-fullwidth is-link ">Criar conta</button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </section>
-    <div class="container is-max-tablet">
-        <p class="help">Already have an account? <a href="/login">Sign in</a></p>
-    </div>
     <%- include('../layouts/footer'); -%>

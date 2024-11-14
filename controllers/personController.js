@@ -21,11 +21,7 @@ const controller = {}
 
 controller.getRegisterPage = async (req, res) => {
     try {
-        const ufs = await Uf.findAll({
-            raw: true,
-            order: ['name']
-        })
-        res.status(200).render('person/signup', { ufs: ufs })
+        res.status(200).render('person/signup')
     } catch (err) {
         console.error(err)
         res.status(500).render("pages/error", { message: 'Erro interno' })
@@ -96,8 +92,6 @@ controller.login = (req, res, next) => {
 
 controller.getUser = async (req, res) => {
     try {
-        // const cbo = JSON.stringify(await Cbo.findAll())
-
         const person = await Person.findByPk(req.user.id, {
             attributes: ['id', 'name',],
             include: {
@@ -108,13 +102,12 @@ controller.getUser = async (req, res) => {
             // raw: true
         });
         console.log(JSON.stringify(person,null,4))
-        let profession = false
-        if (person) {
-            profession = true
+        let hasProfession = false
+        if (person.Professions.length !== 0) {
+            hasProfession = true
             console.log(person.Professions[0].Cbo.title)
-            console.log(person.dataValues.Professions[0].CboId)
         }
-        res.status(200).render('person/index', { person, profession })
+        res.status(200).render('person/index', { person, hasProfession })
     } catch (err) {
         console.error(err);
         res.render('pages/error', { message: 'Erro interno' })
@@ -166,7 +159,7 @@ controller.getAll = async (req, res) => {
 }
 
 controller.createCard = async (req, res) => {
-    const { profession, jobDescription, phone, link, platform } = req.body
+    const { profession, jobDescription, phone, link } = req.body
     try {
         // deveria vir do front-end
         const cbo = await Cbo.findAll({
@@ -202,15 +195,15 @@ controller.createCard = async (req, res) => {
             let row = {}
             row['link'] = link[i]
             row['PersonId'] = req.user.id
-            // melhorar mandando um script com lista
-            let media = await Media.findOne({
-                where:
-                    { platform: platform[i] }
-            })
-            if (!media) {
-                media = await Media.create({ platform: platform[i] })
-            }
-            row['MediaId'] = media.id
+            // // melhorar mandando um script com lista
+            // let media = await Media.findOne({
+            //     where:
+            //         { platform: platform[i] }
+            // })
+            // if (!media) {
+            //     media = await Media.create({ platform: platform[i] })
+            // }
+            // row['MediaId'] = media.id
             socialAccountsBulk.push(row)
         }
 

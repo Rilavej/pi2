@@ -1,42 +1,36 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
-        <h1>Fazer Login</h1>
-        <section class="section is-medium">
-            <div class="container is-max-tablet">
-                <% if (message) { %>
-                    <h1 class="subtitle">
-                        <%= message %>
-                    </h1>
-                    <% } %>
-                <div class="box">
-                    <form action="/login" method="post">
-
-                        <div class="field">
-                            <label class="label">Email</label>
-                            <div class="control">
-                                <input class="input" name="email" type="email" placeholder="Text input">
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="label">Password</label>
-                            <div class="control">
-                                <input class="input" name="password" type="password" placeholder="Text input">
-                            </div>
-                        </div>
-
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button class="button is-link">Fazer login</button>
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </section>
-        <div class="container is-max-tablet">
-            <p class="help">Don't have an account? <a href="/signup">Sign up</a></p>
+        <div class="block has-text-centered	">
+            <h1 class="subtitle">Fazer Login</h1>
+            <p class="help">Não tem conta? <br><a href="/signup"> Sign up</a></p>
         </div>
+        <section class="section">
+            <% if (message) { %>
+                <h1 class="subtitle">
+                    <%= message %>
+                </h1>
+                <% } %>
+                    <div class="box">
+                        <form action="/login" method="post">
+                            <div class="field">
+                                <label class="label">Login</label>
+                                <div class="control">
+                                    <input class="input" name="email" type="email" placeholder="email">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Senha</label>
+                                <div class="control">
+                                    <input class="input" name="password" type="password" placeholder="password">
+                                </div>
+                            </div>
+                            <div class="field pt-5 mt-4">
+                                <div class="control">
+                                    <button class="button is-fullwidth is-link">Fazer login</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+        </section>
     </section>
     <%- include('../layouts/footer'); -%>
