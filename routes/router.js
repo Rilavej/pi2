@@ -8,7 +8,7 @@ router.get('/', personController.getAll) // usar cookie para filtar pela localiz
 router.post('/', personController.search)
 
 router.get('/signup', personController.getRegisterPage)
-router.post('/signup', personController.createPerson,personController.login)
+router.post('/signup', personController.createPerson, personController.login)
 
 router.get('/login', personController.getLoginPage)
 router.post('/login',personController.login)

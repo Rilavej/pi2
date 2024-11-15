@@ -1,82 +1,86 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
-        <div class="card">
-            <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-                </figure>
-            </div>
-            <div class="card-content">
-                <div class="content">
-                    <h1>
-                        <%= user.name %>
-                    </h1>
-                    <% person.Professions.forEach(profession=> { %>
-                        <div class="py-5">
-                            <h6>
-                                <%= profession.Cbo.title %>
-                            </h6>
-                            <p>
-                                <%= profession.jobDescription %>
-                            </p>
-                        </div>
-                        <% }) %>
-                            <div class="media-left">
-                                <figure class="image is-48x48">
-                                    <img src="https://bulma.io/assets/images/placeholders/96x96.png"
-                                        alt="Placeholder image" />
-                                </figure>
+        <div class="container is-max-tablet">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="content">
+                        <h1>
+                            <%= user.name %>
+                        </h1>
+                        <% person.Professions.forEach(profession=> { %>
+                            <div class="py-5">
+                                <h6>
+                                    <%= profession.Cbo.title %>
+                                </h6>
+                                <p>
+                                    <%= profession.jobDescription %>
+                                </p>
                             </div>
-                            <% person.SocialAccounts.forEach(SocialAccount=> { %>
-                                <span>
-                                    <a href="#">
-                                        <%= SocialAccount.link %>
-                                    </a>
-                                </span>
-                                <% }) %>
-                                    <br>
-                                    <% person.Phones.forEach(phone=> { %>
-                                        <span>
-                                            <%= phone.phone %>
-                                        </span>
-                                        <% }) %>
-
+                            <% }) %>
+                                <div class="media-left">
+                                    <figure class="image is-48x48">
+                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png"
+                                            alt="Placeholder image" />
+                                    </figure>
+                                </div>
+                                <% person.SocialAccounts.forEach(SocialAccount=> { %>
+                                    <span>
+                                        <a href="#">
+                                            <%= SocialAccount.link %>
+                                        </a>
+                                    </span>
+                                    <% }) %>
+                                        <br>
+                                        <% person.Phones.forEach(phone=> { %>
+                                            <span>
+                                                <%= phone.phone %>
+                                            </span>
+                                            <% }) %>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
     <section class="section">
-        <form action="/user" method="post" autocomplete="off">
-            <div class="field">
-                <label class="label">Profissão</label>
-                <div id="autocompleteWrapperCbo" class="control">
-                    <input id="cboInput" class="input" name="profession[]" type="text" placeholder="Nome da categoria"
-                        autocomplete="off">
+        <div class="container is-max-tablet">
+            <form action="/user" method="post" autocomplete="off">
+                <div class="field">
+                    <label class="label">Profissão</label>
+                    <div id="autocompleteWrapperCbo" class="control">
+                        <input id="cboInput" class="input" name="profession[]" type="text"
+                            placeholder="Nome da categoria" autocomplete="off">
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <textarea class="textarea" name="jobDescription[]" type="text"
-                        placeholder="Descrição dos serviços"></textarea>
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea" name="jobDescription[]" type="text"
+                            placeholder="Descrição dos serviços"></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label class="label">Telefone</label>
-                <div class="control">
-                    <input class="input" name="phone[]" type="tel" placeholder="Somente números">
+                <div class="field">
+                    <label class="label">Telefone</label>
+                    <div class="control">
+                        <input class="input" name="phone[]" type="tel" placeholder="Somente números">
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label class="label">Conta Social</label>
-                <div class="control">
-                    <input class="input" name="link[]" type="text" placeholder="Link do perfil nas redes sociais">
+                <div class="field">
+                    <label class="label">Conta Social</label>
+                    <div class="control">
+                        <input class="input" name="link[]" type="text" placeholder="Link do perfil nas redes sociais">
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button class="button is-fullwidth is-link">Salvar</button>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-fullwidth is-link">Salvar</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </section>
     <%- include('../layouts/footer'); -%>
+        <%= JSON.stringify(person, null, 4) %>

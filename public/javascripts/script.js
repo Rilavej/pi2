@@ -14,7 +14,7 @@ async function fetchCities() {
 function onInputChange(objList, key, e, parentEl) {
     removeAutocompletDropdown()
     const value = e.target.value.toLowerCase();
-    if (value.length < 2) return;
+    if (value.length < 1) return;
     const filteredNames = [];
     objList.forEach(element => {
         if (removeAccents(element[key].substring(0, value.length).toLowerCase()) === removeAccents(value)) {
@@ -67,6 +67,7 @@ function removeAccents(str) {
 
 if (document.querySelector("#stateInput")) {
     document.querySelector("#stateInput").addEventListener('input', () => {
+        document.querySelector("#cityInput").value = null
         fetchCities()
         document.querySelector("#cityInput").disabled = false
     });

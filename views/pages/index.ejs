@@ -1,38 +1,40 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
-        <h1 class="subtitle has-text-centered">Encontre um profissional</h1>
-        <form id="finderForm" action="/" method="post" autocomplete="off">
-            <div class="columns">
-                <div class="column field">
-                    <div class="control">
-                        <select id="stateInput" class="input is-white" name="state" required>
-                            <option value="" disabled selected> Estado </option>
-                            <% ufs.forEach(uf=> { %>
-                                <option value=<%=uf.abbreviation %>><%= uf.name %>
-                                </option>
-                                <% }); %>
-                        </select>
+        <div class="container is-max-desktop">
+            <h1 class="subtitle has-text-centered">Encontre um profissional</h1>
+            <form id="finderForm" action="/" method="post" autocomplete="off">
+                <div class="columns">
+                    <div class="column field py-1">
+                        <div class="control">
+                            <select id="stateInput" class="input is-white" name="state" required>
+                                <option value="" disabled selected> Estado </option>
+                                <% ufs.forEach(uf=> { %>
+                                    <option value=<%=uf.abbreviation %>><%= uf.name %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="column field py-1">
+                        <div id="autocompleteWrapperCities" class="control">
+                            <input id="cityInput" class="input is-white" name="city" type="text" required disabled
+                                placeholder="Cidade" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="column field py-1">
+                        <div id="autocompleteWrapperCbo" class="control">
+                            <input id="cboInput" class="input is-white" name="profession" type="text" required
+                                placeholder="profissional" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="column field py-1">
+                        <div class="control">
+                            <button id="searchButton" class="button is-fullwidth is-link ">Pesquisar</button>
+                        </div>
                     </div>
                 </div>
-                <div class="column field">
-                    <div id="autocompleteWrapperCities" class="control">
-                        <input id="cityInput" class="input is-white" name="city" type="text" required disabled
-                            placeholder="Cidade" autocomplete="off">
-                    </div>
-                </div>
-                <div class="column field">
-                    <div id="autocompleteWrapperCbo" class="control">
-                        <input id="cboInput" class="input is-white" name="profession" type="text" required
-                            placeholder="profissional" autocomplete="off">
-                    </div>
-                </div>
-                <div class="column field">
-                    <div class="control">
-                        <button id="searchButton" class="button is-fullwidth is-link ">Pesquisar</button>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </section>
     <section class="section">
         <div class="container">

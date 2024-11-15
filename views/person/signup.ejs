@@ -4,59 +4,63 @@
             <h1 class="subtitle">Criar Conta</h1>
             <p class="help">Já tem uma conta? <br><a href="/login">Sign in</a></p>
         </div>
-        <div class="box">
-            <form action="/signup" method="post">
-                <div class="container">
-                    <div class="field">
-                        <label class="label">Nome</label>
-                        <div class="control">
-                            <input class="input" name="name" type="text" required placeholder="name">
+        <%- include('../layouts/messages') %>
+            <div class="level-item">
+                <div class="box">
+                    <form action="/signup" method="post">
+                        <div class="container">
+                            <div class="field">
+                                <label class="label">Nome</label>
+                                <div class="control">
+                                    <input class="input" name="name" type="text" required placeholder="name">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Nome de usuário</label>
+                                <div class="control">
+                                    <input class="input" name="username" type="text" required placeholder="username">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control">
+                                    <input class="input" name="email" type="email" required placeholder="email">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Senha</label>
+                                <div class="control">
+                                    <input class="input" name="password" type="password" required
+                                        placeholder="password">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Estado</label>
+                                <div class="control">
+                                    <select id="stateInput" class="input" name="state" required>
+                                        <option value="" disabled selected> Estado </option>
+                                        <% ufs.forEach(uf=> { %>
+                                            <option value=<%=uf.abbreviation %>><%= uf.name %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label">Cidade</label>
+                                <div id="autocompleteWrapperCities" class="control">
+                                    <input id="cityInput" class="input" name="city" type="text" required disabled
+                                        placeholder="city">
+                                </div>
+                            </div>
+                            <div class="field pt-5 mt-4">
+                                <div class="control">
+                                    <button class="button is-fullwidth is-link ">Criar conta</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Nome de usuário</label>
-                        <div class="control">
-                            <input class="input" name="username" type="text" placeholder="username">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Email</label>
-                        <div class="control">
-                            <input class="input" name="email" type="email" required placeholder="email">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Senha</label>
-                        <div class="control">
-                            <input class="input" name="password" type="password" required placeholder="password">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Estado</label>
-                        <div class="control">
-                            <select id="stateInput" class="input" name="state" required onclick="fetchCities()">
-                                <option value="" disabled selected> Estado </option>
-                                <% ufs.forEach(uf=> { %>
-                                    <option value=<%=uf.abbreviation %>><%= uf.name %>
-                                    </option>
-                                    <% }); %>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Cidade</label>
-                        <div id="autocompleteWrapperCities" class="control">
-                            <input id="cityInput" class="input" name="city" type="text" required disabled
-                                placeholder="city" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="field pt-5 mt-4">
-                        <div class="control">
-                            <button class="button is-fullwidth is-link ">Criar conta</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            </div>
     </section>
     <%- include('../layouts/footer'); -%>

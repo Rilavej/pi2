@@ -1,15 +1,6 @@
 const passport = require("passport")
 const {
-    Person,
-    Phone,
-    Profession,
-    Address,
-    Media,
-    SocialAccount,
-    Uf,
-    Municipio,
-    Cbo,
-    noCboProfession
+    Person, Phone, Profession, Address, Media, SocialAccount, Uf, Municipio, Cbo, noCboProfession
 } = require('../config/associations')
 const { Op } = require('sequelize');
 
@@ -18,12 +9,11 @@ const saltRounds = 10
 
 const controller = {}
 
-
 controller.getRegisterPage = async (req, res) => {
     try {
         res.status(200).render('person/signup')
-    } catch (err) {
-        console.error(err)
+    } catch (error) {
+        console.error(error)
         res.status(500).render("pages/error", { message: 'Erro interno' })
     }
 }
@@ -31,11 +21,9 @@ controller.getRegisterPage = async (req, res) => {
 controller.getLoginPage = async (req, res) => {
     try {
         res.status(200).render('person/login')
-    } catch (err) {
-        console.error(err)
-        res.status(500).render(
-            "pages/error", { message: 'Erro interno' }
-        )
+    } catch (error) {
+        console.error(error)
+        res.status(500).render("pages/error", { message: 'Erro interno' })
     }
 }
 
@@ -43,11 +31,9 @@ controller.getLoginPageFail = async (req, res) => {
     try {
         const message = req.session.messages ? req.session.messages.at(-1) : null
         res.status(200).render('person/login', { message: message })
-    } catch (err) {
-        console.error(err)
-        res.status(500).render(
-            "pages/error", { message: 'Erro interno' }
-        )
+    } catch (error) {
+        console.error(error)
+        res.status(500).render("pages/error", { message: 'Erro interno' })
     }
 }
 
@@ -56,28 +42,42 @@ controller.createPerson = async (req, res, next) => {
         city, state, // Municipio e Uf
         name, email, username, password, // Pessoa
     } = req.body
-
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
-
         const uf = await Uf.findOne({
             where: {
                 [Op.or]: [{ name: state }, { abbreviation: state }]
             }
         })
+        if (!uf) {
+            res.locals.messages.push("Selecione seu estado na lista")
+        }
         const municipio = await Municipio.findOne({
             where: {
                 [Op.and]: [{ name: city }, { Ufid: uf.id }]
             }
         })
-
+        if (!municipio) {
+            res.locals.messages.push(`A cidade "${city}" não consta na base de dados`)
+        }
         const person = await Person.create({ name, email, username, hashedPassword, MunicipioId: municipio.id })
-
-        next() //vai para o login. conferir se nao vai informaçoes nao devidas
-
-    } catch (err) {
-        console.error(err)
-        res.status(422).render("pages/error", { message: `Erro ao cadastar usuário!` })
+        if (person) {
+            next() //vai para o login. conferir se nao vai informaçoes nao devidas
+        } else {
+            throw new Error("Erro ao cadastar usuário!\nUsuário não cadastrado");
+        }
+    } catch (error) {
+        console.error(error)
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            if (error.fields['email']) {
+                res.locals.messages.push(`O email "${error.fields['email']}" já está em uso`)
+            }
+            if (error.fields['username']) {
+                res.locals.messages.push(`O nome de usuário "${error.fields['username']}" já está uso`)
+            }
+        }
+        res.locals.messages.unshift("Ops! Usuário não cadastrado!")
+        res.status(422).render("person/signup")
     }
 }
 
@@ -101,15 +101,15 @@ controller.getUser = async (req, res) => {
             },
             // raw: true
         });
-        console.log(JSON.stringify(person,null,4))
+        console.log(JSON.stringify(person, null, 4))
         let hasProfession = false
         if (person.Professions.length !== 0) {
             hasProfession = true
             console.log(person.Professions[0].Cbo.title)
         }
         res.status(200).render('person/index', { person, hasProfession })
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         res.render('pages/error', { message: 'Erro interno' })
     }
 }
@@ -129,8 +129,8 @@ controller.search = async (req, res) => {
         })
         res.render('pages/searchResults', { people: people }
         )
-    } catch (err) {
-        console.error(err);
+    } catch (error) {
+        console.error(error);
         res.render('pages/error', { message: "Sua busca não encontrou resultados" })
     }
 }
@@ -152,8 +152,8 @@ controller.getAll = async (req, res) => {
             include: [{ all: true }],
         })
         res.render('pages/index', { people: people,/* ufs: ufs,  cbo: cbo */ })
-    } catch (err) {
-        console.error(err)
+    } catch (error) {
+        console.error(error)
         res.render('pages/error', { message: "Erro interno" })
     }
 }
@@ -214,8 +214,8 @@ controller.createCard = async (req, res) => {
         }
 
         res.redirect('/user')
-    } catch (err) {
-        console.error(err)
+    } catch (error) {
+        console.error(error)
         res.render('pages/error', { message: 'Erro interno' })
     }
 }

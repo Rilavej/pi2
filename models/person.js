@@ -34,6 +34,7 @@ const Person = sequelize.define(
         hashedPassword:{
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
         },
         // Se o modelo Admin não der certo
         isAdmin: {
