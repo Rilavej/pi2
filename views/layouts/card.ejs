@@ -1,47 +1,47 @@
-<div class="card">
-    <div class="card-image">
-        <figure class="image is-4by3">
-            <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-        </figure>
-    </div>
-    <div class="card-content">
-        <p class="title is-3">
-            <%= user.name %>
-        </p>
-        <% person.Professions.forEach(profession=> { %>
-            <div class="card">
-                <div class="card-content">
-                    <p class="title is-4">
-                        <%= profession.Cbo.title %>
-                            <button class="button is-small">Edit</button>
-                            <button class="button is-small">Delete</button>
-                    </p>
-                    <p class="subtitle is-6">
-                        <%= profession.jobDescription %>
-                    </p>
+<section class="section">
+    <div class="container is-max-tablet">
+        <div class="card">
+            <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                </figure>
+            </div>
+            <div class="card-content">
+                <div class="content">
+                    <h1>
+                        <%= user.name %>
+                    </h1>
+                    <% person.Professions.forEach(profession=> { %>
+                        <div class="py-5">
+                            <h6>
+                                <%= profession.Cbo.title %>
+                            </h6>
+                            <p>
+                                <%= profession.jobDescription %>
+                            </p>
+                        </div>
+                        <% }) %>
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    <img src="https://bulma.io/assets/images/placeholders/96x96.png"
+                                        alt="Placeholder image" />
+                                </figure>
+                            </div>
+                            <% person.SocialAccounts.forEach(SocialAccount=> { %>
+                                <span>
+                                    <a href="#">
+                                        <%= SocialAccount.link %>
+                                    </a>
+                                </span>
+                                <% }) %>
+                                    <br>
+                                    <% person.Phones.forEach(phone=> { %>
+                                        <span>
+                                            <%= phone.phone %>
+                                        </span>
+                                        <% }) %>
                 </div>
             </div>
-            <% }) %>
-                <div class="media-left content">
-                    <figure class="image is-48x48">
-                        <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
-                    </figure>
-                </div>
-                <div class="content">
-                    <% person.SocialAccounts.forEach(SocialAccount=> { %>
-                        <span>
-                            <a href="#">
-                                <%= SocialAccount.link %>
-                            </a>
-                        </span>
-                        <% }) %>
-                </div>
-                <div class="content">
-                    <% person.Phones.forEach(phone=> { %>
-                        <span>
-                            <%= phone.phone %>
-                        </span>
-                        <% }) %>
-                </div>
+        </div>
     </div>
-</div>
+</section>

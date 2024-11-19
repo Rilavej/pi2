@@ -8,6 +8,7 @@ const SocialAccount = sequelize.define(
         link: {
             type: DataTypes.STRING,
             primaryKey: true,
+            allowNull: false,
         },
     },
     {

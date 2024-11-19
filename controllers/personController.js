@@ -101,60 +101,19 @@ controller.getUser = async (req, res) => {
             },
             // raw: true
         });
-        console.log(JSON.stringify(person, null, 4))
-        let hasProfession = false
-        if (person.Professions.length !== 0) {
-            hasProfession = true
-            console.log(person.Professions[0].Cbo.title)
+        if (!person) {
+            throw new Error("Ops! Usuário não encontrado");
         }
-        res.status(200).render('person/index', { person, hasProfession })
+        console.log(JSON.stringify(person, null, 4))
+        if (person.Professions.length > 0) {
+            person.Professions.forEach(profession => {
+                console.log(profession.Cbo.title);
+            });
+        }
+        res.status(200).render('person/index', { person })
     } catch (error) {
         console.error(error);
         res.render('pages/error', { message: 'Erro interno' })
-    }
-}
-
-controller.search = async (req, res) => {
-    const { city, state, profession } = req.body
-
-    try {
-        const people = await Person.findAll({
-            attributes: ['id', 'name',],
-            include: [{ all: true }],
-            where: {
-                '$Cbo.title$': profession,
-                '$Municipio.name$': city,
-                [Op.or]: [{ '$Uf.name$': state }, { '$Uf.abbreviation$': state, }],
-            }
-        })
-        res.render('pages/searchResults', { people: people }
-        )
-    } catch (error) {
-        console.error(error);
-        res.render('pages/error', { message: "Sua busca não encontrou resultados" })
-    }
-}
-
-// Este pode ser mesclado com 'controller.search'
-controller.getAll = async (req, res) => {
-
-    try {
-        /*
-        const ufs = await Uf.findAll({ 
-            raw: true,
-            order: ['name']
-        })
-        
-        const cbo = JSON.stringify(await Cbo.findAll())
-        */
-        const people = await Person.findAll({
-            attributes: ['name',],
-            include: [{ all: true }],
-        })
-        res.render('pages/index', { people: people,/* ufs: ufs,  cbo: cbo */ })
-    } catch (error) {
-        console.error(error)
-        res.render('pages/error', { message: "Erro interno" })
     }
 }
 
@@ -217,6 +176,50 @@ controller.createCard = async (req, res) => {
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: 'Erro interno' })
+    }
+}
+
+controller.search = async (req, res) => {
+    const { city, state, profession } = req.body
+
+    try {
+        const people = await Person.findAll({
+            attributes: ['id', 'name',],
+            include: [{ all: true }],
+            where: {
+                '$Cbo.title$': profession,
+                '$Municipio.name$': city,
+                [Op.or]: [{ '$Uf.name$': state }, { '$Uf.abbreviation$': state, }],
+            }
+        })
+        res.render('pages/searchResults', { people: people }
+        )
+    } catch (error) {
+        console.error(error);
+        res.render('pages/error', { message: "Sua busca não encontrou resultados" })
+    }
+}
+
+// Este pode ser mesclado com 'controller.search'
+controller.getAll = async (req, res) => {
+
+    try {
+        /*
+        const ufs = await Uf.findAll({ 
+            raw: true,
+            order: ['name']
+        })
+        
+        const cbo = JSON.stringify(await Cbo.findAll())
+        */
+        const people = await Person.findAll({
+            attributes: ['name',],
+            include: [{ all: true }],
+        })
+        res.render('pages/index', { people: people,/* ufs: ufs,  cbo: cbo */ })
+    } catch (error) {
+        console.error(error)
+        res.render('pages/error', { message: "Erro interno" })
     }
 }
 

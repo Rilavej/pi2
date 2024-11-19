@@ -1,86 +1,165 @@
 <%- include('../layouts/header'); -%>
-    <section class="section">
-        <div class="container is-max-tablet">
-            <div class="card">
-                <div class="card-image">
-                    <figure class="image is-4by3">
-                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
-                    </figure>
-                </div>
-                <div class="card-content">
-                    <div class="content">
-                        <h1>
-                            <%= user.name %>
-                        </h1>
-                        <% person.Professions.forEach(profession=> { %>
-                            <div class="py-5">
-                                <h6>
-                                    <%= profession.Cbo.title %>
-                                </h6>
-                                <p>
-                                    <%= profession.jobDescription %>
-                                </p>
-                            </div>
-                            <% }) %>
-                                <div class="media-left">
-                                    <figure class="image is-48x48">
-                                        <img src="https://bulma.io/assets/images/placeholders/96x96.png"
-                                            alt="Placeholder image" />
-                                    </figure>
+    <% if (person.Professions.length> 0) { %>
+        <%- include('../layouts/card') %>
+            <% } %>
+                <section class="section">
+                    <div class="buttons">
+                        <button id="addProfession" class="button is-fullwidth" type="button">
+                            Adcionar Profissão
+                        </button>
+                        <button id="addPhone" class="button is-fullwidth" type="button">
+                            Adcionar Telefone
+                        </button>
+                        <button id="addLink" class="button is-fullwidth" type="button">
+                            Adcionar Conta Social
+                        </button>
+                    </div>
+                    <div class="container is-max-tablet">
+                        <form id="dynamicForm" action="/user" method="post" style="display: none;">
+                            <div id="professionContainer" class="field">
+                                <div class="field fieldUnity">
+                                    <div class="field">
+                                        <label class="label">Profissão <span class="labelNumber"></span></label>
+                                        <div class="control autocompleteWrapperCbo">
+                                            <input class="input cboInput" name="profession[]" type="text"
+                                                placeholder="Nome da categoria" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <textarea class="textarea" name="jobDescription[]" type="text"
+                                                placeholder="Descrição dos serviços"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="field delButton" style="display: none;">
+                                        <div class="control buttons is-right">
+                                            <button id="addProfession" class="button is-small" type="button">
+                                                apagar campo
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <% person.SocialAccounts.forEach(SocialAccount=> { %>
-                                    <span>
-                                        <a href="#">
-                                            <%= SocialAccount.link %>
-                                        </a>
-                                    </span>
-                                    <% }) %>
-                                        <br>
-                                        <% person.Phones.forEach(phone=> { %>
-                                            <span>
-                                                <%= phone.phone %>
-                                            </span>
-                                            <% }) %>
+                            </div>
+                            <hr>
+                            <div id="phoneContainer" class="field">
+                                <div class="field fieldUnity">
+                                    <div class="field">
+                                        <label class="label">Telefone <span class="labelNumber"></span></label>
+                                        <div class="control">
+                                            <input class="input" name="phone[]" type="tel"
+                                                placeholder="Somente números">
+                                        </div>
+                                    </div>
+                                    <div class="field delButton" style="display: none;">
+                                        <div class="control buttons is-right">
+                                            <button id="addProfession" class="button is-small" type="button">
+                                                apagar campo
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div id="linkContainer" class="field">
+                                <div class="field fieldUnity">
+                                    <div class="field">
+                                        <label class="label">Conta Social <span class="labelNumber"></span></label>
+                                        <div class="control">
+                                            <input class="input" name="link[]" type="text"
+                                                placeholder="Link do perfil nas redes sociais">
+                                        </div>
+                                    </div>
+                                    <div class="field delButton" style="display: none;">
+                                        <div class="control buttons is-right">
+                                            <button id="addProfession" class="button is-small" type="button">
+                                                apagar campo
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="field">
+                                <div class="control">
+                                    <button class="button is-fullwidth is-link">Salvar</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section">
-        <div class="container is-max-tablet">
-            <form action="/user" method="post" autocomplete="off">
-                <div class="field">
-                    <label class="label">Profissão</label>
-                    <div id="autocompleteWrapperCbo" class="control">
-                        <input id="cboInput" class="input" name="profession[]" type="text"
-                            placeholder="Nome da categoria" autocomplete="off">
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <textarea class="textarea" name="jobDescription[]" type="text"
-                            placeholder="Descrição dos serviços"></textarea>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Telefone</label>
-                    <div class="control">
-                        <input class="input" name="phone[]" type="tel" placeholder="Somente números">
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Conta Social</label>
-                    <div class="control">
-                        <input class="input" name="link[]" type="text" placeholder="Link do perfil nas redes sociais">
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <button class="button is-fullwidth is-link">Salvar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
-    <%- include('../layouts/footer'); -%>
-        <%= JSON.stringify(person, null, 4) %>
+                </section>
+                <%- include('../layouts/footer'); -%>
+                    <%= JSON.stringify(person, null, 4) %>
+                        <script>
+                            document.getElementById('addProfession').addEventListener('click', () => {
+                                const container = document.getElementById('professionContainer')
+                                const newFieldUnity = addField(container)
+                                if (newFieldUnity) {
+                                    const cboInput = newFieldUnity.querySelector('.cboInput')
+                                    cboInput.addEventListener('input', (e) => onInputChange(
+                                        window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
+                                    ));
+                                    cboInput.addEventListener('click', (e) => onInputChange(
+                                        window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
+                                    ));
+                                }
+                                addEventsButtons(newFieldUnity, container);
+                            });
+
+                            document.getElementById('addPhone').addEventListener('click', () => {
+                                const container = document.getElementById('phoneContainer')
+                                const newFieldUnity = addField(container);
+                                addEventsButtons(newFieldUnity, container);
+                            });
+
+                            document.getElementById('addLink').addEventListener('click', () => {
+                                const container = document.getElementById('linkContainer')
+                                const newFieldUnity = addField(container);
+                                addEventsButtons(newFieldUnity, container);
+                            });
+
+                            function addField(container) {
+                                const form = document.getElementById('dynamicForm');
+                                const fieldUnity = container.querySelector('.fieldUnity')
+                                if (form.style.display === 'none') {
+                                    form.style.display = 'block'; // Torna o formulário visível
+                                    return fieldUnity;
+                                }
+                                container.querySelector('.delButton').style.display = 'block';
+
+                                const newFieldUnity = fieldUnity.cloneNode(true);
+
+                                // Limpar valores dos campos no novo conjunto
+                                const inputs = newFieldUnity.querySelectorAll('input, textarea');
+                                inputs.forEach(input => {
+                                    input.value = '';
+                                });
+                                // Adicionar o novo conjunto ao container
+                                container.appendChild(newFieldUnity);
+                                numberLabels(container)
+                                return newFieldUnity;
+                            }
+
+                            function addEventsButtons(newFieldUnity, container) {
+                                if (newFieldUnity) {
+                                    const delButton = newFieldUnity.querySelector('.delButton')
+                                    delButton.addEventListener('click', () => {
+                                        // if (container.querySelectorAll('.fieldUnity').length < 2) return;
+                                        newFieldUnity.remove();
+                                        numberLabels(container);
+                                        if (container.querySelectorAll('.fieldUnity').length < 2) {
+                                            container.querySelector('.delButton').style.display = 'none'
+                                        };
+                                    })
+                                }
+                            }
+
+                            function numberLabels(container) {
+                                if (container.querySelectorAll('.labelNumber').length === 1) {
+                                    container.querySelector('.labelNumber').innerText = null;
+                                    return;
+                                }
+                                container.querySelectorAll('.labelNumber').forEach((label, i) => {
+                                    label.innerText = i+1
+                                });
+                            }
+                        </script>

@@ -58,13 +58,6 @@ function removeAccents(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
-// document.querySelector("#addProfession").addEventListener('click', ()=>{
-//     document.querySelector('#finderForm').appendChild(
-//     '<input id="cboInput" class="input" name="profession[]" type="text" \
-//     placeholder="Nome da categoria" autocomplete="off">'
-//     )
-// })
-
 if (document.querySelector("#stateInput")) {
     document.querySelector("#stateInput").addEventListener('input', () => {
         document.querySelector("#cityInput").value = null
@@ -82,13 +75,21 @@ if (document.querySelector("#cityInput")) {
     ));
 }
 
-if (document.querySelector("#cboInput")) {
-    document.querySelector("#cboInput").addEventListener('input', (e) => onInputChange(
-        window.cbo, "title", e, document.querySelector("#autocompleteWrapperCbo")
+if (document.querySelector(".cboInput")) {
+    const cboInput = document.querySelector(".cboInput")
+    cboInput.addEventListener('input', (e) => onInputChange(
+        window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
     ));
-    document.querySelector("#cboInput").addEventListener('click', (e) => onInputChange(
-        window.cbo, "title", e, document.querySelector("#autocompleteWrapperCbo")
+    cboInput.addEventListener('click', (e) => onInputChange(
+        window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
     ));
-    // nao funciona
-    // document.querySelector("#cboInput").addEventListener('blur', removeAutocompletDropdown);
+    // // não funciona!
+    // document.querySelector(".cboInput").addEventListener('blur', removeAutocompletDropdown);
+}
+
+if (document.querySelector('.delButton')) {
+    document.querySelectorAll('.delButton').forEach(delButton => {
+        delButton.addEventListener('click', () => { 
+            delButton.closest('.fieldUnity').remove() })  
+    });
 }
