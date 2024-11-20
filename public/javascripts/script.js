@@ -86,10 +86,3 @@ if (document.querySelector(".cboInput")) {
     // // não funciona!
     // document.querySelector(".cboInput").addEventListener('blur', removeAutocompletDropdown);
 }
-
-if (document.querySelector('.delButton')) {
-    document.querySelectorAll('.delButton').forEach(delButton => {
-        delButton.addEventListener('click', () => { 
-            delButton.closest('.fieldUnity').remove() })  
-    });
-}

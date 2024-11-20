@@ -15,8 +15,8 @@
                         </button>
                     </div>
                     <div class="container is-max-tablet">
-                        <form id="dynamicForm" action="/user" method="post" style="display: none;">
-                            <div id="professionContainer" class="field">
+                        <form id="dynamicForm" action="/user" method="post">
+                            <div id="professionContainer" class="field fieldsGroup">
                                 <div class="field fieldUnity">
                                     <div class="field">
                                         <label class="label">Profissão <span class="labelNumber"></span></label>
@@ -31,9 +31,9 @@
                                                 placeholder="Descrição dos serviços"></textarea>
                                         </div>
                                     </div>
-                                    <div class="field delButton" style="display: none;">
+                                    <div class="field delButton">
                                         <div class="control buttons is-right">
-                                            <button id="addProfession" class="button is-small" type="button">
+                                            <button class="button is-small" type="button">
                                                 apagar campo
                                             </button>
                                         </div>
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <div id="phoneContainer" class="field">
+                            <div id="phoneContainer" class="field fieldsGroup">
                                 <div class="field fieldUnity">
                                     <div class="field">
                                         <label class="label">Telefone <span class="labelNumber"></span></label>
@@ -50,9 +50,9 @@
                                                 placeholder="Somente números">
                                         </div>
                                     </div>
-                                    <div class="field delButton" style="display: none;">
+                                    <div class="field delButton">
                                         <div class="control buttons is-right">
-                                            <button id="addProfession" class="button is-small" type="button">
+                                            <button class="button is-small" type="button">
                                                 apagar campo
                                             </button>
                                         </div>
@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <div id="linkContainer" class="field">
+                            <div id="linkContainer" class="field fieldsGroup">
                                 <div class="field fieldUnity">
                                     <div class="field">
                                         <label class="label">Conta Social <span class="labelNumber"></span></label>
@@ -69,9 +69,9 @@
                                                 placeholder="Link do perfil nas redes sociais">
                                         </div>
                                     </div>
-                                    <div class="field delButton" style="display: none;">
+                                    <div class="field delButton">
                                         <div class="control buttons is-right">
-                                            <button id="addProfession" class="button is-small" type="button">
+                                            <button class="button is-small" type="button">
                                                 apagar campo
                                             </button>
                                         </div>
@@ -81,7 +81,7 @@
                             <hr>
                             <div class="field">
                                 <div class="control">
-                                    <button class="button is-fullwidth is-link">Salvar</button>
+                                    <button class="button is-fullwidth is-link" type="submit">Salvar</button>
                                 </div>
                             </div>
                         </form>
@@ -90,44 +90,40 @@
                 <%- include('../layouts/footer'); -%>
                     <%= JSON.stringify(person, null, 4) %>
                         <script>
+                            document.getElementById('dynamicForm').style.display = 'none'; //retirar
+
+                            document.querySelectorAll('.delButton').forEach(delButton => {
+                                delButton.style.display = 'none'; // Retirar
+                                delButton.addEventListener('click', () => {
+                                    removeField(delButton);
+                                })
+                            });
+
                             document.getElementById('addProfession').addEventListener('click', () => {
-                                const container = document.getElementById('professionContainer')
-                                const newFieldUnity = addField(container)
-                                if (newFieldUnity) {
-                                    const cboInput = newFieldUnity.querySelector('.cboInput')
-                                    cboInput.addEventListener('input', (e) => onInputChange(
-                                        window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
-                                    ));
-                                    cboInput.addEventListener('click', (e) => onInputChange(
-                                        window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
-                                    ));
-                                }
-                                addEventsButtons(newFieldUnity, container);
+                                const professionContainer = document.getElementById('professionContainer');
+                                const newFieldUnity = addField(professionContainer);
+                                if (newFieldUnity) addEventToInputs(newFieldUnity);
                             });
 
                             document.getElementById('addPhone').addEventListener('click', () => {
-                                const container = document.getElementById('phoneContainer')
-                                const newFieldUnity = addField(container);
-                                addEventsButtons(newFieldUnity, container);
+                                const phoneContainer = document.getElementById('phoneContainer');
+                                addField(phoneContainer);
                             });
 
                             document.getElementById('addLink').addEventListener('click', () => {
-                                const container = document.getElementById('linkContainer')
-                                const newFieldUnity = addField(container);
-                                addEventsButtons(newFieldUnity, container);
+                                const linkContainer = document.getElementById('linkContainer')
+                                addField(linkContainer);
                             });
 
                             function addField(container) {
                                 const form = document.getElementById('dynamicForm');
-                                const fieldUnity = container.querySelector('.fieldUnity')
                                 if (form.style.display === 'none') {
                                     form.style.display = 'block'; // Torna o formulário visível
-                                    return fieldUnity;
+                                    return;
                                 }
                                 container.querySelector('.delButton').style.display = 'block';
-
+                                const fieldUnity = container.querySelector('.fieldUnity')
                                 const newFieldUnity = fieldUnity.cloneNode(true);
-
                                 // Limpar valores dos campos no novo conjunto
                                 const inputs = newFieldUnity.querySelectorAll('input, textarea');
                                 inputs.forEach(input => {
@@ -136,30 +132,46 @@
                                 // Adicionar o novo conjunto ao container
                                 container.appendChild(newFieldUnity);
                                 numberLabels(container)
+                                AddEventToButtons(newFieldUnity);
                                 return newFieldUnity;
                             }
 
-                            function addEventsButtons(newFieldUnity, container) {
-                                if (newFieldUnity) {
-                                    const delButton = newFieldUnity.querySelector('.delButton')
-                                    delButton.addEventListener('click', () => {
-                                        // if (container.querySelectorAll('.fieldUnity').length < 2) return;
-                                        newFieldUnity.remove();
-                                        numberLabels(container);
-                                        if (container.querySelectorAll('.fieldUnity').length < 2) {
-                                            container.querySelector('.delButton').style.display = 'none'
-                                        };
-                                    })
+                            function addEventToInputs(newFieldUnity) {
+                                const cboInput = newFieldUnity.querySelector('.cboInput')
+                                cboInput.addEventListener('input', (e) => onInputChange(
+                                    window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
+                                ));
+                                cboInput.addEventListener('click', (e) => onInputChange(
+                                    window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
+                                ));
+                            }
+
+                            function AddEventToButtons(newFieldUnity) {
+                                const container = newFieldUnity.closest('.fieldsGroup')
+                                const delButton = newFieldUnity.querySelector('.delButton')
+                                delButton.addEventListener('click', () => {
+                                    removeField(delButton);
+                                })
+                            }
+
+                            function removeField(delButton) {
+                                const container = delButton.closest('.fieldsGroup')
+                                if (container.childElementCount === 2) {
+                                    container.querySelectorAll('.delButton').forEach(delButton => {
+                                        delButton.style.display = 'none' // remover
+                                    });
                                 }
+                                delButton.closest('.fieldUnity').remove();
+                                numberLabels(container);
                             }
 
                             function numberLabels(container) {
                                 if (container.querySelectorAll('.labelNumber').length === 1) {
                                     container.querySelector('.labelNumber').innerText = null;
-                                    return;
+                                } else {
+                                    container.querySelectorAll('.labelNumber').forEach((label, i) => {
+                                        label.innerText = i + 1
+                                    });
                                 }
-                                container.querySelectorAll('.labelNumber').forEach((label, i) => {
-                                    label.innerText = i+1
-                                });
                             }
                         </script>
