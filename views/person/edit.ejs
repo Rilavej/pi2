@@ -1,0 +1,93 @@
+<%- include('../layouts/header'); -%>
+    <section class="section">
+        <div class="container is-max-tablet mt-6">
+            <form id="dynamicForm" action="/user/edit" method="post">
+                <div id="professionContainer" class="field myContainer">
+                    <% person.Cbos.forEach(cbo=> { %>
+                        <div class="field myRow">
+                            <div class="field">
+                                <label class="label">Profissão <span class="labelNumber"></span></label>
+                                <div class="control autocompleteWrapperCbo">
+                                    <input class="input cboInput" name="profession[]" type="text"
+                                        placeholder="Nome da categoria" autocomplete="off" required
+                                        value="<%= cbo.title %>">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <textarea class="textarea" name="jobDescription[]" type="text"
+                                        placeholder="Descrição dos serviços (opcional)"><%= cbo.Profession.jobDescription %></textarea>
+                                </div>
+                            </div>
+                            <div class="field delButton">
+                                <div class="control buttons is-right">
+                                    <button class="button is-small" type="button">
+                                        apagar campo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <button id="addProfession" class="button" type="button">
+                    + profissão
+                </button>
+                <hr>
+                <div id="phoneContainer" class="field myContainer">
+                    <% person.Phones.forEach(phoneRow=> { %>
+                        <div class="field myRow">
+                            <div class="field">
+                                <label class="label">Telefone <span class="labelNumber"></span></label>
+                                <div class="control">
+                                    <input class="input" name="phone[]" type="tel" placeholder="Somente números"
+                                        required value="<%= phoneRow.phone %>">
+                                </div>
+                            </div>
+                            <div class="field delButton">
+                                <div class="control buttons is-right">
+                                    <button class="button is-small" type="button">
+                                        apagar campo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <button id="addPhone" class="button" type="button">
+                    + telefone
+                </button>
+                <hr>
+                <div id="linkContainer" class="field myContainer">
+                    <% person.SocialAccounts.forEach(socialAccount=> { %>
+                        <div class="field myRow">
+                            <div class="field">
+                                <label class="label">Conta Social <span class="labelNumber"></span></label>
+                                <div class="control">
+                                    <input class="input" name="link[]" type="text"
+                                        placeholder="Link do perfil (opcional)" value="<%= socialAccount.link %>">
+                                </div>
+                            </div>
+                            <div class="field delButton">
+                                <div class="control buttons is-right">
+                                    <button class="button is-small" type="button">
+                                        apagar campo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <button id="addLink" class="button" type="button">
+                    + conta social
+                </button>
+                <hr>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-fullwidth is-link" type="submit">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- <script src="/javascripts/dynamicFormEdit.js"></script> -->
+    <%- include('../layouts/footer'); -%>

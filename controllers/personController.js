@@ -90,29 +90,43 @@ controller.login = (req, res, next) => {
     })(req, res, next)
 }
 
-controller.getUser = async (req, res) => {
+controller.getCard = async (req, res, next) => {
     try {
         const person = await Person.findByPk(req.user.id, {
             attributes: ['id', 'name',],
             include: {
                 all: true,
                 nested: true,
-                attributes: { exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds'] },
+                // attributes: { exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds'] },
             },
             // raw: true
         });
         if (!person) {
             throw new Error("Ops! Usuário não encontrado");
         }
-        console.log(JSON.stringify(person, null, 4))
-        if (person.Professions.length > 0) {
-            person.Professions.forEach(profession => {
-                console.log(profession.Cbo.title);
-            });
-        }
-        res.status(200).render('person/index', { person })
+        res.person = person
+        next()
+
     } catch (error) {
         console.error(error);
+        res.render('pages/error', { message: 'Erro interno' })
+    }
+}
+
+controller.showCard = (req, res) => {
+    try {
+        res.status(200).render('person/index', { person: res.person })
+    } catch (error) {
+        console.log(error);
+        res.render('pages/error', { message: 'Erro interno' })
+    }
+}
+
+controller.getEditCardPage = (req, res) => {
+    try {
+        res.status(200).render('person/edit', { person: res.person })
+    } catch (error) {
+        console.log(error);
         res.render('pages/error', { message: 'Erro interno' })
     }
 }
@@ -126,12 +140,12 @@ controller.createCard = async (req, res) => {
             where: { title: { [Op.or]: profession } },
             raw: true
         })
+        console.log(cbo);
+        
 
         let professionsBulk = []
         for (let i = 0; i < cbo.length; i++) {
             let row = {}
-            // if (!profession[i]) {continue}
-            // if (profession[i] == '') {continue}
             row['CboId'] = cbo[i]['id']
             row['PersonId'] = req.user.id
             if (jobDescription[i] != '') {
@@ -143,6 +157,8 @@ controller.createCard = async (req, res) => {
         // Assumindo que todo telefone é whatsapp
         let phonesBulk = []
         for (let i = 0; i < phone.length; i++) {
+            if (!phone[i]) continue
+            if (phone[i] == '') continue
             let row = {}
             row['phone'] = phone[i]
             row['PersonId'] = req.user.id
@@ -151,6 +167,8 @@ controller.createCard = async (req, res) => {
 
         let socialAccountsBulk = []
         for (let i = 0; i < link.length; i++) {
+            if (!link[i]) continue
+            if (link[i] == '') continue
             let row = {}
             row['link'] = link[i]
             row['PersonId'] = req.user.id
@@ -165,19 +183,42 @@ controller.createCard = async (req, res) => {
             // row['MediaId'] = media.id
             socialAccountsBulk.push(row)
         }
-
         const result = await Profession.bulkCreate(professionsBulk)
         if (result) {
             await Phone.bulkCreate(phonesBulk)
             await SocialAccount.bulkCreate(socialAccountsBulk)
         }
-
         res.redirect('/user')
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: 'Erro interno' })
     }
 }
+
+controller.deleteCard = async (req, res, next) => {
+    await Profession.destroy({
+        where: {
+            PersonId: req.user.id
+        }
+    });
+
+    await Phone.destroy({
+        where: {
+            PersonId: req.user.id
+        }
+    });
+
+    await SocialAccount.destroy({
+        where: {
+            PersonId: req.user.id
+        }
+    });
+
+    next()
+}
+
+
+
 
 controller.search = async (req, res) => {
     const { city, state, profession } = req.body

@@ -1,34 +1,33 @@
 <%- include('../layouts/header'); -%>
-    <% if (person.Professions.length> 0) { %>
-        <%- include('../layouts/card') %>
-            <% } %>
-                <section class="section">
-                    <div class="buttons">
-                        <button id="addProfession" class="button is-fullwidth" type="button">
-                            Adcionar Profissão
-                        </button>
-                        <button id="addPhone" class="button is-fullwidth" type="button">
-                            Adcionar Telefone
-                        </button>
-                        <button id="addLink" class="button is-fullwidth" type="button">
-                            Adcionar Conta Social
-                        </button>
-                    </div>
-                    <div class="container is-max-tablet">
+    <section class="section">
+        <div class="buttons">
+            <button id="showForm" class="button is-fullwidth" type="button">
+                Adcionar informações
+            </button>
+        </div>
+        <% if (person.Professions.length> 0) { %>
+            <div class="buttons">
+                <a href="/user/edit" id="editCard" class="button is-fullwidth">
+                    Editar / apagar informações
+                </a>
+            </div>
+            <%- include('../layouts/card') %>
+                <% } %>
+                    <div class="container is-max-tablet mt-6">
                         <form id="dynamicForm" action="/user" method="post">
-                            <div id="professionContainer" class="field fieldsGroup">
-                                <div class="field fieldUnity">
+                            <div id="professionContainer" class="field myContainer">
+                                <div class="field myRow">
                                     <div class="field">
                                         <label class="label">Profissão <span class="labelNumber"></span></label>
                                         <div class="control autocompleteWrapperCbo">
                                             <input class="input cboInput" name="profession[]" type="text"
-                                                placeholder="Nome da categoria" autocomplete="off">
+                                                placeholder="Nome da categoria" autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="field">
                                         <div class="control">
                                             <textarea class="textarea" name="jobDescription[]" type="text"
-                                                placeholder="Descrição dos serviços"></textarea>
+                                                placeholder="Descrição dos serviços (opcional)"></textarea>
                                         </div>
                                     </div>
                                     <div class="field delButton">
@@ -40,14 +39,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <button id="addProfession" class="button" type="button">
+                                + profissão
+                            </button>
                             <hr>
-                            <div id="phoneContainer" class="field fieldsGroup">
-                                <div class="field fieldUnity">
+                            <div id="phoneContainer" class="field myContainer">
+                                <div class="field myRow">
                                     <div class="field">
                                         <label class="label">Telefone <span class="labelNumber"></span></label>
                                         <div class="control">
-                                            <input class="input" name="phone[]" type="tel"
-                                                placeholder="Somente números">
+                                            <input class="input" name="phone[]" type="tel" placeholder="Somente números"
+                                                required>
                                         </div>
                                     </div>
                                     <div class="field delButton">
@@ -59,14 +61,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <button id="addPhone" class="button" type="button">
+                                + telefone
+                            </button>
                             <hr>
-                            <div id="linkContainer" class="field fieldsGroup">
-                                <div class="field fieldUnity">
+                            <div id="linkContainer" class="field myContainer">
+                                <div class="field myRow">
                                     <div class="field">
                                         <label class="label">Conta Social <span class="labelNumber"></span></label>
                                         <div class="control">
                                             <input class="input" name="link[]" type="text"
-                                                placeholder="Link do perfil nas redes sociais">
+                                                placeholder="Link do perfil (opcional)">
                                         </div>
                                     </div>
                                     <div class="field delButton">
@@ -78,6 +83,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <button id="addLink" class="button" type="button">
+                                + conta social
+                            </button>
                             <hr>
                             <div class="field">
                                 <div class="control">
@@ -86,92 +94,6 @@
                             </div>
                         </form>
                     </div>
-                </section>
-                <%- include('../layouts/footer'); -%>
-                    <%= JSON.stringify(person, null, 4) %>
-                        <script>
-                            document.getElementById('dynamicForm').style.display = 'none'; //retirar
-
-                            document.querySelectorAll('.delButton').forEach(delButton => {
-                                delButton.style.display = 'none'; // Retirar
-                                delButton.addEventListener('click', () => {
-                                    removeField(delButton);
-                                })
-                            });
-
-                            document.getElementById('addProfession').addEventListener('click', () => {
-                                const professionContainer = document.getElementById('professionContainer');
-                                const newFieldUnity = addField(professionContainer);
-                                if (newFieldUnity) addEventToInputs(newFieldUnity);
-                            });
-
-                            document.getElementById('addPhone').addEventListener('click', () => {
-                                const phoneContainer = document.getElementById('phoneContainer');
-                                addField(phoneContainer);
-                            });
-
-                            document.getElementById('addLink').addEventListener('click', () => {
-                                const linkContainer = document.getElementById('linkContainer')
-                                addField(linkContainer);
-                            });
-
-                            function addField(container) {
-                                const form = document.getElementById('dynamicForm');
-                                if (form.style.display === 'none') {
-                                    form.style.display = 'block'; // Torna o formulário visível
-                                    return;
-                                }
-                                container.querySelector('.delButton').style.display = 'block';
-                                const fieldUnity = container.querySelector('.fieldUnity')
-                                const newFieldUnity = fieldUnity.cloneNode(true);
-                                // Limpar valores dos campos no novo conjunto
-                                const inputs = newFieldUnity.querySelectorAll('input, textarea');
-                                inputs.forEach(input => {
-                                    input.value = '';
-                                });
-                                // Adicionar o novo conjunto ao container
-                                container.appendChild(newFieldUnity);
-                                numberLabels(container)
-                                AddEventToButtons(newFieldUnity);
-                                return newFieldUnity;
-                            }
-
-                            function addEventToInputs(newFieldUnity) {
-                                const cboInput = newFieldUnity.querySelector('.cboInput')
-                                cboInput.addEventListener('input', (e) => onInputChange(
-                                    window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
-                                ));
-                                cboInput.addEventListener('click', (e) => onInputChange(
-                                    window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
-                                ));
-                            }
-
-                            function AddEventToButtons(newFieldUnity) {
-                                const container = newFieldUnity.closest('.fieldsGroup')
-                                const delButton = newFieldUnity.querySelector('.delButton')
-                                delButton.addEventListener('click', () => {
-                                    removeField(delButton);
-                                })
-                            }
-
-                            function removeField(delButton) {
-                                const container = delButton.closest('.fieldsGroup')
-                                if (container.childElementCount === 2) {
-                                    container.querySelectorAll('.delButton').forEach(delButton => {
-                                        delButton.style.display = 'none' // remover
-                                    });
-                                }
-                                delButton.closest('.fieldUnity').remove();
-                                numberLabels(container);
-                            }
-
-                            function numberLabels(container) {
-                                if (container.querySelectorAll('.labelNumber').length === 1) {
-                                    container.querySelector('.labelNumber').innerText = null;
-                                } else {
-                                    container.querySelectorAll('.labelNumber').forEach((label, i) => {
-                                        label.innerText = i + 1
-                                    });
-                                }
-                            }
-                        </script>
+    </section>
+    <script src="/javascripts/dynamicFormIndex.js"></script>
+    <%- include('../layouts/footer'); -%>
