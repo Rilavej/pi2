@@ -1,6 +1,6 @@
 const passport = require("passport")
 const {
-    Person, Phone, Profession, Address, Media, SocialAccount, Uf, Municipio, Cbo, noCboProfession
+    Person, Phone, Service, Address, Media, SocialAccount, Uf, Municipio, Cbo, noCboService
 } = require('../config/associations')
 const { Op } = require('sequelize');
 
@@ -132,12 +132,12 @@ controller.getEditCardPage = (req, res) => {
 }
 
 controller.createCard = async (req, res) => {
-    const { profession, jobDescription, phone, link } = req.body
+    const { service, description, phone, link } = req.body
     try {
         // deveria vir do front-end
         const cbo = await Cbo.findAll({
             attributes: ['id'],
-            where: { title: { [Op.or]: profession } },
+            where: { title: { [Op.or]: service } },
             raw: true
         })
         console.log(cbo);
@@ -148,8 +148,8 @@ controller.createCard = async (req, res) => {
             let row = {}
             row['CboId'] = cbo[i]['id']
             row['PersonId'] = req.user.id
-            if (jobDescription[i] != '') {
-                row['jobDescription'] = jobDescription[i]
+            if (description[i] != '') {
+                row['description'] = description[i]
             }
             professionsBulk.push(row)
         }
@@ -183,7 +183,7 @@ controller.createCard = async (req, res) => {
             // row['MediaId'] = media.id
             socialAccountsBulk.push(row)
         }
-        const result = await Profession.bulkCreate(professionsBulk)
+        const result = await Service.bulkCreate(professionsBulk)
         if (result) {
             await Phone.bulkCreate(phonesBulk)
             await SocialAccount.bulkCreate(socialAccountsBulk)
@@ -196,7 +196,7 @@ controller.createCard = async (req, res) => {
 }
 
 controller.deleteCard = async (req, res, next) => {
-    await Profession.destroy({
+    await Service.destroy({
         where: {
             PersonId: req.user.id
         }
@@ -221,14 +221,14 @@ controller.deleteCard = async (req, res, next) => {
 
 
 controller.search = async (req, res) => {
-    const { city, state, profession } = req.body
+    const { city, state, service } = req.body
 
     try {
         const people = await Person.findAll({
             attributes: ['id', 'name',],
             include: [{ all: true }],
             where: {
-                '$Cbo.title$': profession,
+                '$Cbo.title$': service,
                 '$Municipio.name$': city,
                 [Op.or]: [{ '$Uf.name$': state }, { '$Uf.abbreviation$': state, }],
             }

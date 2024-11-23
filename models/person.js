@@ -18,23 +18,23 @@ const Person = sequelize.define(
             //     isAlpha: true,            
             // }
         // },
+        username:{
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false,
+        },
         email:{
             type: DataTypes.STRING,
-            allowNull: false,
             unique: true,
+            allowNull: false,
             // validate: {
             //     isEmail: true,
             // }
         },
-        username:{
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true,
-        },
         hashedPassword:{
             type: DataTypes.STRING,
-            allowNull: false,
             unique: true,
+            allowNull: false,
         },
         // Se o modelo Admin não der certo
         isAdmin: {

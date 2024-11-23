@@ -11,8 +11,8 @@ const Cbo = sequelize.define(
         },
         title: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false,
-            unique: true
         },
     },
     {

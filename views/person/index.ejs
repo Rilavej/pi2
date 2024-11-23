@@ -5,7 +5,7 @@
                 Adcionar informações
             </button>
         </div>
-        <% if (person.Professions.length> 0) { %>
+        <% if (person.Services.length> 0) { %>
             <div class="buttons">
                 <a href="/user/edit" id="editCard" class="button is-fullwidth">
                     Editar / apagar informações
@@ -20,13 +20,13 @@
                                     <div class="field">
                                         <label class="label">Profissão <span class="labelNumber"></span></label>
                                         <div class="control autocompleteWrapperCbo">
-                                            <input class="input cboInput" name="profession[]" type="text"
+                                            <input class="input cboInput" name="service[]" type="text"
                                                 placeholder="Nome da categoria" autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="field">
                                         <div class="control">
-                                            <textarea class="textarea" name="jobDescription[]" type="text"
+                                            <textarea class="textarea" name="description[]" type="text"
                                                 placeholder="Descrição dos serviços (opcional)"></textarea>
                                         </div>
                                     </div>

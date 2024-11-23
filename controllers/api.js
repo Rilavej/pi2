@@ -1,17 +1,17 @@
 const { Sequelize } = require('sequelize')
 const {
-    Person, Media, Phone, Profession, Address, SocialAccount, Cbo, Municipio, Uf, noCboProfession
+    Person, Media, Phone, Service, Address, SocialAccount, Cbo, Municipio, Uf, noCboService
 } = require('../config/associations')
 
 const controller = {}
 
 controller.getProfessions = async function (req, res) {
-    const professions = await Profession.findAll({
+    const services = await Service.findAll({
         include: {all: true},
         raw: true,
     })
-    res.json(professions)
-    console.log(professions)
+    res.json(services)
+    console.log(services)
 }
 
 module.exports = controller

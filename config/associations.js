@@ -2,12 +2,12 @@ const sequelize = require('../config/dbconnection')
 
 const Person = require('../models/person')
 const Phone = require('../models/phone')
-const Profession = require('../models/profession')
+const Service = require('../models/service')
 const Address = require('../models/address')
 const Media = require('../models/media')
 const SocialAccount = require('../models/socialAccount')
 const Cbo = require('../models/cbo')
-const noCboProfession = require('../models/noCboProfession')
+const noCboService = require('../models/noCboService')
 const Municipio = require('../models/municipio')
 const Uf = require('../models/uf')
 
@@ -18,15 +18,15 @@ Municipio.hasMany(Person, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}}
 Person.belongsTo(Municipio, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
 
 // The Super Many-to-Many relationship
-Person.belongsToMany(Cbo, {through: {model: Profession}, onDelete: 'CASCADE'})
-Cbo.belongsToMany(Person, {through: {model: Profession}, onDelete: 'RESTRICT'})
-Person.hasMany(Profession, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
-Profession.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
-Cbo.hasMany(Profession, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
-Profession.belongsTo(Cbo, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
+Person.belongsToMany(Cbo, {through: {model: Service}, onDelete: 'CASCADE'})
+Cbo.belongsToMany(Person, {through: {model: Service}, onDelete: 'RESTRICT'})
+Person.hasMany(Service, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Service.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Cbo.hasMany(Service, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
+Service.belongsTo(Cbo, {onDelete: 'RESTRICT', foreignKey: {allowNull: false}})
 
-Person.hasMany(noCboProfession, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
-noCboProfession.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+Person.hasMany(noCboService, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
+noCboService.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
 
 Person.hasMany(Phone, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
 Phone.belongsTo(Person, {onDelete: 'CASCADE', foreignKey: {allowNull: false}})
@@ -47,14 +47,14 @@ const sync = sequelize.sync({force: false})
 module.exports = {
     Person,
     Phone,
-    Profession,
+    Service,
     Address,
     Media,
     SocialAccount,
     Uf,
     Municipio,
     Cbo,
-    noCboProfession,
+    noCboService,
     sequelize,
     sync
 }

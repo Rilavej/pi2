@@ -1,18 +1,18 @@
 const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
-const Profession = sequelize.define(
-    'Profession',
+const Service = sequelize.define(
+    'Service',
     {
         id: {
             type: DataTypes.INTEGER,
+            primaryKey: true,
             autoIncrement: true,
-            primaryKey: true
         },
-        jobDescription: {
+        description: {
             type: DataTypes.STRING,
         },
     }
 )
 
-module.exports = Profession
+module.exports = Service

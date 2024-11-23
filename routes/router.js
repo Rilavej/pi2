@@ -20,6 +20,6 @@ router.post('/user', auth, personController.createCard)
 router.get('/user/edit', auth, personController.getCard, personController.getEditCardPage)
 router.post('/user/edit', auth, personController.deleteCard, personController.createCard)
 
-router.get('/api/:professions', api.getProfessions)
+router.get('/api/:services', api.getProfessions)
 
 module.exports = router

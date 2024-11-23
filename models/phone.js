@@ -7,7 +7,7 @@ const Phone = sequelize.define(
     {
         phone: {
             type: DataTypes.STRING,
-            primaryKey:true,
+            // unique: true,
             allowNull: false,
             validate: {
                 isNumeric: true

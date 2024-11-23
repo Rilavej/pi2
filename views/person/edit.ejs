@@ -8,15 +8,15 @@
                             <div class="field">
                                 <label class="label">Profissão <span class="labelNumber"></span></label>
                                 <div class="control autocompleteWrapperCbo">
-                                    <input class="input cboInput" name="profession[]" type="text"
+                                    <input class="input cboInput" name="service[]" type="text"
                                         placeholder="Nome da categoria" autocomplete="off" required
                                         value="<%= cbo.title %>">
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="control">
-                                    <textarea class="textarea" name="jobDescription[]" type="text"
-                                        placeholder="Descrição dos serviços (opcional)"><%= cbo.Profession.jobDescription %></textarea>
+                                    <textarea class="textarea" name="description[]" type="text"
+                                        placeholder="Descrição dos serviços (opcional)"><%= cbo.Service.description %></textarea>
                                 </div>
                             </div>
                             <div class="field delButton">

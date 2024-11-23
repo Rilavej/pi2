@@ -10,13 +10,13 @@ const Uf = sequelize.define(
         },
         name: {
             type: DataTypes.STRING,
+            unique: true,
             allowNull: false,
-            unique: true
         },
         abbreviation: {
             type: DataTypes.ENUM,
-            allowNull: false,
             unique: true,
+            allowNull: false,
             values: [
                 "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", 
                 "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", 
