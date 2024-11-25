@@ -4,35 +4,28 @@
             <h1 class="subtitle">Fazer Login</h1>
             <p class="help">Não tem conta? <br><a href="/signup"> Sign up</a></p>
         </div>
-        <% if (message) { %>
-            <div class="block has-text-centered	">
-                <h1 class="subtitle">
-                    <%= message %>
-                </h1>
-            </div>
-            <% } %>
-                <div class="level-item">
-                    <div class="box">
-                        <form action="/login" method="post">
-                            <div class="field">
-                                <label class="label">Login</label>
-                                <div class="control">
-                                    <input class="input" name="email" type="email" placeholder="email">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="label">Senha</label>
-                                <div class="control">
-                                    <input class="input" name="password" type="password" placeholder="password">
-                                </div>
-                            </div>
-                            <div class="field pt-5 mt-4">
-                                <div class="control">
-                                    <button class="button is-fullwidth is-link">Fazer login</button>
-                                </div>
-                            </div>
-                        </form>
+        <div class="level-item">
+            <div class="box">
+                <form action="/login" method="post">
+                    <div class="field">
+                        <label class="label">Login</label>
+                        <div class="control">
+                            <input class="input" name="email" type="email" placeholder="email">
+                        </div>
                     </div>
-                </div>
+                    <div class="field">
+                        <label class="label">Senha</label>
+                        <div class="control">
+                            <input class="input" name="password" type="password" placeholder="password">
+                        </div>
+                    </div>
+                    <div class="field pt-5 mt-4">
+                        <div class="control">
+                            <button class="button is-fullwidth is-link">Fazer login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </section>
     <%- include('../layouts/footer'); -%>
