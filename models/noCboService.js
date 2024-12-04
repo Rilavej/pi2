@@ -2,8 +2,8 @@ const sequelize = require('../config/dbconnection')
 const DataTypes = require('sequelize')
 
 // Tabela exclusiva para possíveis ocupações inexistentes no CBO
-const noCboService = sequelize.define(
-    'noCboService',
+const NoCboService = sequelize.define(
+    'NoCboService',
     {
         title: {
             type: DataTypes.STRING,
@@ -15,4 +15,4 @@ const noCboService = sequelize.define(
     },
 )
 
-module.exports = noCboService
+module.exports = NoCboService

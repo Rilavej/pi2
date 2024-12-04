@@ -1,6 +1,6 @@
 const passport = require("passport")
 const {
-    Person, Phone, Service, Address, Media, SocialAccount, Uf, Municipio, Cbo, noCboService
+    Person, Phone, Service, Address, Media, SocialAccount, Uf, Municipio, Cbo, NoCboService
 } = require('../config/associations')
 const { Op } = require('sequelize');
 
@@ -9,9 +9,28 @@ const saltRounds = 10
 
 const controller = {}
 
+function trimServices(services) {
+    for (const service of services) {
+        if (service.ocupation) {
+            service.ocupation = service.ocupation.trim().toLowerCase()
+            service.ocupation = service.ocupation.charAt(0).toUpperCase() + service.ocupation.slice(1)
+        }
+        if (service.description) {
+            service.description = service.description.trim().toLowerCase()
+            service.description = service.description.charAt(0).toUpperCase() + service.description.slice(1)
+        }
+    }
+}
+
+function isNumeric(str) {
+    return /^[0-9]+$/.test(str);
+}
+
 controller.getRegisterPage = async (req, res) => {
     try {
-        res.status(200).render('person/signup')
+        const ufs = await Uf.findAll({ raw: true, order: ['name'] })
+        const cbo = await Cbo.findAll({ raw: true })
+        res.status(200).render('person/signup', { ufs: ufs, cbo: cbo })
     } catch (error) {
         console.error(error)
         res.status(500).render("pages/error", { message: 'Erro interno' })
@@ -90,6 +109,17 @@ controller.login = (req, res, next) => {
     })(req, res, next)
 }
 
+controller.logout = async (req, res, next) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err)
+        }
+        req.flash('success_msg', "Você saiu!")
+        res.redirect('/')
+    })
+
+}
+
 controller.getPersonOrCard = async (req, res, next) => {
     try {
         const person = await Person.findByPk(req.user.id, {
@@ -105,7 +135,9 @@ controller.getPersonOrCard = async (req, res, next) => {
             res.locals.messages.push("Usuário não encontrado")
             throw new Error("Usuário não encontrado");
         }
+
         res.person = person
+        console.log(JSON.stringify(res.person, null, 4));
         next() //showCard
 
     } catch (error) {
@@ -137,152 +169,342 @@ controller.getEditCardPage = (req, res) => {
 controller.createCard = async (req, res, next) => {
     const { services, phones, links } = req.body
 
-    console.log(services, 'post do formulario'); // retirar
-
+    console.log(services, "services"); // retirar
+    console.log(phones, "phones"); // retirar
+    console.log(links , "links"); // retirar
+    
     try {
-        // opção 1
-        // const cbo = await Cbo.findAll({
-        //     attributes: ['id'], /** talvez trazer do front-end em input type='hidden' */
-        //     where: { title: { [Op.or]: services /** era uma lista simples */ } },
-        //     raw: true
-        // })
+        if (services) {
+            trimServices(services) // retira espaços do incio e fim, lowerCase a string e capitaliza primera letra
+            console.log(services, 'services tratado'); // retirar
 
-        // fazer função para usar em outros controllers
-        for (const service of services) {
-            service.ocupation = service.ocupation.trim().toLowerCase()
-            service.description = service.description.trim().toLowerCase()
-            service.ocupation = service.ocupation.charAt(0).toUpperCase() + service.ocupation.slice(1)
-            service.description = service.description.charAt(0).toUpperCase() + service.description.slice(1)
-        }
-        console.log(services, 'services tratado'); // retirar
+            const serviceBulk = [];
+            const noCboServiceBulk = [];
+            const invalidBulk = [];
 
-        const serviceBulk = [];
-        const noCboServiceBulk = [];
-        const invalidBulk = [];
+            for (const service of services) {
+                if (service.ocupation === "" || service.ocupation === null) {
+                    invalidBulk.push({ title: service.ocupation, description: service.description })
+                    continue
+                    // res.locals.messages.push(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`)
+                }
+                const cbo = await Cbo.findOne({
+                    attributes: ['id'], /** talvez trazer do front-end em input type='hidden' */
+                    where: { title: service.ocupation },
+                    raw: true
+                })
+                console.log(cbo, "resultado da consulta"); // retirar
 
-        // opção 2
-        for (const service of services) {
-            const cbo = await Cbo.findOne({
-                attributes: ['id'], /** talvez trazer do front-end em input type='hidden' */
-                where: { title: service.ocupation.trim() },
-                raw: true
-            })
-            console.log(cbo, "resultado da consulta"); // retirar
+                if (cbo) {
+                    serviceBulk.push({ CboId: cbo.id, description: service.description, PersonId: req.user.id })
+                } else {
+                    noCboServiceBulk.push({ title: service.ocupation, description: service.description, PersonId: req.user.id })
+                }
+            }
+            console.log(serviceBulk, 'serviceBulk')
+            console.log(noCboServiceBulk, 'noCboServiceBulk')
+            console.log(invalidBulk, 'invalidBulk');
 
-            if (cbo) {
-                serviceBulk.push({ CboId: cbo.id, description: service.description, PersonId: req.user.id })
-            } else if (service.ocupation === "" || service.ocupation === null) {
-                invalidBulk.push({ title: service.ocupation, description: service.description })
-                res.locals.messages.push(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`)
-            } else {
-                noCboServiceBulk.push({ title: service.ocupation, description: service.description, PersonId: req.user.id })
+            if (serviceBulk.length > 0) {
+                if (!await Service.bulkCreate(serviceBulk)) res.locals.messages.push('Erro ao salvar Profisão')
+            }
+            if (noCboServiceBulk.length > 0) {
+                if (!await NoCboService.bulkCreate(noCboServiceBulk)) res.locals.messages.push('Erro ao salvar Profisão')
             }
         }
-        console.log(serviceBulk, 'serviceBulk')
-        console.log(noCboServiceBulk, 'noCboServiceBulk')
-        console.log(invalidBulk, 'invalidBulk');
 
-        // opção 1
-        // let professionsBulk = []
-        // for (let i = 0; i < cbo.length; i++) {
-        //     let row = {}
-        //     row['CboId'] = cbo[i]['id']
-        //     row['PersonId'] = req.user.id
-        //     if (description[i] != '') {
-        //         row['description'] = description[i]
-        //     }
-        //     professionsBulk.push(row)
-        // }
+        if (phones) {
+            // Assumindo que todo telefone é whatsapp
+            const phonesBulk = []
+            const invalidPhones = []
 
-        // Assumindo que todo telefone é whatsapp
-
-        function isNumeric(str) {
-            return /^[0-9]+$/.test(str);
-        }
-
-        const phonesBulk = []
-        const invalidPhones = []
-
-        for (let i = 0; i < phones.length; i++) {
-            if (!phones[i]) continue
-            phones[i] = phones[i].trim()
-            if (phones[i] === '') continue
-            if (!isNumeric(phones[i])) {
-                invalidPhones.push(phones[i])
-                res.locals.messages.push(`Telefone inválido: "${phones[i]}"`)
-                continue
+            for (let i = 0; i < phones.length; i++) {
+                if (!phones[i]) continue
+                phones[i] = phones[i].trim()
+                if (phones[i] === '') continue
+                if (!isNumeric(phones[i])) {
+                    invalidPhones.push(phones[i])
+                    res.locals.messages.push(`Telefone inválido: "${phones[i]}"`)
+                    continue
+                }
+                const row = {}
+                row['phone'] = phones[i]
+                row['PersonId'] = req.user.id
+                phonesBulk.push(row)
             }
-            const row = {}
-            row['phone'] = phones[i]
-            row['PersonId'] = req.user.id
-            phonesBulk.push(row)
+            console.log(phonesBulk, 'phonesBulk');
+            console.log(invalidPhones, 'invalidPhones');
+
+            if (phonesBulk.length > 0) {
+                if (!await Phone.bulkCreate(phonesBulk)) res.locals.messages.push('Erro ao salvar telefone')
+            }
         }
-        console.log(phonesBulk, 'phonesBulk');
-        console.log(invalidPhones, 'invalidPhones');
 
-        const socialAccountsBulk = []
+        if (links) {
+            const socialAccountsBulk = []
 
-        for (let i = 0; i < links.length; i++) {
-            if (!links[i]) continue
-            links[i] = links[i].trim().toLowerCase()
-            if (links[i] === '') continue
-            const row = {}
-            row['link'] = links[i]
-            row['PersonId'] = req.user.id
-            // // melhorar mandando um script com lista
-            // let media = await Media.findOne({
-            //     where:
-            //         { platform: platform[i] }
-            // })
-            // if (!media) {
-            //     media = await Media.create({ platform: platform[i] })
-            // }
-            // row['MediaId'] = media.id
-            socialAccountsBulk.push(row)
-        }
-        console.log(socialAccountsBulk, 'socialAccountsBulk');
+            for (let i = 0; i < links.length; i++) {
+                if (!links[i]) continue
+                links[i] = links[i].trim().toLowerCase()
+                if (links[i] === '') continue
+                const row = {}
+                row['link'] = links[i]
+                row['PersonId'] = req.user.id
+                // // melhorar mandando um script com lista
+                // let media = await Media.findOne({
+                //     where:
+                //         { platform: platform[i] }
+                // })
+                // if (!media) {
+                //     media = await Media.create({ platform: platform[i] })
+                // }
+                // row['MediaId'] = media.id
+                socialAccountsBulk.push(row)
+            }
+            console.log(socialAccountsBulk, 'socialAccountsBulk');
 
-        if (serviceBulk.length > 0) {
-            if (!await Service.bulkCreate(serviceBulk)) res.locals.messages.push('Erro ao salvar Profisão')
-        } if (noCboServiceBulk.length > 0) {
-            if (!await Service.bulkCreate(noCboServiceBulk)) res.locals.messages.push('Erro ao salvar Profisão')
-        } if (phonesBulk.length > 0) {
-            if (!await Phone.bulkCreate(phonesBulk)) res.locals.messages.push('Erro ao salvar telefone')
-        } if (socialAccountsBulk.length > 0) {
-            if (!await SocialAccount.bulkCreate(socialAccountsBulk)) res.locals.messages.push('Erro ao salvar conta social')
+            if (socialAccountsBulk.length > 0) {
+                if (!await SocialAccount.bulkCreate(socialAccountsBulk)) res.locals.messages.push('Erro ao salvar conta social')
+            }
         }
 
         next()
+
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: 'Erro interno', messages: res.locals.messages })
     }
 }
 
-controller.deleteCard = async (req, res, next) => {
-    await Service.destroy({
-        where: {
-            PersonId: req.user.id
-        }
-    });
+controller.updateServices = async (req, res) => {
+    const { services, noCboServices } = req.body
 
-    await Phone.destroy({
-        where: {
-            PersonId: req.user.id
-        }
-    });
+    console.log(services, "services");
+    console.log(noCboServices, 'noCboServices');
 
-    await SocialAccount.destroy({
-        where: {
-            PersonId: req.user.id
-        }
-    });
+    try {
 
-    next()
+        if (services) {
+            trimServices(services)
+            console.log(services, 'services tratado'); // retirar
+
+            const service = services[0]
+
+            if (service.ocupation === "" || service.ocupation === null) {
+                res.locals.messages.push(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`)
+                throw new Error(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`);
+            }
+
+            console.log(service.ocupation, "ocupacao");
+
+            const cbo = await Cbo.findOne({
+                attributes: ['id'], /** trazer do front-end em input type='hidden' */
+                where: { title: service.ocupation },
+                raw: true
+            })
+            console.log(cbo, "resultado da consulta"); // retirar
+
+            if (cbo) {
+                await Service.update(
+                    { CboId: cbo.id, description: service.description, },
+                    {
+                        where: {
+                            PersonId: req.user.id,
+                            id: service.id
+                        },
+                    },
+                );
+
+            } else {
+                const result = await NoCboService.create({ title: service.ocupation, description: service.description, PersonId: req.user.id })
+                if (result) {
+                    await Service.destroy({
+                        where: {
+                            PersonId: req.user.id,
+                            id: service.id
+                        }
+                    });
+                } else {
+                    res.locals.messages.push(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`)
+                }
+            }
+        }
+
+        if (noCboServices) {
+            trimServices(noCboServices)
+            console.log(noCboServices, 'service tratado'); // retirar
+
+            const noCboService = noCboServices[0]
+
+            if (noCboService.ocupation === "" || noCboService.ocupation === null) {
+                res.locals.messages.push(`Descrição "${noCboService.description}" associada à profissão inválida: "${noCboService.title}"`)
+                throw new Error(`Descrição "${noCboService.description}" associada à profissão inválida: "${noCboService.title}"`);
+            }
+
+            const result = await NoCboService.update(
+                { title: noCboService.ocupation, description: noCboService.description, },
+                {
+                    where: {
+                        PersonId: req.user.id,
+                        id: noCboService.id
+                    },
+                },
+            );
+
+            if (!result) {
+                res.locals.messages.push(`Descrição "${noCboService.description}" associada à profissão inválida: "${noCboService.title}"`)
+            }
+        }
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        console.error(error)
+        res.render('pages/error', { message: 'Erro interno', messages: res.locals.messages })
+    }
 }
 
+controller.updatePhone = async (req, res) => {
+    const { phones } = req.body
+    let { phone } = phones[0]
+    const { id } = phones[0]
 
+    try {
+        if (phone)
+            phone = phone.trim()
+        if (phone === '') {
+            res.locals.messages.push("Telefone inválido")
+            throw new Error(res.locals.messages.at(-1));
+        }
 
+        if (!isNumeric(phone)) {
+            res.locals.messages.push(`Telefone inválido: "${phone}"`)
+            throw new Error(res.locals.messages.at(-1));
+        }
+
+        const result = await Phone.update(
+            { phone: phone },
+            {
+                where: {
+                    PersonId: req.user.id,
+                    id: id
+                },
+            },
+        );
+        if (!result) {
+            res.locals.messages.push(`Não foi possível atualizar o telefone: "${phone}"`)
+            throw new Error(res.locals.messages.at(-1));
+
+        }
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        console.error(error)
+        res.render('pages/error', { message: 'Erro interno', messages: res.locals.messages })
+    }
+}
+
+controller.updateSocialAccount = async (req, res) => {
+    const { links } = req.body
+    let { link } = links[0]
+    const { oldLink } = links[0]
+
+    try {
+
+        if (link)
+            link = link.trim()
+        if (link === '') {
+            res.locals.messages.push("Conta Social inválida")
+            throw new Error(res.locals.messages.at(-1));
+        }
+
+        const result = await SocialAccount.update(
+            { link: link },
+            {
+                where: {
+                    PersonId: req.user.id,
+                    link: oldLink
+                },
+            },
+        );
+        if (!result) {
+            res.locals.messages.push(`Não foi possível atualizar a Conta Social: "${link}"`)
+            throw new Error(res.locals.messages.at(-1));
+
+        }
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        console.error(error)
+        res.render('pages/error', { message: 'Erro interno', messages: res.locals.messages })
+    }
+}
+
+controller.deleteService = async (req, res) => {
+    try {
+        await Service.destroy({
+            where: {
+                PersonId: req.user.id,
+                id: req.params.id
+            }
+        });
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        res.render('pages/error', { message: 'Erro interno' })
+    }
+}
+
+controller.deleteNoCboService = async (req, res) => {
+    try {
+        await NoCboService.destroy({
+            where: {
+                PersonId: req.user.id,
+                id: req.params.id
+            }
+        });
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        res.render('pages/error', { message: 'Erro interno' })
+    }
+}
+
+controller.deletePhone = async (req, res) => {
+    try {
+        await Phone.destroy({
+            where: {
+                PersonId: req.user.id,
+                id: req.params.id
+            }
+        });
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        res.render('pages/error', { message: 'Erro interno' })
+    }
+}
+
+controller.deleteSocialAccount = async (req, res) => {
+    try {
+        await SocialAccount.destroy({
+            where: {
+                PersonId: req.user.id,
+                link: req.params.link
+            }
+        });
+
+        res.redirect('/user/edit')
+
+    } catch (error) {
+        res.render('pages/error', { message: 'Erro interno' })
+    }
+}
 
 controller.search = async (req, res) => {
     const { city, state, service } = req.body

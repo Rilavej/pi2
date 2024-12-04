@@ -6,7 +6,8 @@ require('./config/associations');
 const path = require('path');
 const passport = require('passport');
 require('./security/authentication')(passport);
-var session = require('express-session');
+const session = require('express-session');
+const methodOverride = require('method-override');
 
 (async function () {
     const { ufs, cbo } = await require('./cache/ufs&cbo')
@@ -34,6 +35,7 @@ server.use((req, res, next) => {
     // res.locals.err = {err: 'Erro interno do servidor'}
     next()
 })
+server.use(methodOverride("_method",{methods:["POST","GET"]}));
 server.use(express.json())
 server.use(express.urlencoded({ extended: true }))
 server.use(express.static(path.join(__dirname, 'public')))

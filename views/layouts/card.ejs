@@ -23,6 +23,17 @@
                             <% } %>
                                 <hr>
                                 <% }) %>
+                                    <% person.NoCboServices.forEach(noCboService=> { %>
+                                        <h6>
+                                            <%= noCboService.title %>
+                                        </h6>
+                                        <% if (noCboService.description) { %>
+                                            <p>
+                                                <%= noCboService.description %>
+                                            </p>
+                                            <% } %>
+                                                <hr>
+                                                <% }) %>
                 </div>
                 <div class="media-left">
                     <figure class="image is-48x48">

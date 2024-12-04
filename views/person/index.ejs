@@ -1,99 +1,96 @@
 <%- include('../layouts/header'); -%>
     <section class="section">
-            <div class="buttons">
-                <button id="showForm" class="button is-fullwidth" type="button">
-                    Adcionar informações
-                </button>
-            </div>
-            <% if (person.Services.length> 0) { %>
-                <div class="buttons">
-                    <a href="/user/edit" id="editCard" class="button is-fullwidth">
-                        Editar / apagar informações
-                    </a>
-                </div>
-                <%- include('../layouts/card') %>
-                    <% } %>
-                        <div class="container is-max-tablet mt-6">
-                            <form id="dynamicForm" action="/user" method="post">
-                                <div id="professionContainer" class="field myContainer">
-                                    <div class="field myRow">
-                                        <div class="field">
-                                            <label class="label">Profissão <span class="labelNumber"></span></label>
-                                            <div class="control autocompleteWrapperCbo">
-                                                <input class="input cboInput" name="services[0][ocupation]" type="text"
-                                                    placeholder="Nome da categoria" autocomplete="off" required>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <div class="control">
-                                                <textarea class="textarea" name="services[0][description]" type="text"
-                                                    placeholder="Descrição dos serviços (opcional)"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="field delButton">
-                                            <div class="control buttons is-right">
-                                                <button class="button is-small" type="button">
-                                                    apagar campo
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+        <div class="buttons">
+            <button id="showForm" class="button is-fullwidth is-info" type="button">
+                Adcionar informações
+            </button>
+        </div>
+        <div class="buttons">
+            <a href="/user/edit" id="editCard" class="button is-fullwidth is-warning">
+                Editar / excluir informações
+            </a>
+        </div>
+        <%- include('../layouts/card') %>
+            <div class="container is-max-tablet mt-6">
+                <form id="dynamicForm" action="/user" method="post">
+                    <div id="professionContainer" class="field myContainer">
+                        <div class="field myRow">
+                            <div class="field">
+                                <label class="label">Profissão <span class="labelNumber"></span></label>
+                                <div class="control autocompleteWrapperCbo">
+                                    <input class="input cboInput" name="services[0][ocupation]" type="text"
+                                        placeholder="Nome da categoria" autocomplete="off">
                                 </div>
-                                <button id="addProfession" class="button" type="button">
-                                    + profissão
-                                </button>
-                                <hr>
-                                <div id="phoneContainer" class="field myContainer">
-                                    <div class="field myRow">
-                                        <div class="field">
-                                            <label class="label">Telefone <span class="labelNumber"></span></label>
-                                            <div class="control">
-                                                <input class="input" name="phones[]" type="tel"
-                                                    placeholder="Somente números" required>
-                                            </div>
-                                        </div>
-                                        <div class="field delButton">
-                                            <div class="control buttons is-right">
-                                                <button class="button is-small" type="button">
-                                                    apagar campo
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <textarea class="textarea" name="services[0][description]" type="text"
+                                        placeholder="Descrição dos serviços (opcional)"></textarea>
                                 </div>
-                                <button id="addPhone" class="button" type="button">
-                                    + telefone
-                                </button>
-                                <hr>
-                                <div id="linkContainer" class="field myContainer">
-                                    <div class="field myRow">
-                                        <div class="field">
-                                            <label class="label">Conta Social <span class="labelNumber"></span></label>
-                                            <div class="control">
-                                                <input class="input" name="links[]" type="text"
-                                                    placeholder="Link do perfil (opcional)">
-                                            </div>
-                                        </div>
-                                        <div class="field delButton">
-                                            <div class="control buttons is-right">
-                                                <button class="button is-small" type="button">
-                                                    apagar campo
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="field delButton">
+                                <div class="control buttons is-right">
+                                    <button class="button is-small is-warning is-outlined" type="button">
+                                        apagar campo
+                                    </button>
                                 </div>
-                                <button id="addLink" class="button" type="button">
-                                    + conta social
-                                </button>
-                                <hr>
-                                <div class="field">
-                                    <div class="control">
-                                        <button class="button is-fullwidth is-link" type="submit">Salvar</button>
-                                    </div>
-                                </div>
-                            </form>
+                            </div>
                         </div>
+                    </div>
+                    <button id="addProfession" class="button is-info is-fullwidth" type="button">
+                        + profissão
+                    </button>
+                    <hr>
+                    <div id="phoneContainer" class="field myContainer">
+                        <div class="field myRow">
+                            <div class="field">
+                                <label class="label">Telefone <span class="labelNumber"></span></label>
+                                <div class="control">
+                                    <input class="input" name="phones[]" type="tel" placeholder="Somente números">
+                                </div>
+                            </div>
+                            <div class="field delButton">
+                                <div class="control buttons is-right">
+                                    <button class="button is-small is-warning is-outlined" type="button">
+                                        apagar campo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="addPhone" class="button is-info is-fullwidth" type="button">
+                        + telefone
+                    </button>
+                    <hr>
+                    <div id="linkContainer" class="field myContainer">
+                        <div class="field myRow">
+                            <div class="field">
+                                <label class="label">Conta Social <span class="labelNumber"></span></label>
+                                <div class="control">
+                                    <input class="input" name="links[]" type="text"
+                                        placeholder="Link do perfil (opcional)">
+                                </div>
+                            </div>
+                            <div class="field delButton">
+                                <div class="control buttons is-right">
+                                    <button class="button is-small is-warning is-outlined" type="button">
+                                        apagar campo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="addLink" class="button is-info is-fullwidth" type="button">
+                        + conta social
+                    </button>
+                    <hr>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-fullwidth is-success" type="submit">Salvar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
     </section>
     <script src="/javascripts/dynamicFormIndex.js"></script>
     <%- include('../layouts/footer'); -%>
