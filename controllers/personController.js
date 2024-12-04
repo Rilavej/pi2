@@ -511,19 +511,20 @@ controller.search = async (req, res) => {
 
     try {
         const people = await Person.findAll({
-            attributes: ['id', 'name',],
-            include: [{ all: true }],
+            attributes: ['id', 'name', 'username', 'MunicipioId'],
             where: {
-                '$Cbo.title$': service,
+                '$Cbos.title$': service,
                 '$Municipio.name$': city,
-                [Op.or]: [{ '$Uf.name$': state }, { '$Uf.abbreviation$': state, }],
-            }
+                [Op.or]: [{ '$Municipio.Uf.name$': state }, { '$Municipio.Uf.abbreviation$': state, }],
+            },
+            include: { all: true, nested: true },
         })
-        res.render('pages/searchResults', { people: people }
-        )
+
+        res.render('pages/searchResults', { people: people })
+        // res.send(people)
     } catch (error) {
         console.error(error);
-        res.render('pages/error', { message: "Sua busca não encontrou resultados" })
+        res.render('pages/error', { message: "Erro interno" })
     }
 }
 

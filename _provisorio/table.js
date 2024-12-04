@@ -3,6 +3,10 @@ require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 
+// SHOW GLOBAL VARIABLES LIKE 'local_infile';
+
+// SET GLOBAL local_infile = true;
+
 const table = (async () => {
     const connection = await mysql2.createConnection({
         host: process.env.HOST,
