@@ -6,6 +6,7 @@ const { Op, or, Sequelize } = require('sequelize');
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+const Fuse = require('fuse.js');
 
 const controller = {}
 
@@ -529,14 +530,50 @@ controller.search = async (req, res) => {
             attributes: ['id', 'name', 'username', 'MunicipioId'],
             where: {
                 [Op.and]: [
-                    { [Op.or]: [{ '$Cbos.title$': service }, { '$NoCboServices.title$': service }] },
                     { '$Municipio.name$': city },
                     { [Op.or]: [{ '$Municipio.Uf.name$': state }, { '$Municipio.Uf.abbreviation$': state, }] },
                 ]
             },
             include: { all: true, nested: true },
         })
+        const peopleFromJson = people.map((person) => person.toJSON())
+        // let peopleFromJson = JSON.stringify(people)
+        // peopleFromJson = JSON.parse(peopleFromJson)
         
+        const fuseOptions = {
+            // isCaseSensitive: false,
+            // includeScore: false,
+            // shouldSort: true,
+            // includeMatches: false,
+            // findAllMatches: false,
+            // minMatchCharLength: 1,
+            // location: 0,
+            // threshold: 0.6,
+            // distance: 100,
+            // useExtendedSearch: false,
+            // ignoreLocation: false,
+            // ignoreFieldNorm: false,
+            // fieldNormWeight: 1,
+            keys: ["Cbos.title", "NoCboServices.title"]
+        }
+        const fuse = new Fuse(peopleFromJson, fuseOptions)
+        const peopleFromFuse = await fuse.search(service.trim().toLowerCase())
+        const filteredPeople = peopleFromFuse.map( x => x.item )
+
+        // // Filtro estrito atraveis da cláusula WHERE
+        // const people = await Person.findAll({
+        //     attributes: ['id', 'name', 'username', 'MunicipioId'],
+        //     where: {
+        //         [Op.and]: [
+        //             { [Op.or]: [{ '$Cbos.title$': service }, { '$NoCboServices.title$': service }] },
+        //             { '$Municipio.name$': city },
+        //             { [Op.or]: [{ '$Municipio.Uf.name$': state }, { '$Municipio.Uf.abbreviation$': state, }] },
+        //         ]
+        //     },
+        //     include: { all: true, nested: true },
+        // })
+
+        // // Filtro estrito atraveis da cláusula WHERE
         // const people = await Person.findAll({
         //     attributes: ['id', 'name', 'username', 'MunicipioId'],
         //     include: [
@@ -576,9 +613,11 @@ controller.search = async (req, res) => {
         //     }
         // })
 
-        console.log(JSON.stringify(people, null, 4), "people")
-
-        res.render('pages/searchResults', { people: people })
+        console.log(filteredPeople, "=== filteredPeople");
+        if (filteredPeople.length === 0) res.locals.messages.push("Sua busca não retornou resultados!")
+        res.locals.inputValues = {city: city, state: state, service: service.trim()}
+        
+        res.render('pages/searchResults', { people: filteredPeople, messages: res.locals.messages, inputValues: res.locals.inputValues })
     } catch (error) {
         console.error(error);
         res.render('pages/error', { message: "Erro interno" })

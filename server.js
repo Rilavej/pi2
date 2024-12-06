@@ -32,6 +32,7 @@ server.use((req, res, next) => {
     res.locals.user = req.user || null
     res.locals.message = null
     res.locals.messages = []
+    res.locals.inputValues = null
     // res.locals.err = {err: 'Erro interno do servidor'}
     next()
 })
