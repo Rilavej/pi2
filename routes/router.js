@@ -13,6 +13,7 @@ router.post('/signup', personController.createPerson, personController.login)
 router.get('/login', personController.getLoginPage)
 router.post('/login', personController.login)
 router.get('/loginFail', personController.getLoginPageFail)
+router.get('/logout', personController.logout)
 
 router.get('/user', auth, personController.getPersonOrCard, personController.showCard)
 router.post('/user', auth, personController.createCard, personController.getPersonOrCard, personController.showCard)
@@ -28,6 +29,6 @@ router.put('/user/update/socialAccount', auth, personController.updateSocialAcco
 router.delete('/user/delete/service/:id', auth, personController.deleteService)
 router.delete('/user/delete/service1/:id', auth, personController.deleteNoCboService)
 router.delete('/user/delete/phone/:id', auth, personController.deletePhone)
-router.delete('/user/delete/socialAccount/:link', auth, personController.deleteSocialAccount)
+router.delete('/user/delete/socialAccount', auth, personController.deleteSocialAccount)
 
 module.exports = router

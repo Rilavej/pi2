@@ -41,18 +41,21 @@
                     </figure>
                 </div>
                 <% person.SocialAccounts.forEach(socialAccount=> { %>
-                    <span>
-                        <a href="#">
-                            <%= socialAccount.link %>
-                        </a>
-                    </span>
-                    <% }) %>
+                    <% const url=(function ensureHttps(url) { if (!url.startsWith("https://")) { url="https://" + url; }
+                        return url; }(socialAccount.link)); %>
+                        <span>
+                            <a href=<%=url %>>
+                                <%= socialAccount.link %>
+                            </a>
+                        </span>
                         <br>
-                        <% person.Phones.forEach(phoneRow=> { %>
-                            <span>
-                                <%= phoneRow.phone %>
-                            </span>
-                            <% }) %>
+                        <% }) %>
+                            <br>
+                            <% person.Phones.forEach(phoneRow=> { %>
+                                <span>
+                                    <%= phoneRow.phone %>
+                                </span>
+                                <% }) %>
             </div>
         </div>
     </div>

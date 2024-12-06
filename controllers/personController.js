@@ -114,7 +114,7 @@ controller.logout = async (req, res, next) => {
         if (err) {
             return next(err)
         }
-        req.flash('success_msg', "Você saiu!")
+        // req.flash('success_msg', "Você saiu!")
         res.redirect('/')
     })
 
@@ -137,7 +137,7 @@ controller.getPersonOrCard = async (req, res, next) => {
         }
 
         res.person = person
-        console.log(JSON.stringify(res.person, null, 4));
+        console.log(JSON.stringify(person, null, 4), "person");
         next() //showCard
 
     } catch (error) {
@@ -491,11 +491,12 @@ controller.deletePhone = async (req, res) => {
 }
 
 controller.deleteSocialAccount = async (req, res) => {
+
     try {
         await SocialAccount.destroy({
             where: {
                 PersonId: req.user.id,
-                link: req.params.link
+                link: decodeURIComponent(req.query.link)
             }
         });
 
@@ -513,13 +514,15 @@ controller.search = async (req, res) => {
         const people = await Person.findAll({
             attributes: ['id', 'name', 'username', 'MunicipioId'],
             where: {
-                '$Cbos.title$': service,
+                [Op.or]: [{'$Cbos.title$': service}, {'$NoCboServices$': service}],
                 '$Municipio.name$': city,
                 [Op.or]: [{ '$Municipio.Uf.name$': state }, { '$Municipio.Uf.abbreviation$': state, }],
             },
             include: { all: true, nested: true },
         })
 
+        console.log(JSON.stringify(people, null, 4), "people")
+        
         res.render('pages/searchResults', { people: people })
         // res.send(people)
     } catch (error) {
