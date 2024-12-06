@@ -2,7 +2,7 @@ const passport = require("passport")
 const {
     Person, Phone, Service, Address, Media, SocialAccount, Uf, Municipio, Cbo, NoCboService
 } = require('../config/associations')
-const { Op } = require('sequelize');
+const { Op, or, Sequelize } = require('sequelize');
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -57,10 +57,16 @@ controller.getLoginPageFail = async (req, res) => {
 }
 
 controller.createPerson = async (req, res, next) => {
-    const {
+    let {
         city, state, // Municipio e Uf
         name, email, username, password, // Pessoa
     } = req.body
+
+    name = name.trim().toLowerCase()
+    name = name.charAt(0).toUpperCase() + name.slice(1)
+    email = email.trim().toLowerCase()
+    username = username.trim().toLowerCase()
+
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds)
         const uf = await Uf.findOne({
@@ -148,7 +154,7 @@ controller.getPersonOrCard = async (req, res, next) => {
 
 controller.showCard = (req, res) => {
     try {
-        res.status(200).render('person/index', { person: res.person })
+        res.status(200).render('person/index', { person: res.person, messages: res.locals.messages })
     } catch (error) {
         console.log(error);
         res.render('pages/error', { message: 'Erro interno' })
@@ -171,8 +177,8 @@ controller.createCard = async (req, res, next) => {
 
     console.log(services, "services"); // retirar
     console.log(phones, "phones"); // retirar
-    console.log(links , "links"); // retirar
-    
+    console.log(links, "links"); // retirar
+
     try {
         if (services) {
             trimServices(services) // retira espaços do incio e fim, lowerCase a string e capitaliza primera letra
@@ -264,7 +270,15 @@ controller.createCard = async (req, res, next) => {
             console.log(socialAccountsBulk, 'socialAccountsBulk');
 
             if (socialAccountsBulk.length > 0) {
-                if (!await SocialAccount.bulkCreate(socialAccountsBulk)) res.locals.messages.push('Erro ao salvar conta social')
+                try {
+                    const result = await SocialAccount.bulkCreate(socialAccountsBulk)
+                    if (!result) res.locals.messages.push('Erro ao salvar conta social')
+                } catch (error) {
+                    if (error.name === 'SequelizeUniqueConstraintError') {
+                        res.locals.messages.push(`A conta social "${error.fields.PRIMARY}" já está vinculada a um usuário`)
+                    }
+                }
+
             }
         }
 
@@ -514,17 +528,57 @@ controller.search = async (req, res) => {
         const people = await Person.findAll({
             attributes: ['id', 'name', 'username', 'MunicipioId'],
             where: {
-                [Op.or]: [{'$Cbos.title$': service}, {'$NoCboServices$': service}],
-                '$Municipio.name$': city,
-                [Op.or]: [{ '$Municipio.Uf.name$': state }, { '$Municipio.Uf.abbreviation$': state, }],
+                [Op.and]: [
+                    { [Op.or]: [{ '$Cbos.title$': service }, { '$NoCboServices.title$': service }] },
+                    { '$Municipio.name$': city },
+                    { [Op.or]: [{ '$Municipio.Uf.name$': state }, { '$Municipio.Uf.abbreviation$': state, }] },
+                ]
             },
             include: { all: true, nested: true },
         })
+        
+        // const people = await Person.findAll({
+        //     attributes: ['id', 'name', 'username', 'MunicipioId'],
+        //     include: [
+        //         {
+        //             model: Municipio,
+        //             where: {
+        //                 name: city,
+        //             },
+        //             include: {
+        //                 model: Uf,
+        //                 where: {
+        //                     [Op.or]: [{ name: state }, { abbreviation: state }]
+        //                 }
+        //             }
+        //         },
+        //         {
+        //             model: Cbo,
+        //             // where: { title: service },
+        //             // required: false,
+        //             // or: true,
+
+        //         },
+        //         {
+        //             model: NoCboService,
+        //             // where: { title: service },
+        //             // required: false,
+        //             // or: true,
+        //         },
+        //         { model: SocialAccount, },
+        //         { model: Phone, }
+        //     ],
+        //     where: {
+        //         [Op.or]: [
+        //             { '$Cbos.title$': service }, // Condição para o título em Cbo
+        //             { '$NoCboServices.title$': service } // Condição para o título em NoCboService
+        //         ]
+        //     }
+        // })
 
         console.log(JSON.stringify(people, null, 4), "people")
-        
+
         res.render('pages/searchResults', { people: people })
-        // res.send(people)
     } catch (error) {
         console.error(error);
         res.render('pages/error', { message: "Erro interno" })
