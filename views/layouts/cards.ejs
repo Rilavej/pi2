@@ -1,0 +1,10 @@
+<section class="section">
+    <div class="columns is-multiline">
+        <% people.forEach(element=> { %>
+            <% person=element %>
+                <div class="column is-one-quarter">
+                    <%- include('../layouts/card') %>
+                </div>
+                <% }); %>
+    </div>
+</section>

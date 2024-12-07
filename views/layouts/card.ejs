@@ -8,7 +8,7 @@
         <div class="card-content">
             <div class="content">
                 <h1>
-                    <%= user.name %>
+                    <%= person.name %>
                 </h1>
                 <div class="py-0">
                     <hr>
@@ -42,7 +42,7 @@
                 </div>
                 <% person.SocialAccounts.forEach(socialAccount=> { %>
                     <% const url=(function ensureHttps(url) { if (!url.startsWith("https://")) { url="https://" + url; }
-                        return url; }(socialAccount.link)); %>
+                        return url; } (socialAccount.link)); %>
                         <span>
                             <a href=<%=url %>>
                                 <%= socialAccount.link %>
@@ -53,7 +53,10 @@
                             <br>
                             <% person.Phones.forEach(phoneRow=> { %>
                                 <span>
-                                    <%= phoneRow.phone %>
+                                    <a href="https://wa.me/55<%= phoneRow.phone %>
+                                        <%_ %>?text=Ol%C3%A1%2C%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es%21">
+                                        <%= phoneRow.phone %>
+                                    </a>
                                 </span>
                                 <% }) %>
             </div>

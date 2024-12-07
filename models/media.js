@@ -8,6 +8,11 @@ const Media = sequelize.define(
             type: DataTypes.STRING,
             unique: true,
             allowNull: false
+        },
+        domain: {
+            type: DataTypes.STRING,
+            unique: true,
+            allowNull: false
         }
     },
     {

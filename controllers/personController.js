@@ -130,7 +130,7 @@ controller.logout = async (req, res, next) => {
 controller.getPersonOrCard = async (req, res, next) => {
     try {
         const person = await Person.findByPk(req.user.id, {
-            attributes: ['id', 'name',],
+            attributes: ['id', 'name', 'username', 'MunicipioId'],
             include: {
                 all: true,
                 nested: true,
@@ -144,7 +144,7 @@ controller.getPersonOrCard = async (req, res, next) => {
         }
 
         res.person = person
-        console.log(JSON.stringify(person, null, 4), "person");
+        console.log(JSON.stringify(person, null, 4), " === person");
         next() //showCard
 
     } catch (error) {
@@ -542,11 +542,11 @@ controller.search = async (req, res) => {
         
         const fuseOptions = {
             // isCaseSensitive: false,
-            // includeScore: false,
+            includeScore: true,
             // shouldSort: true,
-            // includeMatches: false,
+            includeMatches: true,
             // findAllMatches: false,
-            // minMatchCharLength: 1,
+            minMatchCharLength: 3,
             // location: 0,
             // threshold: 0.6,
             // distance: 100,
@@ -557,7 +557,7 @@ controller.search = async (req, res) => {
             keys: ["Cbos.title", "NoCboServices.title"]
         }
         const fuse = new Fuse(peopleFromJson, fuseOptions)
-        const peopleFromFuse = await fuse.search(service.trim().toLowerCase())
+        const peopleFromFuse = fuse.search(service.trim().toLowerCase())
         const filteredPeople = peopleFromFuse.map( x => x.item )
 
         // // Filtro estrito atraveis da cláusula WHERE
@@ -613,7 +613,7 @@ controller.search = async (req, res) => {
         //     }
         // })
 
-        console.log(filteredPeople, "=== filteredPeople");
+        console.log(peopleFromFuse, "=== peopleFromFuse");
         if (filteredPeople.length === 0) res.locals.messages.push("Sua busca não retornou resultados!")
         res.locals.inputValues = {city: city, state: state, service: service.trim()}
         
@@ -628,19 +628,11 @@ controller.search = async (req, res) => {
 controller.getAll = async (req, res) => {
 
     try {
-        /*
-        const ufs = await Uf.findAll({ 
-            raw: true,
-            order: ['name']
-        })
-        
-        const cbo = JSON.stringify(await Cbo.findAll())
-        */
         const people = await Person.findAll({
-            attributes: ['name',],
-            include: [{ all: true }],
+            attributes: ['id', 'name', 'username', 'MunicipioId'],
+            include: { all: true, nested: true },
         })
-        res.render('pages/index', { people: people,/* ufs: ufs,  cbo: cbo */ })
+        res. render('pages/index', { people: people })
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: "Erro interno" })
