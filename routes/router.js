@@ -32,7 +32,6 @@ router.delete('/user/delete/service1/:id', auth, personController.deleteNoCboSer
 router.delete('/user/delete/phone/:id', auth, personController.deletePhone)
 router.delete('/user/delete/socialAccount', auth, personController.deleteSocialAccount)
 
-router.get('/image', (req, res) => res.render('person/imageForm'))
-router.post('/image', auth, upload, personController.saveImagePath)
+router.post('/image', auth, upload, personController.saveImageName)
 
 module.exports = router

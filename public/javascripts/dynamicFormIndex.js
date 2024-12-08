@@ -1,4 +1,5 @@
 document.getElementById('dynamicForm').style.display = 'none'; //retirar
+document.getElementById('imageForm').style.display = 'none'; //retirar
 
 document.querySelectorAll('.delButton').forEach(delButton => {
     delButton.style.display = 'none'; // Retirar
@@ -15,6 +16,13 @@ document.getElementById('showForm').addEventListener('click', () => {
     form.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
+document.getElementById('showImageForm').addEventListener('click', () => {
+    const form = document.getElementById('imageForm');
+    if (form.style.display === 'none') {
+        form.style.display = 'block'; // Torna o formulário visível
+    }
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 document.getElementById('addProfession').addEventListener('click', () => {
     const professionContainer = document.getElementById('professionContainer');

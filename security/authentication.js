@@ -3,14 +3,14 @@ const LocalStrategy = require('passport-local').Strategy
 const Person = require('../models/person')
 const bcrypt = require('bcrypt')
 
-module.exports = function(passport) {
+module.exports = function (passport) {
 
     passport.use(new LocalStrategy(
         {
-            usernameField:'email',
-            passwordField:'password'
+            usernameField: 'email',
+            passwordField: 'password'
         },
-        async (email , password, done)=> {
+        async (email, password, done) => {
             try {
                 const user = await Person.findOne({
                     //https://sequelize.org/docs/v6/core-concepts/model-querying-finders/
@@ -20,16 +20,16 @@ module.exports = function(passport) {
                     }
                 })
 
-            if (!user) {
-                return done(null, false, {message: 'Usuário ou senha incorreto(s)!'})
-            }
-            
-            const isCorrectPassword = await bcrypt.compare(password, user.hashedPassword)
-            if (!isCorrectPassword) {
-                return done(null, false, {message: 'Usuário ou senha incorreto(s)!'})
-            }
+                if (!user) {
+                    return done(null, false, { message: 'Usuário ou senha incorreto(s)!' })
+                }
 
-            return done(null, user)
+                const isCorrectPassword = await bcrypt.compare(password, user.hashedPassword)
+                if (!isCorrectPassword) {
+                    return done(null, false, { message: 'Usuário ou senha incorreto(s)!' })
+                }
+
+                return done(null, user)
 
             } catch (err) {
                 done(err, false)
@@ -37,15 +37,24 @@ module.exports = function(passport) {
         }
     ))
 
-    passport.serializeUser((user, done)=>{
+    passport.serializeUser((user, done) => {
         done(null, user.id)
     })
 
-    passport.deserializeUser(async (id, done)=>{
+    passport.deserializeUser(async (id, done) => {
         try {
+            // const user = await Person.findByPk(id, {
+            //     attributes: {exclude: ['hashedPassword','email',]}
+            // })
             const user = await Person.findByPk(id, {
-                attributes: {exclude: ['hashedPassword','email',]}
-            })
+                attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
+                include: {
+                    all: true,
+                    nested: true,
+                    // attributes: { exclude: ['id', 'PersonId', 'MediaId', 'phoneMediaIds'] },
+                },
+                // raw: true
+            });
             done(null, user)
         } catch (err) {
             done(err, user)

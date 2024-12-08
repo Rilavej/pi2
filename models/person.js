@@ -42,7 +42,7 @@ const Person = sequelize.define(
             defaultValue: false,
             allowNull: false,
         },
-        imagePath: {
+        imageName: {
             type: DataTypes.STRING,
         }
     },

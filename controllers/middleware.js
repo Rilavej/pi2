@@ -1,6 +1,7 @@
 const multer = require('multer');
 const uploadDirectory = 'public/images/'
-const path = require('path')
+const path = require('path');
+const { nextTick } = require('process');
 
 const storage = multer.diskStorage(
     {
@@ -25,7 +26,8 @@ const upload = multer({
         if (extname && mimetype) {
             return cb(null, true);
         } else {
-            cb(new Error('Somente imagens em formato JPEG, PNG ou GIF são permitidas.'));
+            // cb(new Error('Somente imagens em formato JPEG, JPG, PNG ou GIF são permitidas.'));
+            return cb(null, false);
         }
     },
 }).single('image'); // O campo de envio de imagem no formulário será 'image'

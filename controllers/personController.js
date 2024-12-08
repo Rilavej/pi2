@@ -140,7 +140,7 @@ controller.getUser = async (req, res, next) => {
     try {
         res.cbo = await getCbo()
         const person = await Person.findByPk(req.user.id, {
-            attributes: ['id', 'name', 'username', 'MunicipioId'],
+            attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
             include: {
                 all: true,
                 nested: true,
@@ -541,7 +541,7 @@ controller.search = async (req, res) => {
         const ufs = await getUfs()
         const cbo = await getCbo()
         const people = await Person.findAll({
-            attributes: ['id', 'name', 'username', 'MunicipioId'],
+            attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
             where: {
                 [Op.and]: [
                     { '$Municipio.name$': city },
@@ -576,7 +576,7 @@ controller.search = async (req, res) => {
 
         // // Filtro estrito atraveis da cláusula WHERE
         // const people = await Person.findAll({
-        //     attributes: ['id', 'name', 'username', 'MunicipioId'],
+        //     attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
         //     where: {
         //         [Op.and]: [
         //             { [Op.or]: [{ '$Cbos.title$': service }, { '$NoCboServices.title$': service }] },
@@ -589,7 +589,7 @@ controller.search = async (req, res) => {
 
         // // Filtro estrito atraveis da cláusula WHERE
         // const people = await Person.findAll({
-        //     attributes: ['id', 'name', 'username', 'MunicipioId'],
+        //     attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
         //     include: [
         //         {
         //             model: Municipio,
@@ -645,7 +645,7 @@ controller.getAll = async (req, res) => {
         const ufs = await getUfs()
         const cbo = await getCbo()
         const people = await Person.findAll({
-            attributes: ['id', 'name', 'username', 'MunicipioId'],
+            attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
             include: { all: true, nested: true },
         })
         res.render('pages/index', { people: people, ufs, cbo })
@@ -655,17 +655,23 @@ controller.getAll = async (req, res) => {
     }
 }
 
-controller.saveImagePath = async (req, res) => {
+controller.saveImageName = async (req, res) => {
     try {
-        const person = await Person.findByPk(req.user.id)
-        person.imagePath = req.file.path
-        await person.save()
-        console.log(req.file.path, '=== req.file.path');
+        if (undefined === req.file || req.file === null) {
+            res.locals.messages.push('Somente imagens em formato JPEG, JPG, PNG ou GIF são permitidas.')
+            res.render("person/index")
 
-        res.redirect("/")
+        } else {
+            console.log(req.file, '=== req.file');
+            const person = await Person.findByPk(req.user.id)
+            person.imageName = req.file.filename
+            await person.save()
+            // res.locals.messages.push('Imagem salva com secesso') // não funciona porque redirect encerra o ciclo de req e res
+            res.redirect("/user")
+        }
     } catch (error) {
         console.log(error);
-        res.render('pages/error', { message: 'Erro interno '})        
+        res.render('pages/error', { message: 'Erro interno ' })
     }
 }
 

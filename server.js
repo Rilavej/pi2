@@ -33,6 +33,7 @@ server.use(passport.session())
 
 server.use((req, res, next) => {
     res.locals.user = req.user || null
+    res.locals.person = req.user || null
     res.locals.message = null
     res.locals.messages = []
     res.locals.inputValues = null

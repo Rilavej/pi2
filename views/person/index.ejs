@@ -7,12 +7,19 @@
             <a href="/user/edit" id="editCard" class="button is-warning">
                 Editar / excluir informações
             </a>
-            <a href="/image" id="addImage" class="button is-info">
-                Adicionar imagem
-            </a>
+            <button id="showImageForm" class="button is-info">
+                Adicionar imagem ao cartão
+            </button>
         </div>
         <%- include('../layouts/card') %>
             <div class="container is-max-tablet mt-6">
+                <form id="imageForm" class="block" action="/image" method="post" enctype="multipart/form-data">
+                    <input class="block" type="file" name="image" />
+                    <input class="button is-success is-small" type="submit" value="Salvar imagem"
+                        class="btn btn-default">
+                    <p class="help">formato JPEG, JPG, PNG ou GIF</p>
+                </form>
+                <!-- <%#- include('../layouts/imageForm') %> -->
                 <form id="dynamicForm" action="/user" method="post">
                     <div id="professionContainer" class="field myContainer">
                         <div class="field myRow">
