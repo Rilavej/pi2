@@ -61,8 +61,9 @@ const table = (async () => {
     try {
         const tableName = 'Media'
         await connection.query(
-            `INSERT IGNORE INTO ${tableName} (platform) VALUES (?),(?),(?),(?)`,
-            ["WhatsApp", "Instagran", "Facebook", "LinkedIn",]
+            `INSERT IGNORE INTO ${tableName} (platform, domain) VALUES (?, ?), (?, ?), (?, ?), (?, ?)`,
+            ["WhatsApp", "wa.me/55", "Instagran", "instagram.com/", "Facebook", "facebook.com/", "LinkedIn", "linkedin.com/in/",]
+           
         )
         console.log(`Tabela ${tableName} preenchida com sucesso.`)
     } catch (err) { console.error(err) }

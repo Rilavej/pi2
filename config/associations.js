@@ -42,7 +42,7 @@ Person.hasOne(Address, { onDelete: 'CASCADE', foreignKey: { allowNull: false } }
 Address.belongsTo(Person, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
 
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
-const sync = sequelize.sync({ alter: true })
+const sync = sequelize.sync({ /* alter: true */ })
 
 module.exports = {
     Person,

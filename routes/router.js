@@ -15,10 +15,10 @@ router.post('/login', personController.login)
 router.get('/loginFail', personController.getLoginPageFail)
 router.get('/logout', personController.logout)
 
-router.get('/user', auth, personController.getPersonOrCard, personController.showCard)
-router.post('/user', auth, personController.createCard, personController.getPersonOrCard, personController.showCard)
+router.get('/user', auth, personController.getUser, personController.showCard)
+router.post('/user', auth, personController.createCard, personController.getUser, personController.showCard)
 
-router.get('/user/edit', auth, personController.getPersonOrCard, personController.getEditCardPage)
+router.get('/user/edit', auth, personController.getUser, personController.getEditCardPage)
 
 router.get('/api/:services', api.getProfessions)
 

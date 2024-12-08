@@ -9,11 +9,14 @@ require('./security/authentication')(passport);
 const session = require('express-session');
 const methodOverride = require('method-override');
 
-(async function () {
-    const { ufs, cbo } = await require('./cache/ufs&cbo')
-    server.locals.ufs = ufs // define a variavel no objeto locals, tornando-a acessivel globalmente na view-engine
-    server.locals.cbo = cbo
-})();
+// (async function () {
+//     const { ufs, cbo } = await require('./cache/ufs&cbo')
+//     server.locals.ufs = ufs // define a variavel no objeto locals, tornando-a acessivel globalmente na view-engine
+//     server.locals.cbo = cbo
+// })();
+
+server.locals.ufs = null
+server.locals.cbo = null
 
 const PORT = process.env.PORT || 3000
 

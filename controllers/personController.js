@@ -10,6 +10,16 @@ const Fuse = require('fuse.js');
 
 const controller = {}
 
+async function getUfs() {
+    const ufs = await Uf.findAll({ raw: true, order: ['name'] })
+    return ufs
+}
+
+async function getCbo() {
+    const cbo = await Cbo.findAll({ raw: true })
+    return cbo
+}
+
 function trimServices(services) {
     for (const service of services) {
         if (service.ocupation) {
@@ -30,8 +40,7 @@ function isNumeric(str) {
 controller.getRegisterPage = async (req, res) => {
     try {
         const ufs = await Uf.findAll({ raw: true, order: ['name'] })
-        const cbo = await Cbo.findAll({ raw: true })
-        res.status(200).render('person/signup', { ufs: ufs, cbo: cbo })
+        res.status(200).render('person/signup', { ufs: ufs })
     } catch (error) {
         console.error(error)
         res.status(500).render("pages/error", { message: 'Erro interno' })
@@ -127,8 +136,9 @@ controller.logout = async (req, res, next) => {
 
 }
 
-controller.getPersonOrCard = async (req, res, next) => {
+controller.getUser = async (req, res, next) => {
     try {
+        res.cbo = await getCbo()
         const person = await Person.findByPk(req.user.id, {
             attributes: ['id', 'name', 'username', 'MunicipioId'],
             include: {
@@ -155,7 +165,7 @@ controller.getPersonOrCard = async (req, res, next) => {
 
 controller.showCard = (req, res) => {
     try {
-        res.status(200).render('person/index', { person: res.person, messages: res.locals.messages })
+        res.status(200).render('person/index', { person: res.person, cbo: res.cbo, messages: res.locals.messages })
     } catch (error) {
         console.log(error);
         res.render('pages/error', { message: 'Erro interno' })
@@ -163,9 +173,11 @@ controller.showCard = (req, res) => {
     }
 }
 
-controller.getEditCardPage = (req, res) => {
+controller.getEditCardPage = async (req, res) => {
+
+    const cbo = await getCbo()
     try {
-        res.status(200).render('person/edit', { person: res.person })
+        res.status(200).render('person/edit', { person: res.person, cbo: cbo })
     } catch (error) {
         console.log(error);
         res.render('pages/error', { message: 'Erro interno' })
@@ -526,6 +538,8 @@ controller.search = async (req, res) => {
     const { city, state, service } = req.body
 
     try {
+        const ufs = await getUfs()
+        const cbo = await getCbo()
         const people = await Person.findAll({
             attributes: ['id', 'name', 'username', 'MunicipioId'],
             where: {
@@ -539,7 +553,7 @@ controller.search = async (req, res) => {
         const peopleFromJson = people.map((person) => person.toJSON())
         // let peopleFromJson = JSON.stringify(people)
         // peopleFromJson = JSON.parse(peopleFromJson)
-        
+
         const fuseOptions = {
             // isCaseSensitive: false,
             includeScore: true,
@@ -558,7 +572,7 @@ controller.search = async (req, res) => {
         }
         const fuse = new Fuse(peopleFromJson, fuseOptions)
         const peopleFromFuse = fuse.search(service.trim().toLowerCase())
-        const filteredPeople = peopleFromFuse.map( x => x.item )
+        const filteredPeople = peopleFromFuse.map(x => x.item)
 
         // // Filtro estrito atraveis da cláusula WHERE
         // const people = await Person.findAll({
@@ -615,9 +629,9 @@ controller.search = async (req, res) => {
 
         console.log(peopleFromFuse, "=== peopleFromFuse");
         if (filteredPeople.length === 0) res.locals.messages.push("Sua busca não retornou resultados!")
-        res.locals.inputValues = {city: city, state: state, service: service.trim()}
-        
-        res.render('pages/searchResults', { people: filteredPeople, messages: res.locals.messages, inputValues: res.locals.inputValues })
+        res.locals.inputValues = { city: city, state: state, service: service.trim() }
+
+        res.render('pages/searchResults', { people: filteredPeople, ufs, cbo, messages: res.locals.messages, inputValues: res.locals.inputValues })
     } catch (error) {
         console.error(error);
         res.render('pages/error', { message: "Erro interno" })
@@ -628,11 +642,13 @@ controller.search = async (req, res) => {
 controller.getAll = async (req, res) => {
 
     try {
+        const ufs = await getUfs()
+        const cbo = await getCbo()
         const people = await Person.findAll({
             attributes: ['id', 'name', 'username', 'MunicipioId'],
             include: { all: true, nested: true },
         })
-        res. render('pages/index', { people: people })
+        res.render('pages/index', { people: people, ufs, cbo })
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: "Erro interno" })
