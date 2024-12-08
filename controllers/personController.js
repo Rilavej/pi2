@@ -638,7 +638,7 @@ controller.search = async (req, res) => {
     }
 }
 
-// Este pode ser mesclado com 'controller.search'
+// Este pode ser mesclado com 'controller.search' fazendo condicional no req.body
 controller.getAll = async (req, res) => {
 
     try {
@@ -652,6 +652,20 @@ controller.getAll = async (req, res) => {
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: "Erro interno" })
+    }
+}
+
+controller.saveImagePath = async (req, res) => {
+    try {
+        const person = await Person.findByPk(req.user.id)
+        person.imagePath = req.file.path
+        await person.save()
+        console.log(req.file.path, '=== req.file.path');
+
+        res.redirect("/")
+    } catch (error) {
+        console.log(error);
+        res.render('pages/error', { message: 'Erro interno '})        
     }
 }
 

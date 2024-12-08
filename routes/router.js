@@ -3,6 +3,7 @@ const router = express.Router()
 const personController = require('../controllers/personController')
 const { auth, admin } = require('../security/authorization')
 const api = require('../controllers/api.js')
+const { upload } = require('../controllers/middleware.js')
 
 router.get('/', personController.getAll) // usar cookie para filtar pela localizaçao do usuario 
 router.post('/', personController.search)
@@ -30,5 +31,8 @@ router.delete('/user/delete/service/:id', auth, personController.deleteService)
 router.delete('/user/delete/service1/:id', auth, personController.deleteNoCboService)
 router.delete('/user/delete/phone/:id', auth, personController.deletePhone)
 router.delete('/user/delete/socialAccount', auth, personController.deleteSocialAccount)
+
+router.get('/image', (req, res) => res.render('person/imageForm'))
+router.post('/image', auth, upload, personController.saveImagePath)
 
 module.exports = router

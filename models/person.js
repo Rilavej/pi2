@@ -41,6 +41,9 @@ const Person = sequelize.define(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
             allowNull: false,
+        },
+        imagePath: {
+            type: DataTypes.STRING,
         }
     },
     {
