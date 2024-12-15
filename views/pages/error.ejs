@@ -1,2 +1,7 @@
 <%- include('../layouts/header'); -%>
-    <%- include('../layouts/footer'); -%>
+    <% if (user) { %>
+        <a href="/user" class="button">&#8678;	\0021E6 Voltar</a>
+        <% } else { %>
+            <a href="/" class="button">&#8678;	\0021E6 Voltar</a>
+            <% } %>
+                <%- include('../layouts/footer'); -%>

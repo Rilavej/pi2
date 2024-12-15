@@ -11,62 +11,72 @@
             <h1 class="title is-4"><strong>CLISTA</strong></h1>
         </a>
 
-        <a href="/" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-            data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
+        <% if (user) { %>
+            <span class="container"></span>
+            <a href="/user" class="navbar-item button is-primary">
+                <strong>
+                    <%= user.username %>
+                </strong>
+            </a>
+            <% } %>
+
+                <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div id="navMenu" class="navbar-menu">
         <div class="navbar-start">
-            <a href="/user" class="navbar-item">
-                Home
-            </a>
-
-            <a href="https://bulma.io" class="navbar-item">
-                Documentation BULMA
-            </a>
-
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    More
-                </a>
-
-                <div class="navbar-dropdown">
-                    <a href="/logout" class="navbar-item is-selected">
-                        Sair
-                    </a>
-                    <a class="navbar-item">
-                        About
-                    </a>
-                    <a class="navbar-item">
-                        Jobs
-                    </a>
-                    <a class="navbar-item">
-                        Contact
-                    </a>
-                    <hr class="navbar-divider">
-                    <a class="navbar-item">
-                        Report an issue
-                    </a>
-                </div>
-            </div>
         </div>
-
         <div class="navbar-end">
             <div class="navbar-item">
-                <div class="buttons">
-                    <a href="/signup" class="button is-primary">
-                        <strong>Criar Conta</strong>
-                    </a>
-                    <a href="/login" class="button is-light">
-                        Entrar
-                    </a>
+                <div class="buttons is-right">
+                    <% if (user) { %>
+                        <a href="/user" class="button is-primary">
+                            <strong>
+                                Início
+                            </strong>
+                        </a>
+                        <a href="/logout" class="button is-light">
+                            Sair
+                        </a>
+                        <% } else { %>
+                            <a href="/signup" class="button is-primary">
+                                <strong>Criar Conta</strong>
+                            </a>
+                            <a href="/login" class="button is-light">
+                                Entrar
+                            </a>
+                            <% } %>
                 </div>
             </div>
         </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        // Add a click event on each of them
+        $navbarBurgers.forEach(el => {
+            el.addEventListener('click', () => {
+
+                // Get the target from the "data-target" attribute
+                const target = el.dataset.target;
+                const $target = document.getElementById(target);
+
+                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                el.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+
+            });
+        });
+
+    });
+</script>

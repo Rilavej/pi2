@@ -469,7 +469,8 @@ controller.updateSocialAccount = async (req, res) => {
     }
 }
 
-controller.deleteService = async (req, res) => {
+controller.
+deleteService = async (req, res) => {
     try {
         await Service.destroy({
             where: {
