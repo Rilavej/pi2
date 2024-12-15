@@ -39,7 +39,7 @@ function isNumeric(str) {
 
 controller.getRegisterPage = async (req, res) => {
     try {
-        const ufs = await Uf.findAll({ raw: true, order: ['name'] })
+        const ufs = getUfs()
         res.status(200).render('person/signup', { ufs: ufs })
     } catch (error) {
         console.error(error)
@@ -469,8 +469,7 @@ controller.updateSocialAccount = async (req, res) => {
     }
 }
 
-controller.
-deleteService = async (req, res) => {
+controller.deleteService = async (req, res) => {
     try {
         await Service.destroy({
             where: {
