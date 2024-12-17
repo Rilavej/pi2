@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize')
 const {
-    Person, Media, Phone, Service, Address, SocialAccount, Cbo, Municipio, Uf, NoCboService
+    Person, Media, Phone, Service, Address, SocialAccount, Cbo, Municipio, Uf,
 } = require('../config/associations')
 
 const controller = {}

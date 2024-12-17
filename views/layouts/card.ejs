@@ -16,28 +16,17 @@
                 </h1>
                 <div class="py-0">
                     <hr>
-                    <% person.Cbos.forEach(cbo=> { %>
+                    <% person.Services.forEach(service=> { %>
                         <h6>
-                            <%= cbo.title %>
+                            <%= service.CboId ? service.Cbo.title : service.noCboTitle %>
                         </h6>
-                        <% if (cbo.Service.description) { %>
+                        <% if (service.description) { %>
                             <p>
-                                <%= cbo.Service.description %>
+                                <%= service.description %>
                             </p>
                             <% } %>
                                 <hr>
                                 <% }) %>
-                                    <% person.NoCboServices.forEach(noCboService=> { %>
-                                        <h6>
-                                            <%= noCboService.title %>
-                                        </h6>
-                                        <% if (noCboService.description) { %>
-                                            <p>
-                                                <%= noCboService.description %>
-                                            </p>
-                                            <% } %>
-                                                <hr>
-                                                <% }) %>
                 </div>
                 <div class="media-left">
                     <figure class="image is-48x48">

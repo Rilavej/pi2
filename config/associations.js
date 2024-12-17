@@ -7,7 +7,7 @@ const Address = require('../models/address')
 const Media = require('../models/media')
 const SocialAccount = require('../models/socialAccount')
 const Cbo = require('../models/cbo')
-const NoCboService = require('../models/noCboService')
+// const NoCbo = require('../models/noCbo')
 const Municipio = require('../models/municipio')
 const Uf = require('../models/uf')
 
@@ -22,11 +22,15 @@ Person.belongsToMany(Cbo, { through: { model: Service }, onDelete: 'CASCADE' })
 Cbo.belongsToMany(Person, { through: { model: Service }, onDelete: 'RESTRICT' })
 Person.hasMany(Service, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
 Service.belongsTo(Person, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
-Cbo.hasMany(Service, { onDelete: 'RESTRICT', foreignKey: { allowNull: false } })
-Service.belongsTo(Cbo, { onDelete: 'RESTRICT', foreignKey: { allowNull: false } })
+Cbo.hasMany(Service, { onDelete: 'RESTRICT', foreignKey: { allowNull: true } })
+Service.belongsTo(Cbo, { onDelete: 'RESTRICT', foreignKey: { allowNull: true } })
 
-Person.hasMany(NoCboService, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
-NoCboService.belongsTo(Person, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
+// Person.belongsToMany(NoCbo, { through: { model: Service }, onDelete: 'CASCADE' })
+// NoCbo.belongsToMany(Person, { through: { model: Service }, onDelete: 'RESTRICT' })
+// Person.hasMany(Service, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
+// Service.belongsTo(Person, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
+// NoCbo.hasMany(Service, { onDelete: 'RESTRICT', foreignKey: { allowNull: true } })
+// Service.belongsTo(NoCbo, { onDelete: 'RESTRICT', foreignKey: { allowNull: true } })
 
 Person.hasMany(Phone, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
 Phone.belongsTo(Person, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
@@ -42,7 +46,7 @@ Person.hasOne(Address, { onDelete: 'CASCADE', foreignKey: { allowNull: false } }
 Address.belongsTo(Person, { onDelete: 'CASCADE', foreignKey: { allowNull: false } })
 
 // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
-const sync = sequelize.sync({  /* alter: true */  })
+const sync = sequelize.sync({  /* alter: true */ })
 
 module.exports = {
     Person,
@@ -54,7 +58,8 @@ module.exports = {
     Uf,
     Municipio,
     Cbo,
-    NoCboService,
+    // NoCbo,
+    Service,
     sequelize,
     sync
 }

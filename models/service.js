@@ -12,6 +12,9 @@ const Service = sequelize.define(
         description: {
             type: DataTypes.STRING,
         },
+        noCboTitle: {
+            type: DataTypes.STRING,
+        }
     }
 )
 

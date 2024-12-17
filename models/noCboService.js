@@ -5,9 +5,10 @@ const DataTypes = require('sequelize')
 const NoCboService = sequelize.define(
     'NoCboService',
     {
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true,
         },
         description: {
             type: DataTypes.STRING,

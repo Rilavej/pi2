@@ -28,7 +28,7 @@ router.put('/user/update/phone', auth, personController.updatePhone)
 router.put('/user/update/socialAccount', auth, personController.updateSocialAccount)
 
 router.delete('/user/delete/service/:id', auth, personController.deleteService)
-router.delete('/user/delete/service1/:id', auth, personController.deleteNoCboService)
+// router.delete('/user/delete/service1/:id', auth, personController.deleteNoCboService)
 router.delete('/user/delete/phone/:id', auth, personController.deletePhone)
 router.delete('/user/delete/socialAccount', auth, personController.deleteSocialAccount)
 

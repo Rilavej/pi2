@@ -1,8 +1,8 @@
 const passport = require("passport")
 const {
-    Person, Phone, Service, Address, Media, SocialAccount, Uf, Municipio, Cbo, NoCboService
+    Person, Phone, Service, Address, Media, SocialAccount, Uf, Municipio, Cbo, NoCbo,
 } = require('../config/associations')
-const { Op, or, Sequelize } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 const bcrypt = require('bcrypt')
 const saltRounds = 10
@@ -39,7 +39,7 @@ function isNumeric(str) {
 
 controller.getRegisterPage = async (req, res) => {
     try {
-        const ufs = getUfs()
+        const ufs = await getUfs()
         res.status(200).render('person/signup', { ufs: ufs })
     } catch (error) {
         console.error(error)
@@ -154,7 +154,7 @@ controller.getUser = async (req, res, next) => {
         }
 
         res.person = person
-        console.log(JSON.stringify(person, null, 4), " === person");
+        console.log(JSON.stringify(person, null, 4), "=== person");
         next() //showCard
 
     } catch (error) {
@@ -187,18 +187,11 @@ controller.getEditCardPage = async (req, res) => {
 // Implemetar limite em quantidade de informações nos cartões por usuario 
 controller.createCard = async (req, res, next) => {
     const { services, phones, links } = req.body
-
-    console.log(services, "services"); // retirar
-    console.log(phones, "phones"); // retirar
-    console.log(links, "links"); // retirar
-
     try {
         if (services) {
             trimServices(services) // retira espaços do incio e fim, lowerCase a string e capitaliza primera letra
-            console.log(services, 'services tratado'); // retirar
 
             const serviceBulk = [];
-            const noCboServiceBulk = [];
             const invalidBulk = [];
 
             for (const service of services) {
@@ -212,23 +205,22 @@ controller.createCard = async (req, res, next) => {
                     where: { title: service.ocupation },
                     raw: true
                 })
-                console.log(cbo, "resultado da consulta"); // retirar
 
                 if (cbo) {
                     serviceBulk.push({ CboId: cbo.id, description: service.description, PersonId: req.user.id })
                 } else {
-                    noCboServiceBulk.push({ title: service.ocupation, description: service.description, PersonId: req.user.id })
+                    // const [noCbo, created] = await NoCbo.findOrCreate({
+                    //     where: { title: service.ocupation },
+                        // defaults: {
+                        //     title: service.ocupation,
+                        // },
+                    // });
+                    serviceBulk.push({ noCboTitle: service.ocupation, description: service.description, PersonId: req.user.id })
                 }
             }
-            console.log(serviceBulk, 'serviceBulk')
-            console.log(noCboServiceBulk, 'noCboServiceBulk')
-            console.log(invalidBulk, 'invalidBulk');
 
             if (serviceBulk.length > 0) {
                 if (!await Service.bulkCreate(serviceBulk)) res.locals.messages.push('Erro ao salvar Profisão')
-            }
-            if (noCboServiceBulk.length > 0) {
-                if (!await NoCboService.bulkCreate(noCboServiceBulk)) res.locals.messages.push('Erro ao salvar Profisão')
             }
         }
 
@@ -304,25 +296,20 @@ controller.createCard = async (req, res, next) => {
 }
 
 controller.updateServices = async (req, res) => {
-    const { services, noCboServices } = req.body
+    const service = req.body.service[0]
 
-    console.log(services, "services");
-    console.log(noCboServices, 'noCboServices');
+    console.log(service, "service");
 
     try {
 
-        if (services) {
-            trimServices(services)
-            console.log(services, 'services tratado'); // retirar
-
-            const service = services[0]
+        if (service) {
+            trimServices([service])
+            console.log(service, 'service tratado'); // retirar
 
             if (service.ocupation === "" || service.ocupation === null) {
                 res.locals.messages.push(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`)
                 throw new Error(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`);
             }
-
-            console.log(service.ocupation, "ocupacao");
 
             const cbo = await Cbo.findOne({
                 attributes: ['id'], /** trazer do front-end em input type='hidden' */
@@ -333,7 +320,7 @@ controller.updateServices = async (req, res) => {
 
             if (cbo) {
                 await Service.update(
-                    { CboId: cbo.id, description: service.description, },
+                    { noCboTitle: null, CboId: cbo.id, description: service.description, },
                     {
                         where: {
                             PersonId: req.user.id,
@@ -341,45 +328,24 @@ controller.updateServices = async (req, res) => {
                         },
                     },
                 );
-
             } else {
-                const result = await NoCboService.create({ title: service.ocupation, description: service.description, PersonId: req.user.id })
-                if (result) {
-                    await Service.destroy({
+                // const [noCbo, created] = await NoCbo.findOrCreate({
+                //     where: { title: service.ocupation },
+                // });
+
+                const result = await Service.update(
+                    { CboId: null, noCboTitle: service.ocupation, description: service.description, PersonId: req.user.id },
+                    {
                         where: {
                             PersonId: req.user.id,
                             id: service.id
-                        }
-                    });
-                } else {
+                        },
+                    }
+
+                )
+                if (!result) {
                     res.locals.messages.push(`Descrição "${service.description}" associada à profissão inválida: "${service.title}"`)
                 }
-            }
-        }
-
-        if (noCboServices) {
-            trimServices(noCboServices)
-            console.log(noCboServices, 'service tratado'); // retirar
-
-            const noCboService = noCboServices[0]
-
-            if (noCboService.ocupation === "" || noCboService.ocupation === null) {
-                res.locals.messages.push(`Descrição "${noCboService.description}" associada à profissão inválida: "${noCboService.title}"`)
-                throw new Error(`Descrição "${noCboService.description}" associada à profissão inválida: "${noCboService.title}"`);
-            }
-
-            const result = await NoCboService.update(
-                { title: noCboService.ocupation, description: noCboService.description, },
-                {
-                    where: {
-                        PersonId: req.user.id,
-                        id: noCboService.id
-                    },
-                },
-            );
-
-            if (!result) {
-                res.locals.messages.push(`Descrição "${noCboService.description}" associada à profissão inválida: "${noCboService.title}"`)
             }
         }
 
@@ -485,21 +451,21 @@ controller.deleteService = async (req, res) => {
     }
 }
 
-controller.deleteNoCboService = async (req, res) => {
-    try {
-        await NoCboService.destroy({
-            where: {
-                PersonId: req.user.id,
-                id: req.params.id
-            }
-        });
+// controller.deleteNoCboService = async (req, res) => {
+//     try {
+//         await NoCboService.destroy({
+//             where: {
+//                 PersonId: req.user.id,
+//                 id: req.params.id
+//             }
+//         });
 
-        res.redirect('/user/edit')
+//         res.redirect('/user/edit')
 
-    } catch (error) {
-        res.render('pages/error', { message: 'Erro interno' })
-    }
-}
+//     } catch (error) {
+//         res.render('pages/error', { message: 'Erro interno' })
+//     }
+// }
 
 controller.deletePhone = async (req, res) => {
     try {
@@ -568,7 +534,7 @@ controller.search = async (req, res) => {
             // ignoreLocation: false,
             // ignoreFieldNorm: false,
             // fieldNormWeight: 1,
-            keys: ["Cbos.title", "NoCboServices.title"]
+            keys: ["Cbos.title", "Services.noCboTitle"]
         }
         const fuse = new Fuse(peopleFromJson, fuseOptions)
         const peopleFromFuse = fuse.search(service.trim().toLowerCase())
