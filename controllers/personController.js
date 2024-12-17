@@ -644,7 +644,7 @@ controller.saveImageName = async (req, res) => {
     }
 }
 
-controller.getCard = async (req, res) => {
+controller.getCard = async (req, res, next) => {
     try {
         const person = await Person.findOne({
             attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
@@ -653,7 +653,12 @@ controller.getCard = async (req, res) => {
                 username: req.params.username.trim().toLowerCase()
             }
         })
-        res.render('pages/profile', { person: person })
+        if (person) {
+            res.render('pages/profile', { person: person })
+        } else {
+            res.locals.messages.push("O Perfil informado não existe!")
+            next()
+        }
     } catch (error) {
         console.error(error)
         res.render('pages/error', { message: "Erro interno" })
