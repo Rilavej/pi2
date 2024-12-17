@@ -5,10 +5,10 @@ const mysql2 = require('mysql2/promise')
 require('dotenv').config()
 
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
 
 
-const connection = (async () => {
+(async () => {
 
     const connection = mysql2.createConnection({
         host: process.env.HOST,
@@ -22,7 +22,6 @@ const connection = (async () => {
         const [results] = await connection.query({ sql })
         // console.log(results)
         console.log(`Schema ${process.env.DATABASE} criado com sucesso.`)
-        await connection.end()
         console.log(`Conexão usada na criação do schema ${process.env.DATABASE} foi encerrada com sucesso.`)
 
     } catch (error) {
@@ -96,9 +95,9 @@ const connection = (async () => {
         console.log(`Tabela ${tableName} preenchida com sucesso.`)
     } catch (err) { console.error(err) }
 
-    connection.end().then(() =>
-        console.log(`Conexão usada no preenchimento foi encerrada com sucesso.`)
-    )
+    // await connection.end()
+    // console.log(`Conexão usada no preenchimento foi encerrada com sucesso.`)
+ 
 
 })();
 
