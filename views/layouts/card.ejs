@@ -3,12 +3,12 @@
         <div class="card-image">
             <figure class="image is-4by3">
                 <% if (person.imageName) { %>
-                    <a href="http://localhost:<%= PORT %>/<%= person.username %>">
-                        <img src="http://localhost:<%= PORT %>/images/<%= person.imageName %>"
+                    <a href="/<%= person.username %>">
+                        <img src="/images/<%= person.imageName %>"
                             alt="Placeholder image" />
                     </a>
                     <% } else { %>
-                        <a href="http://localhost:<%= PORT %>/<%= person.username %>">
+                        <a href="/<%= person.username %>">
                             <img src="https://bulma.io/assets/images/placeholders/1280x960.png"
                                 alt="Placeholder image" />
                         </a>
@@ -17,7 +17,7 @@
         </div>
         <div class="card-content">
             <div class="content">
-                <a href="http://localhost:<%= PORT %>/<%= person.username %>">
+                <a href="/<%= person.username %>">
                     <h1>
                         <%= person.name %>
                     </h1>
