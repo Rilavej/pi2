@@ -4,7 +4,8 @@
             <figure class="image is-4by3">
                 <% if (person.imageName) { %>
                     <a href="http://localhost:<%= PORT %>/<%= person.username %>">
-                        <img src="http://localhost:3000/images/<%= person.imageName %>" alt="Placeholder image" />
+                        <img src="http://localhost:<%= PORT %>/images/<%= person.imageName %>"
+                            alt="Placeholder image" />
                     </a>
                     <% } else { %>
                         <a href="http://localhost:<%= PORT %>/<%= person.username %>">
@@ -34,11 +35,6 @@
                             <% } %>
                                 <hr>
                                 <% }) %>
-                </div>
-                <div class="media-left">
-                    <figure class="image is-48x48">
-                        <img src="https://bulma.io/assets/images/placeholders/96x96.png" alt="Placeholder image" />
-                    </figure>
                 </div>
                 <% person.SocialAccounts.forEach(socialAccount=> { %>
                     <% const url=(function ensureHttps(url) { if (!url.startsWith("https://")) { url="https://" + url; }

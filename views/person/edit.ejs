@@ -24,8 +24,8 @@
                             </div>
                             <div class="field">
                                 <div class="control buttons is-centered">
-                                    <button class="button is-warning is-small is-pulled-right editButton"
-                                        type="button">Editar</button>
+                                    <!-- <button class="button is-warning is-small is-pulled-right editButton"
+                                        type="button">Editar</button> -->
                                     <a href="/user/delete/service/<%= service.id %>/?_method=delete"
                                         class="button is-danger is-small is-pulled-right">Excluir</a>
                                     <button class="button is-success is-small is-pulled-right"
@@ -55,8 +55,8 @@
                                         </div>
                                     </div>
                                     <div class="control buttons is-centered">
-                                        <button class="button is-warning is-small is-pulled-right editButton"
-                                            type="button">Editar</button>
+                                        <!-- <button class="button is-warning is-small is-pulled-right editButton"
+                                            type="button">Editar</button> -->
                                         <a href="/user/delete/phone/<%= phoneRow.id %>/?_method=delete"
                                             class="button is-danger is-small is-pulled-right">Excluir</a>
                                         <button class="button is-success is-small is-pulled-right"
@@ -88,9 +88,9 @@
                                             </div>
                                             <div class="field">
                                                 <div class="control buttons is-centered">
-                                                    <button
+                                                    <!-- <button
                                                         class="button is-warning is-small is-pulled-right editButton"
-                                                        type="button">Editar</button>
+                                                        type="button">Editar</button> -->
                                                     <a href="/user/delete/socialAccount?link=<%= encodeURIComponent(socialAccount.link) %>&_method=delete"
                                                         class="button is-danger is-small is-pulled-right">Excluir</a>
                                                     <button class="button is-success is-small is-pulled-right"
@@ -107,4 +107,16 @@
         </div>
     </section>
     <!-- <script src="/javascripts/dynamicFormEdit.js"></script> -->
-    <!-- <%- // include('../layouts/footer' ); -%> -->
+    <script>
+        if (document.querySelector(".cboInput")) {
+            const cboInputs = document.querySelectorAll(".cboInput")
+            for (const cboInput of cboInputs){
+            cboInput.addEventListener('input', (e) => onInputChange(
+                window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
+            ));
+            cboInput.addEventListener('click', (e) => onInputChange(
+                window.cbo, "title", e, cboInput.closest(".autocompleteWrapperCbo")
+            ));}
+        }
+    </script>
+    <%- include('../layouts/footer' ); -%>
