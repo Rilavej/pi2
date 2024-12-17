@@ -34,4 +34,6 @@ router.delete('/user/delete/socialAccount', auth, personController.deleteSocialA
 
 router.post('/image', auth, upload, personController.saveImageName)
 
+router.get('/:username', personController.getCard)
+
 module.exports = router

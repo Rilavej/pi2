@@ -641,4 +641,20 @@ controller.saveImageName = async (req, res) => {
     }
 }
 
+controller.getCard = async (req, res) => {
+    try {
+        const person = await Person.findOne({
+            attributes: ['id', 'name', 'username', 'MunicipioId', 'imageName'],
+            include: { all: true, nested: true },
+            where: {
+                username: req.params.username.trim().toLowerCase()
+            }
+        })
+        res.render('pages/profile', { person: person })
+    } catch (error) {
+        console.error(error)
+        res.render('pages/error', { message: "Erro interno" })
+    }
+}
+
 module.exports = controller
