@@ -19,6 +19,7 @@ server.locals.ufs = null
 server.locals.cbo = null
 
 const PORT = process.env.PORT || 3000
+server.locals.PORT = PORT
 
 // ############################################# Estudar ######################################################
 server.use(session({

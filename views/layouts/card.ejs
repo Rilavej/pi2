@@ -3,17 +3,24 @@
         <div class="card-image">
             <figure class="image is-4by3">
                 <% if (person.imageName) { %>
-                    <img src="http://localhost:3000/images/<%= person.imageName %>" alt="Placeholder image" />
+                    <a href="http://localhost:<%= PORT %>/<%= person.username %>">
+                        <img src="http://localhost:3000/images/<%= person.imageName %>" alt="Placeholder image" />
+                    </a>
                     <% } else { %>
-                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="Placeholder image" />
+                        <a href="http://localhost:<%= PORT %>/<%= person.username %>">
+                            <img src="https://bulma.io/assets/images/placeholders/1280x960.png"
+                                alt="Placeholder image" />
+                        </a>
                         <% } %>
             </figure>
         </div>
         <div class="card-content">
             <div class="content">
-                <h1>
-                    <%= person.name %>
-                </h1>
+                <a href="http://localhost:<%= PORT %>/<%= person.username %>">
+                    <h1>
+                        <%= person.name %>
+                    </h1>
+                </a>
                 <div class="py-0">
                     <hr>
                     <% person.Services.forEach(service=> { %>

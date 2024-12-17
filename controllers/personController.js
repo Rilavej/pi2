@@ -104,6 +104,8 @@ controller.createPerson = async (req, res, next) => {
         }
     } catch (error) {
         console.error(error)
+        const ufs = await getUfs()
+        res.locals.message = 'Erro interno'
         if (error.name === 'SequelizeUniqueConstraintError') {
             if (error.fields['email']) {
                 res.locals.messages.push(`O email "${error.fields['email']}" já está em uso`)
@@ -111,8 +113,9 @@ controller.createPerson = async (req, res, next) => {
             if (error.fields['username']) {
                 res.locals.messages.push(`O nome de usuário "${error.fields['username']}" já está uso`)
             }
+            res.locals.message = null
         }
-        res.status(422).render("person/signup", { message: 'Erro interno' })
+        res.status(422).render("person/signup", { message: res.locals.message, ufs })
     }
 }
 
@@ -211,9 +214,9 @@ controller.createCard = async (req, res, next) => {
                 } else {
                     // const [noCbo, created] = await NoCbo.findOrCreate({
                     //     where: { title: service.ocupation },
-                        // defaults: {
-                        //     title: service.ocupation,
-                        // },
+                    // defaults: {
+                    //     title: service.ocupation,
+                    // },
                     // });
                     serviceBulk.push({ noCboTitle: service.ocupation, description: service.description, PersonId: req.user.id })
                 }
